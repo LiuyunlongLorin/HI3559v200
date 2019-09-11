@@ -58,9 +58,11 @@ ifeq ($(MPP_BUILD),y)
 else
     INC += -I$(DRV_ROOT)/extdrv/motionsensor/motionsensor_chip/SensorDev/ICM20690/
 endif
-
-
 endif
+
+
+
+
 
 ifeq ($(TRANSFER_TYPE), I2C)
     SRCS += ./TransferType/i2c/i2c_dev.c

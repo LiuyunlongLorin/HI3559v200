@@ -13,6 +13,9 @@ if MOTIONSENSOR
 		config MOTIONSENSOR_IMC20690
 			bool "IMC20690"
 			depends on !HI3559AV100
+		config MOTIONSENSOR_LSM6DSM
+			bool "LSM6DSM"
+			depends on !HI3559AV100
 	endchoice
 endif
 
