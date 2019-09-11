@@ -1,0 +1,254 @@
+# Makefile.param
+# Only global variable should be defined here.
+# All the variables must be used as "export" and "?=".
+# Otherwise, there will be some errors, when Makefile.param is nested.
+
+#export HIWORK_PATH?=/hiwork
+export CFLAGS
+export MAPI_BUILD=y
+
+
+# Get the local SDK_ROOT path or RELEASE_ROOT path by PARAM_FILE.
+# MAPI_PARAM_FILE is configed at Makefile before include this file
+ifeq ($(NDK_PATH),)
+    $(error please specify NDK_PATH )
+endif
+
+include $(NDK_PATH)/build/chip.mak
+
+ifeq ($(CFG_REL_FOR_PDT), y)
+    SDK_ROOT ?= $(MIDDLEWARE_DIR)/..
+else
+    SDK_ROOT ?= $(MIDDLEWARE_DIR)/../sdk
+endif
+export SDK_PATH = $(SDK_ROOT)
+
+
+include $(NDK_PATH)/build/config_$(HIARCH).mak
+include $(NDK_PATH)/../base.mak
+include $(NDK_PATH)/../cfg.mak
+
+
+ifeq ($(CFG_OS_TYPE), liteos)
+    export OSTYPE=liteos
+    export OSCFG=single
+else ifeq ($(CFG_OS_TYPE), linux_liteos)
+    export OSCFG=dual
+    CFLAGS += -DLOSCFG_PLATFORM_HISI_AMP
+else ifeq ($(CFG_OS_TYPE), linux)
+    export OSTYPE=linux
+    export OSCFG=single
+endif
+
+
+ifeq ($(HIARCH), )
+$(error HIARCH not defined! Please check!)
+endif
+
+# use LIBC indicate libc, use libc to choose cross compiler.
+# uclibc or glibc only for Linux
+export LIBC?=glibc
+
+####### outer relay path ########
+export MPP_OUT_PATH?=$(SDK_ROOT)/mpp/out
+export HISYSLINK_PATH?=$(SDK_ROOT)/hisyslink
+export OSAL_ROOT?=$(SDK_ROOT)/osal
+export OSDRV_ROOT?=$(SDK_ROOT)/osdrv
+
+
+
+ifeq ($(HIARCH), hi3559av100)
+    CFLAGS += -D__HI3559AV100__
+else ifeq ($(HIARCH), hi3556av100)
+    CFLAGS += -D__HI3556AV100__
+else ifeq ($(HIARCH), hi3519av100)
+    CFLAGS += -D__HI3519AV100__
+else ifeq ($(HIARCH), hi3559v200)
+    CFLAGS += -D__HI3559V200__
+else ifeq ($(HIARCH), hi3518ev300)
+    CFLAGS += -D__HI3518EV300__
+endif
+
+####### Audio Codec Config ###############
+#ACODEC_TYPE ?= ACODEC_TYPE_TLV320AIC31
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_TLV320AIC31)
+	CFLAGS += -DACODEC_TYPE_TLV320AIC31
+endif
+
+export REL_PATH?=$(NDK_PATH)/out/$(HIARCH)/$(MAPI_CPU_TYPE)
+export SAMPLE_DIR?=$(NDK_PATH)/sample/arch
+
+export SENSOR_CFG_PATH?=$(NDK_PATH)/code/mediaserver/configs/sensor
+export SENSOR_PATH?=$(NDK_PATH)/code/mediaserver/adapt/sensor/$(HIARCH)
+export SENSOR_ORGFILE_PATH?=$(SDK_PATH)/mpp/component/isp/isp_hi3519v101/sensor
+export DIS_CFG_PATH?=$(NDK_PATH)/code/mediaserver/configs/dis
+
+#Gyro,yes/no
+export CFG_GYRO_ON?=no
+
+# use C01 to indicate uclibc, C02 to  indicate glibc, C00 to indicate FPGA.
+DBG_FLAG?=0
+ifeq ($(LIBC),glibc)
+    ifeq ($(FPGA), y)
+        export CVER?=.C$(DBG_FLAG)3
+    else
+        export CVER?=.C$(DBG_FLAG)2
+    endif
+else ifeq ($(FPGA), y)
+    export CVER?=.C$(DBG_FLAG)0
+else
+    export CVER?=.C$(DBG_FLAG)1
+endif
+
+# MAPI CFLAGS
+export MAPI_CFLAGS:= -Wall
+ifeq ($(HIGDB), y)
+	MAPI_CFLAGS += -g
+endif
+
+
+export ARCH=arm64
+# common CFLAGS
+export LIBS_CFLAGS
+export LIBS_LD_CFLAGS
+LIBS_CFLAGS +=  -fno-aggressive-loop-optimizations -ldl -ffunction-sections -fdata-sections
+#LIBS_CFLAGS += -fstack-protector
+#LIBS_CFLAGS += -DUSER_BIT_64 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+LIBS_CFLAGS += -fstack-protector -fPIC 
+
+LIBS_LD_CFLAGS += -fno-aggressive-loop-optimizations -ldl
+LIBS_LD_CFLAGS += -fstack-protector -Wl,-z,relro -Wl,-z,noexecstack -fPIC
+
+#export LIBS_CFLAGS := -mno-unaligned-access -fno-aggressive-loop-optimizations -ffunction-sections -fdata-sections -O2
+LIBS_CFLAGS += -Wno-implicit-function-declaration -Wno-unused-variable -Wno-unused-function
+#export LIBS_LD_CFLAGS := --gc-sections
+
+####### include the param of platform ########
+#if cpu type is linux ,only include linux param
+ifeq ($(MAPI_CPU_TYPE), dual)
+	include $(NDK_PATH)/$(OSTYPE).param
+else ifeq ($(MAPI_CPU_TYPE), linux)
+    include $(NDK_PATH)/linux.param
+else ifeq ($(MAPI_CPU_TYPE), liteos)
+    include $(NDK_PATH)/$(OSTYPE).param
+endif
+
+include $(NDK_PATH)/build/Makefile_$(HIARCH).param
+
+####### sensor ########
+CFLAGS += -DLANE_DIVIDE_MODE=$(SENSOR_CABLE_TYPE)
+
+ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_0)
+    CFLAGS += -DCFG_LANE_DIVIDE_MODE_0
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_1)
+    CFLAGS += -DCFG_LANE_DIVIDE_MODE_1
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_2)
+    CFLAGS += -DCFG_LANE_DIVIDE_MODE_2
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_3)
+    CFLAGS += -DCFG_LANE_DIVIDE_MODE_3
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_4)
+    CFLAGS += -DCFG_LANE_DIVIDE_MODE_4
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_5)
+    CFLAGS += -DCFG_LANE_DIVIDE_MODE_5
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_6)
+    CFLAGS += -DCFG_LANE_DIVIDE_MODE_6
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_7)
+    CFLAGS += -DCFG_LANE_DIVIDE_MODE_7
+endif
+#######################################################################################
+
+ifeq ($(CFG_SENSOR_TYPE0), )
+    CFG_SENSOR_TYPE0=UNUSED
+    CFLAGS += -DCFG_SENSOR_TYPE0=UNUSED
+else
+    CFLAGS += -DSENSOR_$(CFG_SENSOR_TYPE0)            #register_sensor
+    CFLAGS += -DCFG_SENSOR_TYPE0=$(CFG_SENSOR_TYPE0)
+endif
+
+ifeq ($(CFG_SENSOR_TYPE1), )
+    CFG_SENSOR_TYPE1=UNUSED
+    CFLAGS += -DCFG_SENSOR_TYPE1=UNUSED
+else
+    CFLAGS += -DSENSOR_$(CFG_SENSOR_TYPE1)
+    CFLAGS += -DCFG_SENSOR_TYPE1=$(CFG_SENSOR_TYPE1)
+endif
+
+ifeq ($(CFG_SENSOR_TYPE2), )
+    CFG_SENSOR_TYPE2=UNUSED
+    CFLAGS += -DCFG_SENSOR_TYPE2=UNUSED
+else
+    CFLAGS += -DSENSOR_$(CFG_SENSOR_TYPE2)
+    CFLAGS += -DCFG_SENSOR_TYPE2=$(CFG_SENSOR_TYPE2)
+endif
+
+ifeq ($(CFG_SENSOR_TYPE3), )
+    CFG_SENSOR_TYPE3=UNUSED
+    CFLAGS += -DCFG_SENSOR_TYPE3=UNUSED
+else
+    CFLAGS += -DSENSOR_$(CFG_SENSOR_TYPE3)
+    CFLAGS += -DCFG_SENSOR_TYPE3=$(CFG_SENSOR_TYPE3)
+endif
+
+ifeq ($(CFG_SENSOR_TYPE4), )
+    CFG_SENSOR_TYPE4=UNUSED
+    CFLAGS += -DCFG_SENSOR_TYPE4=UNUSED
+else
+    CFLAGS += -DSENSOR_$(CFG_SENSOR_TYPE4)
+    CFLAGS += -DCFG_SENSOR_TYPE4=$(CFG_SENSOR_TYPE4)
+endif
+
+ifeq ($(CFG_SENSOR_TYPE5), )
+    CFG_SENSOR_TYPE5=UNUSED
+    CFLAGS += -DCFG_SENSOR_TYPE5=UNUSED
+else
+    CFLAGS += -DSENSOR_$(CFG_SENSOR_TYPE5)
+    CFLAGS += -DCFG_SENSOR_TYPE5=$(CFG_SENSOR_TYPE5)
+endif
+
+ifeq ($(CFG_SENSOR_TYPE6), )
+    CFG_SENSOR_TYPE6=UNUSED
+    CFLAGS += -DCFG_SENSOR_TYPE6=UNUSED
+else
+    CFLAGS += -DSENSOR_$(CFG_SENSOR_TYPE6)
+    CFLAGS += -DCFG_SENSOR_TYPE6=$(CFG_SENSOR_TYPE6)
+endif
+
+ifeq ($(CFG_SENSOR_TYPE7), )
+    CFG_SENSOR_TYPE7=UNUSED
+    CFLAGS += -DCFG_SENSOR_TYPE7=UNUSED
+else
+    CFLAGS += -DSENSOR_$(CFG_SENSOR_TYPE7)
+    CFLAGS += -DCFG_SENSOR_TYPE7=$(CFG_SENSOR_TYPE7)
+endif
+
+
+#####################################
+ifeq ($(CFG_SUPPORT_STITCH), y)
+    CFLAGS += -DSUPPORT_STITCH
+endif
+
+ifeq ($(CFG_SUPPORT_PHOTO_POST_PROCESS), y)
+    CFLAGS += -DSUPPORT_PHOTO_POST_PROCESS
+endif
+
+ifeq ($(CFG_SUPPORT_DIS), y)
+    CFLAGS += -DSUPPORT_DIS
+endif
+
+ifeq ($(CFG_SUPPORT_GYRO), y)
+    CFLAGS += -DSUPPORT_GYRO
+endif
+
+ifeq ($(CFG_SUPPORT_HDMI), y)
+    CFLAGS += -DSUPPORT_HDMI
+endif
+
+####### Log Level ########
+ifeq ($(CFG_LOG_LEVEL), MAPI_LOG_NONE)
+    CFLAGS += -DMAPI_LOG_NONE
+else ifeq ($(CFG_LOG_LEVEL), MAPI_LOG_ERR)
+    CFLAGS += -DMAPI_LOG_ERR
+else ifeq ($(CFG_LOG_LEVEL), MAPI_LOG_ALL)
+    CFLAGS += -DMAPI_LOG_ALL
+endif
+#######################################################################################

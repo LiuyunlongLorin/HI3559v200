@@ -1,0 +1,12 @@
+config LOSCFG_DRIVERS_RANDOM
+    bool "Enable random"
+    default y
+    depends on LOSCFG_DRIVERS && LOSCFG_FS_VFS
+    help
+        Answer Y to support random.
+config LOSCFG_HW_RANDOM_ENABLE
+    depends on LOSCFG_DRIVERS_RANDOM && (LOSCFG_PLATFORM_HI3518EV200 || LOSCFG_PLATFORM_HI3516CV300)
+    bool "Select hw random"
+    default y
+    help
+    Answer Y to select hw random.

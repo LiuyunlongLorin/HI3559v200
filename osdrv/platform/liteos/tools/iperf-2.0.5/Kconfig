@@ -1,0 +1,6 @@
+config LOSCFG_TOOLS_IPERF
+    bool "Enable Iperf-2.0.5"
+    default y
+    depends on LOSCFG_DEBUG_VERSION && LOSCFG_SHELL
+    help
+      Answer Y to enable LiteOS support iperf tool.

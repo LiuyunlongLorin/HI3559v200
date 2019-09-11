@@ -1,0 +1,27 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Device Configuration"
+
+menuconfig TOUCHPAD
+	bool "TOUCHPAD support"
+
+if TOUCHPAD
+	choice
+		prompt "TOUCHPAD Type"
+		config TOUCHPAD_FT6356
+			bool "ft6356"
+			depends on (HI3559AV100)
+	    config TOUCHPAD_FT6236
+			bool "ft6236"
+			depends on (HI3556AV100 || HI3519AV100 || HI3559V200 || HI3556V200)
+		config TOUCHPAD_GT911
+			bool "gt911"
+			depends on (HI3556V200)
+	endchoice
+	config FLIP_TOUCHPAD
+			bool "Flip TouchPad"
+
+endif
+

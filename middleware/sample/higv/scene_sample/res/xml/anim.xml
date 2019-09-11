@@ -1,0 +1,340 @@
+<translate
+    id="trs_inout_top_out"
+    duration_ms="200"
+    animtype="0"
+    fromx="50"
+    fromy="0"
+    tox="50"
+    toy="-40"
+/>
+
+<translate
+    id="trs_inout_top_in"
+    duration_ms="200"
+    animtype="0"
+    fromx="50"
+    fromy="-40"
+    tox="50"
+    toy="0"
+/>
+
+<translate
+    id="trs_inout_left_out"
+    duration_ms="200"
+    animtype="0"
+    fromx="0"
+    fromy="50"
+    tox="-40"
+    toy="50"
+/>
+<translate
+    id="trs_inout_left_in"
+    duration_ms="200"
+    animtype="0"
+    fromx="-40"
+    fromy="50"
+    tox="0"
+    toy="50"
+/>
+
+<translate
+    id="trs_inout_right_out"
+    duration_ms="200"
+    animtype="0"
+    fromx="280"
+    fromy="50"
+    tox="320"
+    toy="50"
+/>
+<translate
+    id="trs_inout_right_in"
+    duration_ms="200"
+    animtype="0"
+    fromx="320"
+    fromy="50"
+    tox="280"
+    toy="50"
+/>
+
+<translate
+    id="trs_inout_bottom_out"
+    duration_ms="200"
+    animtype="0"
+    fromx="0"
+    fromy="200"
+    tox="0"
+    toy="239"
+/>
+
+<translate
+    id="trs_inout_bottom_in"
+    duration_ms="200"
+    animtype="0"
+    fromx="0"
+    fromy="239"
+    tox="0"
+    toy="200"
+/>
+
+<translate
+    id="trs_win_in"
+    duration_ms="1000"
+    animtype="0"
+    fromx="320"
+    fromy="0"
+    tox="0"
+    toy="0"
+/>
+
+<translate
+    id="trs_win_out"
+    duration_ms="1000"
+    animtype="0"
+    fromx="0"
+    fromy="0"
+    tox="320"
+    toy="0"
+/>
+
+<translate
+    id="trs_anim_test"
+    duration_ms="1000"
+    repeatcount="-1"
+    animtype="0"
+    fromx="10"
+    fromy="50"
+    tox="170"
+    toy="50"
+/>
+
+<animalpha
+    id="animalpha_change"
+    duration_ms="1000"
+    repeatcount="-1"
+    repeatmode="1"
+    delaystart="20"
+    animtype="1"
+    fromalpha="10"
+    toalpha="160"
+/>
+
+<animroll
+    id="animroll_btn"
+    duration_ms="10000"
+    repeatcount="1"
+    delaystart="200"
+    animtype="2"
+    directiontype="3"
+    fromloc="0"
+    toloc="100"
+/>
+
+<animroll
+    id="animroll_listbox_left"
+    duration_ms="1000"
+    repeatcount="1"
+    delaystart="500"
+    animtype="2"
+    directiontype="2"
+    fromloc="20"
+    toloc="310"
+/>
+
+<animroll
+    id="animroll_listbox_up"
+    duration_ms="5000"
+    repeatcount="1"
+    repeatmode="1"
+    delaystart="0"
+    animtype="2"
+    directiontype="0"
+    fromloc="205"
+    toloc="0"
+/>
+
+<animroll
+    id="animroll_listbox_up_down"
+    duration_ms="2000"
+    repeatcount="1"
+    delaystart="0"
+    animtype="2"
+    directiontype="0"
+    fromloc="10"
+    toloc="205"
+/>
+
+<animroll
+    id="anim_test_roll_up_down"
+    duration_ms="2000"
+    repeatcount="2"
+    delaystart="2000"
+    animtype="2"
+    directiontype="0"
+    fromloc="10"
+    toloc="100"
+/>
+
+<animroll
+    id="animroll_listbox_down"
+    duration_ms="5000"
+    repeatcount="1"
+    delaystart="1000"
+    animtype="2"
+    directiontype="1"
+    fromloc="0"
+    toloc="205"
+/>
+
+<animroll
+    id="animroll_listbox_right"
+    duration_ms="10000"
+    repeatcount="1"
+    delaystart="1000"
+    animtype="2"
+    directiontype="3"
+    fromloc="0"
+    toloc="310"
+/>
+
+
+<translate
+    id="trs_tab_122"
+    duration_ms="500"
+    animtype="0"
+    fromx="50"
+    fromy="103"
+    tox="130"
+    toy="103"
+/>
+
+<translate
+    id="trs_tab_123"
+    duration_ms="500"
+    animtype="0"
+    fromx="50"
+    fromy="103"
+    tox="210"
+    toy="103"
+/>
+
+<translate
+    id="trs_tab_223"
+    duration_ms="500"
+    animtype="0"
+    fromx="130"
+    fromy="103"
+    tox="210"
+    toy="103"
+/>
+
+<translate
+    id="trs_tab_221"
+    duration_ms="500"
+    animtype="0"
+    fromx="130"
+    fromy="103"
+    tox="50"
+    toy="103"
+/>
+
+<translate
+    id="trs_tab_321"
+    duration_ms="500"
+    animtype="0"
+    fromx="210"
+    fromy="103"
+    tox="50"
+    toy="103"
+/>
+
+<translate
+    id="trs_tab_322"
+    duration_ms="500"
+    animtype="0"
+    fromx="210"
+    fromy="103"
+    tox="130"
+    toy="103"
+/>
+
+<translate
+    id="trs_tab_left"
+    duration_ms="500"
+    animtype="0"
+    fromx="-319"
+    fromy="110"
+    tox="0"
+    toy="110"
+/>
+
+<translate
+    id="trs_tab_right"
+    duration_ms="500"
+    animtype="0"
+    fromx="319"
+    fromy="110"
+    tox="0"
+    toy="110"
+/>
+
+<translate
+    id="trs_test_move"
+    duration_ms="1000"
+    repeatcount="-1"
+    animtype="0"
+    fromx="70"
+    fromy="50"
+    tox="200"
+    toy="70"
+/>
+
+<animroll
+    id="animroll_1s"
+    duration_ms="2000"
+    repeatcount="-1"
+    repeatmode="0"
+    delaystart="0"
+    animtype="2"
+    directiontype="0"
+    fromloc="0"
+    toloc="95"
+/>
+
+<translate
+    id="translate_outside_up_to_down"
+    duration_ms="2000"
+    repeatcount="6"
+    repeatmode="1"
+    delaystart="500"
+    animtype="0"
+    fromx="30"
+    fromy="45"
+    tox="220"
+    toy="45"
+    />
+
+<translate
+    id="translate_outside_left_to_right"
+    duration_ms="2000"
+    repeatcount="4"
+    repeatmode="1"
+    delaystart="500"
+    animtype="0"
+    fromx="30"
+    fromy="40"
+    tox="30"
+    toy="-13"
+    />
+
+<translate
+    id="translate_left_to_right"
+    duration_ms="1000"
+    repeatcount="1"
+    repeatmode="1"
+    delaystart="10"
+    animtype="0"
+    fromx="30"
+    fromy="40"
+    tox="36"
+    toy="40"
+    />

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="HDMI_HOME"
+    isusecommonskin="yes">
+
+    <window
+        id="HDMI_HOME"
+        top="0"
+        left="0"
+        width="1920"
+        height="1080"
+        normalskin="SKIN_COMMON_BG"
+        opacity="255"
+        winlevel="0"
+        transparent="yes"
+        isrelease="yes"
+        onshow="PDT_HDMI_HOME_OnShow"
+        onhide="PDT_HDMI_HOME_OnHide"
+        onevent="PDT_HDMI_HOME_OnEvent"
+        onkeydown="PDT_HDMI_HOME_OnKeyDown"
+        ongesturefling="PDT_HDMI_HOME_OnGestureFling">
+
+    <label
+        id="HDMI_HOME_NOTIC"
+        top="984"
+        left="1280"
+        width="640"
+        height="48"
+        isrelease="yes"
+        font="FONT30"
+        text="STRING_HDMI_HOME_NOTIC"
+        alignment="hcenter|vcenter"
+        transparent="no"
+        normalskin="SKIN_COMMON_NOTIC_TEXT"/>
+    </window>
+</view>

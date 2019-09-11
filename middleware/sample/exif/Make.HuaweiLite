@@ -1,0 +1,95 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+MW_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+SAMPLE_DIR := $(MIDDLEWARE_DIR)/sample
+include $(MIDDLEWARE_DIR)/base.mak
+include $(MW_ADPT_DIR)/medialibs.mak
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+LOG_LIB_DIR := $(HIBERRY_COMMON_DIR)/log/lib
+LOG_INC_DIR := $(HIBERRY_COMMON_DIR)/log/include
+MBUF_LIB_DIR := $(HIBERRY_COMMON_DIR)/mbuffer/lib
+MBUF_INC_DIR := $(HIBERRY_COMMON_DIR)/mbuffer/include
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+REC_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/recorder_pro/lib
+REC_INC_DIR := $(HIBERRY_COMPONENT_DIR)/recorder_pro/include
+RTSP_LIB_DIR := $(SAMPLE_DIR)/livestream/rtspserver/lib
+RTSP_INC_DIR := $(SAMPLE_DIR)/livestream/rtspserver/include
+SVRCOMM_LIB_DIR := $(SAMPLE_DIR)/livestream/server_common/lib
+SVRCOMM_INC_DIR := $(SAMPLE_DIR)/livestream/server_common/include
+DTCF_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/dtcf/lib
+DTCF_INC_DIR := $(HIBERRY_COMPONENT_DIR)/dtcf/include
+MP4_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/mp4/lib
+MP4_INC_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/mp4/include
+FILEFORMAT_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/common/lib
+FILEFORMAT_INC_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/common/include
+TIMDER_LIB_DIR := $(MIDDLEWARE_DIR)/thirdparty/timers/lib
+TIMDER_INC_DIR := $(MIDDLEWARE_DIR)/thirdparty/timers/include
+COMM_INC_DIR := $(MIDDLEWARE_DIR)/common/include
+HI_TIMER_LIB_DIR     := $(HIBERRY_COMMON_DIR)/hitimer/lib
+TAG_EDITOR_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/exif/lib
+TAG_EDITOR_INCLUDE_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/exif/include
+OPENEXIF_LIB_DIR := $(MIDDLEWARE_DIR)/thirdparty/openexif/lib
+OPENEXIF_INC_DIR := $(MIDDLEWARE_DIR)/thirdparty/openexif/include
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+APP_INIT_DIR := $(MEDIA_ADPT_ROOT)/$(CFG_CHIP_TYPE)/HuaweiLite
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -maxdepth 1  -name '*.c' -print)
+SRCS                +=  $(shell find $(APP_INIT_DIR) -maxdepth 1  -name '*.c' -print)
+SRCS                :=  $(sort $(SRCS))
+OBJS                :=  $(patsubst %.c,%.o,$(SRCS))
+
+INC_FLAGS += -I$(DTCF_INC_DIR) -I$(TAG_EDITOR_INCLUDE_DIR) -I$(REC_INC_DIR) -I$(RTSP_INC_DIR) -I$(SVRCOMM_INC_DIR) \
+ -I$(TIMDER_INC_DIR) \
+ -I$(HIBERRY_COMMON_INC)\
+ -I$(MP4_INC_DIR) \
+ -I$(FILEFORMAT_INC_DIR) \
+ -I$(COMM_INC_DIR) \
+
+INC_FLAGS += $(MEDIA_INCLUDE_PATH)
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+TARGET :=sample_exif
+BIN := $(TARGET).bin
+MAP := $(TARGET).map
+
+HIBERRY_LIBS := -L$(REC_LIB_DIR) -L$(RTSP_LIB_DIR) -L$(SVRCOMM_LIB_DIR) \
+-L$(HI_TIMER_LIB_DIR) -L$(TIMDER_LIB_DIR) -L$(LOG_LIB_DIR) -L$(MBUF_LIB_DIR) \
+-L$(MP4_LIB_DIR) -L$(FILEFORMAT_LIB_DIR) -L$(DTCF_LIB_DIR) \
+-L$(TAG_EDITOR_LIB_DIR) -L$(OPENEXIF_LIB_DIR)\
+--start-group -lrecorder_pro -lexif -lopenexif -lrtspserver -lservercommon \
+				-lmp4 -lfileformat -ldtcf \
+				-lmbuf -lhitimer -ltimers -lmwlog --end-group
+SDK_LIB := $(MEDIA_LIBS_PATH_LINK) --start-group $(MEDIA_LIBS_LINK) --end-group
+LDFLAGS := $(LITEOS_LDFLAGS) --gc-sections
+LIBDEP = --start-group $(LITEOS_LIBS) --end-group
+CFLAGS += $(INC_FLAGS)
+CFLAGS += -DHI_ACODEC_TYPE_INNER
+.PHONY : clean all
+
+all: $(BIN)
+
+$(BIN):$(TARGET)
+	@$(OBJCOPY) -O binary $(TARGET) $(BIN)
+
+$(TARGET):$(OBJS)
+	@$(LD) $(LDFLAGS) -Map=$(MAP) -o $(TARGET) $(OBJS) $(HIBERRY_LIBS) $(SDK_LIB) $(LIBDEP)
+
+$(OBJS):%.o:%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	@rm -f $(TARGET) $(BIN) $(MAP) *.asm
+	@rm -f $(OBJS)

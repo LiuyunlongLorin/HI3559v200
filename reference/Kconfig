@@ -1,0 +1,66 @@
+#
+# For a description of the syntax of this configuration file,
+# see build/scripts/Documentation/kbuild/kconfig-language.txt.
+#
+
+source reference/hal/Kconfig
+source reference/common/Kconfig
+
+menu "Scene Configuration"
+config SCENEAUTO_SUPPORT
+	bool "Sceneauto support"
+endmenu
+
+menu "Media Configuration"
+	config LDC_SUPPORT
+		bool "LDC support"
+endmenu
+
+menu "UI Configuration"
+	choice
+		prompt "LCD UI Source Adapt Type"
+		default LCD_UISRC_ADAPT_MANUAL
+		config LCD_UISRC_ADAPT_AUTO
+			bool "auto"
+		config LCD_UISRC_ADAPT_MANUAL
+			bool "manual"
+	endchoice
+	config LCD_UISRC_BASE_WIDTH
+	    string "LCD UI source base width"
+	    depends on LCD_UISRC_ADAPT_AUTO
+    config LCD_UISRC_BASE_HEIGHT
+	    string "LCD UI source base height"
+	    depends on LCD_UISRC_ADAPT_AUTO
+    config LCD_UISRC_DEST_WIDTH
+	    string "LCD UI source dest width"
+	    depends on LCD_UISRC_ADAPT_AUTO
+    config LCD_UISRC_DEST_HEIGHT
+	    string "LCD UI source dest height"
+	    depends on LCD_UISRC_ADAPT_AUTO
+
+    choice
+		prompt "HDMI UI Source Adapt Type"
+		default HDMI_UISRC_ADAPT_MANUAL
+		config HDMI_UISRC_ADAPT_AUTO
+			bool "auto"
+		config HDMI_UISRC_ADAPT_MANUAL
+			bool "manual"
+	endchoice
+	config HDMI_UISRC_BASE_WIDTH
+	    string "HDMI UI source base width"
+	    depends on HDMI_UISRC_ADAPT_AUTO
+    config HDMI_UISRC_BASE_HEIGHT
+	    string "HDMI UI source base height"
+	    depends on HDMI_UISRC_ADAPT_AUTO
+    config HDMI_UISRC_DEST_WIDTH
+	    string "HDMI UI source dest width"
+	    depends on HDMI_UISRC_ADAPT_AUTO
+    config HDMI_UISRC_DEST_HEIGHT
+	    string "HDMI UI source dest height"
+	    depends on HDMI_UISRC_ADAPT_AUTO
+endmenu
+
+menu "PARAM Configuration"
+config PARAM_DIR_SUFFIX
+	string "PARAM DIR SUFFIX"
+endmenu

@@ -1,0 +1,2 @@
+setenv bootargs 'mem=128M quiet console=ttyAMA0,115200 clk_ignore_unused rw ubi.mtd=5 root=ubi0:ubifs rootfstype=ubifs mtdparts=hinand:1M(u-boot.bin),1M(rawparam),1M(rawparambak),8M(media_app_zip.bin),5M(uImage),12M(rootfs.ubifs),30M(appfs.ubifs)'
+setenv bootcmd 'nand read param_readaddr 0x100000 0x10000;nand read parambak_readaddr 0x200000 0x10000;dcache flush;cread param_readaddr parambak_readaddr 0x10000 param_baseaddr;go_cpu1 liteos_textbase liteos_readaddr 0x300000 0x800000; nand read linux_bootaddr 0xb00000 0x500000;bootm linux_bootaddr'

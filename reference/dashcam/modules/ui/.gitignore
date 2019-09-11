@@ -1,0 +1,12 @@
+carrecorder/bin/
+carrecorder/higv/
+carrecorder/include/higv_cextfile.h
+carrecorder/include/higv_language.h
+carrecorder/src/higv_cextfile.c
+
+rearview/bin/
+rearview/higv/
+rearview/include/higv_cextfile.h
+rearview/include/higv_language.h
+rearview/src/higv_cextfile.c
+

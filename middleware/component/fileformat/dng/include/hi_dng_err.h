@@ -1,0 +1,57 @@
+#ifndef __HI_DNG_ERR_H__
+#define __HI_DNG_ERR_H__
+
+#include "hi_error_def.h"
+#include "hi_defs.h"
+
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif
+#endif /* __cplusplus */
+
+typedef enum hiAPP_DNGMUXER_ERR_CODE_E {
+    /* general error code */
+
+    APP_DNG_ERR_HANDLE_INVALID = 0x40, /**<dng handle invalid */
+    APP_DNG_ERR_INVALID_ARG = 0x41,    /**<param is null or invalid */
+    APP_DNG_ERR_MALLOC_FAIL = 0x42,    /**<malloc memory fail */
+    APP_DNG_ERR_CREATE_MUXER = 0x43,   /**<create dngmuxer fail */
+    APP_DNG_ERR_DESTORY_MUXER = 0x44,  /**<destory dngmuxer  fail */
+    APP_DNG_ERR_WRITE = 0x45,          /**<write fail */
+    APP_DNG_ERR_READ = 0x46,           /**<read  fail */
+    APP_DNG_ERR_CREATE_AGAIN = 0x47,   /**<create error */
+    APP_DNG_ERR_NOT_CREATE = 0x48,     /**<not create error */
+    APP_DNG_ERR_ADD_IFD = 0x49,        /**<add ifd fail */
+    APP_DNG_ERR_GET_INFO = 0x50,       /**<get info fail */
+    APP_DNG_ERR_GET_IMAGE = 0X51,
+    APP_DNG_ERR_CREATE_DEMUXER = 0x52,  /**<create  dng demuxer fail */
+    APP_DNG_ERR_DESTORY_DEMUXER = 0x53, /**<destory dng demuxer fail */
+    APP_DNG_ERR_REACH_MAX = 0x54,       /**<reach instance max */
+    APP_DNG_BUTT = 0xFF
+} HI_APP_DNGMUXER_ERR_CODE_E;
+
+/* general error code */
+#define HI_ERR_DNG_NULL_PTR        HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_ERR_NULL_PTR)
+#define HI_ERR_DNG_HANDLE_INVALID  HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_HANDLE_INVALID)
+#define HI_ERR_DNG_INVALIDARG      HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_INVALID_ARG)
+#define HI_ERR_DNG_MALLOC          HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_MALLOC_FAIL)
+#define HI_ERR_DNG_CREATE_MUXER    HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_CREATE_MUXER)
+#define HI_ERR_DNG_DESTROY_MUXER   HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_DESTORY_MUXER)
+#define HI_ERR_DNG_WRITE           HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_WRITE)
+#define HI_ERR_DNG_READ            HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_READ)
+#define HI_ERR_DNG_CREATE_AGAIN    HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_CREATE_AGAIN)
+#define HI_ERR_DNG_NOT_CREATE      HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_NOT_CREATE)
+#define HI_ERR_DNG_ADD_IFD         HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_ADD_IFD)
+#define HI_ERR_DNG_GET_INFO        HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_GET_INFO)
+#define HI_ERR_DNG_GET_IMAGE       HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_GET_IMAGE)
+#define HI_ERR_DNG_CREATE_DEMUXER  HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_CREATE_DEMUXER)
+#define HI_ERR_DNG_DESTROY_DEMUXER HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_DESTORY_DEMUXER)
+#define HI_ERR_DNG_REACH_MAX       HI_APP_DEF_ERR(HI_APPID_DNG, APP_ERR_LEVEL_ERROR, APP_DNG_ERR_REACH_MAX)
+
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif
+#endif /* __cplusplus */
+#endif

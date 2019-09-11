@@ -1,0 +1,103 @@
+menu "Kernel"
+config LOSCFG_KERNEL_LITEKERNEL
+    bool "Enable Lite Kernel"
+    default y
+    help
+      This option will enable lite kernel of LiteOS. This is a basic feature,
+      so you should say Y here.
+
+config LOSCFG_KERNEL_MEM_TLSF
+    bool "Enable mem tlsf"
+    default n
+    depends on  LOSCFG_KERNEL_LITEKERNEL
+    help
+      This option will change mem type as tlsf
+
+config LOSCFG_KERNEL_MEM_SLAB
+    bool "Enable mem slab"
+    default n
+    depends on LOSCFG_KERNEL_MEM_TLSF
+    help
+      This option will change mem type as slab + tlsf
+
+config LOSCFG_KERNEL_MEM_SPEC
+    bool "Enable mem spec"
+    default n
+    depends on LOSCFG_KERNEL_MEM_TLSF
+    help
+      This option will change mem type as spec + tlsf
+
+config LOSCFG_KERNEL_EXTKERNEL
+    bool "Enable Extend Kernel"
+    default y
+    depends on LOSCFG_KERNEL_LITEKERNEL
+    help
+      This option will enable extend Kernel of LiteOS.  Extend kernel include
+      cppsupport, cpup, dynload, runstop and scatter. You can select one or some
+      of them.
+
+config LOSCFG_KERNEL_CPPSUPPORT
+    bool "C++ Support"
+    default y
+    depends on LOSCFG_KERNEL_EXTKERNEL
+    help
+      If you wish to build LiteOS with support for C++.
+
+config LOSCFG_AARCH64_FPU
+    bool "Enable FPU Support"
+    default n
+    depends on LOSCFG_KERNEL_EXTKERNEL && LOSCFG_ARCH_CORTEX_A53_AARCH64
+    help
+       Enable this option will support float point
+
+config LOSCFG_KERNEL_MPU
+   bool "Enable MPU Support"
+   default n
+   depends on LOSCFG_KERNEL_EXTKERNEL
+   help
+     Enable this option only when the processor has a Memory Protection Unit
+
+config LOSCFG_KERNEL_CPUP
+    bool "Enable Cpup"
+    default y
+    depends on LOSCFG_KERNEL_EXTKERNEL
+    help
+      If you wish to build LiteOS with support for cpup.
+
+config LOSCFG_CPUP_INCLUDE_IRQ
+    bool "Enable Cpup include irq"
+    default y
+    depends on LOSCFG_KERNEL_CPUP
+    help
+      If you wish to include irq usage for cpup.
+
+config LOSCFG_KERNEL_DYNLOAD
+    bool "Enable Dynamic Load Feature"
+    default y
+    depends on LOSCFG_KERNEL_EXTKERNEL
+    help
+      If you wish to build LiteOS with support for dynamic load.
+
+config LOSCFG_KERNEL_RUNSTOP
+    bool "Enable Run stop Feature"
+    default y
+    depends on LOSCFG_KERNEL_EXTKERNEL
+    help
+      If you wish to build LiteOS with support for run-stop.
+
+config LOSCFG_KERNEL_SCATTER
+    bool "Enable Scatter Feature"
+    default y
+    depends on LOSCFG_KERNEL_EXTKERNEL
+    help
+      If you wish to build LiteOS with support for scatter.
+
+config LOSCFG_KERNEL_TICKLESS
+    bool "Enable Tickless Feature"
+    default y
+    depends on LOSCFG_KERNEL_EXTKERNEL
+    help
+      If you wish to build LiteOS with support for tickless.
+endmenu
+
+

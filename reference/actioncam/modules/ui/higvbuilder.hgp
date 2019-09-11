@@ -1,0 +1,36 @@
+// This file a HiGV project definition file.
+// Created by HiGVBuilder.
+
+// Project paths
+
+PROJECT_PATH = .\
+
+PICTURE_PATH = $(PROJECT_PATH)
+FONT_PATH = $(PROJECT_PATH)\res\font
+OUTPUT_PATH = $(PROJECT_PATH)\bin
+
+// Diagram and resource files
+
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_busy_page.xml
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_filelist_page.xml
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_home_page.xml
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_lock_page.xml
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_mode_page.xml
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_playback_page.xml
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_prompt.xml
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_quick_page.xml
+LAYOUT_FILES += $(PROJECT_PATH)\xml\ui_set_page.xml
+
+SKIN_FILES += $(PROJECT_PATH)\xml\skin.xml
+
+FONT_FILES += $(PROJECT_PATH)\xml\font.xml
+
+DATAMODEL_FILES += $(PROJECT_PATH)\xml\datamodel.xml
+
+
+LANGUAGE_FILES += $(PROJECT_PATH)\xml\language.xml
+
+// Settings
+
+VIEW_WIDTH = 320
+VIEW_HEIGHT = 240

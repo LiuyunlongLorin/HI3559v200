@@ -1,0 +1,86 @@
+#!/bin/sh
+storage_type=sd
+storage_size=0
+if [[ $# == 0 ]] ; then
+{
+        if [ $storage_type == sd ] ; then
+        {
+                echo "coredump task start"
+                #set core dump parameter
+                ulimit -c unlimited
+                echo "/dev/core.%e-%p-%t"> /proc/sys/kernel/core_pattern
+                node=/dev/mmcblk0p2
+                count=0
+                while [ $count -le 15 ]
+                do
+                if [ -b /dev/mmcblk0p2 ]; then
+                        echo "$dev is exist"
+                        umask 077
+                        mount -t vfat /dev/mmcblk0p2 /mnt
+                        echo "/mnt/core.%e-%p-%t"> /proc/sys/kernel/core_pattern
+                        break
+                fi
+                let count++;
+                sleep 1s
+                done
+                if [[ $count == 16 ]] ; then
+                {
+                        echo -e "\033[33m"
+                        echo "*************************************************"
+                        echo "*************************************************"
+                        echo "coredump maybe lost because of mmcblk0p2 not exist"
+                        echo "*************************************************"
+                        echo "*************************************************"
+                        echo -e "\033[0m"
+                }
+                else
+                {
+                        echo -e "\033[32m"
+                        echo "coredump sd zone found"
+                        echo -e "\033[0m"
+                }
+                fi
+        };
+        else
+        {
+			echo "coredump task start on emc type"
+			if [[ $storage_size -gt 600 ]] ; then
+			{
+				#set core dump parameter
+				ulimit -c unlimited
+				echo "/app/core.%e-%p-%t"> /proc/sys/kernel/core_pattern
+			};
+			else
+			{
+			        echo -e "\033[33m"
+			        echo "*************************************************"
+			        echo "*************************************************"
+			        echo "coredump maybe lost because of $storage_size <600M"
+			        echo "*************************************************"
+			        echo "*************************************************"
+			        echo -e "\033[0m"
+			}
+			fi
+
+        }
+        fi
+};
+else
+{
+        if [ $storage_type == sd ] ; then
+        {
+
+                if [ -b /dev/mmcblk0p2 ]; then
+                        umask 077
+                        if [[ $1 == umount ]] ; then
+                        umount /mnt
+                        fi
+                        if [[ $1 == mount ]] ; then
+                        mount -t vfat /dev/mmcblk0p2 /mnt
+                        fi
+                fi
+        }
+        #do nothing when storage_type is not sd
+        fi
+};
+fi

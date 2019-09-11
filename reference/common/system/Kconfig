@@ -1,0 +1,12 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+menu "System Configuration"
+config BOOT_LOGO
+	bool "BOOT_LOGO support"
+	depends on !(DASHCAM && NONESCREEN)
+config BOOT_SOUND
+	bool "BOOT_SOUND support"
+endmenu

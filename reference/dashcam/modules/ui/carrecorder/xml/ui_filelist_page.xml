@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="FILELIST_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="FILELIST_PAGE"
+        top="0"
+        width="320"
+        height="240"
+        opacity="255"
+        winlevel="0"
+        transparent="no"
+        normalskin="SKIN_COMMON_BG"
+        isrelease="yes"
+        onshow="PDT_UI_FILELIST_OnShow"
+        onhide="PDT_UI_FILELIST_OnHide"
+        onevent="PDT_UI_FILELIST_OnEvent">
+
+        <groupbox
+            id="FILE_GROUPBOX"
+            top="0"
+            left="0"
+            width="320"
+            height="48"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_TITLE_BG">
+
+            <label
+                id="FILELIST_LABEL_INFO"
+                top="0"
+                left="48"
+                width="176"
+                height="48"
+                isrelease="yes"
+                font="FONT22"
+                text="STRING_FILELIST_INFO"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <button
+                id="FILELIST_BUTTON_SELECT_ALL"
+                top="0"
+                left="224"
+                width="48"
+                height="48"
+                isrelease="yes"
+                normalskin="SKIN_FILELIST_BUTTON_SELECT_ALL"
+                activeskin="SKIN_FILELIST_BUTTON_SELECT_ALL_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_UI_FILELIST_OnKeyDown"/>
+
+            <button
+                id="FILELIST_BUTTON_DELETE"
+                top="0"
+                left="272"
+                width="48"
+                height="48"
+                isrelease="yes"
+                normalskin="SKIN_BUTTON_DELETE"
+                activeskin="SKIN_BUTTON_DELETE_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_UI_FILELIST_OnKeyDown"/>
+        </groupbox>
+
+
+        <!-- scrollbar -->
+        <scrollbar
+            id="FILELIST_SCROLLBAR"
+            top="50"
+            left="315"
+            width="3"
+            height="156"
+            isrelease="yes"
+            normalskin="SKIN_SET_SCORLLBAR_BG"
+            slidres="SKIN_SET_SCORLLBAR_SLIDER"
+            sliddircet="vertical"
+            downarrownormal=""
+            uparrowpress=""
+            downarrowpress=""
+            alignment="hcenter|vcenter"
+            uparrownormal=""/>
+
+
+        <scrollgrid
+            id="FILELIST_SCROLLGRID_FILES"
+            top="48"
+            left="0"
+            width="315"
+            height="160"
+            isrelease="yes"
+            normalskin="SKIN_FILELIST_SCROLLGRID_FILES"
+            activeskin="SKIN_FILELIST_SCROLLGRID_FILES"
+            font=""
+            widgetposmirror="no"
+            widgetinteriormirror="no"
+            transparent="no"
+            rownum="2"
+            colnum="3"
+            topmargin="1"
+            leftmargin="1"
+            rightmargin="1"
+            bottommargin="1"
+            rowspace="1"
+            colspace="1"
+            cellcolnum="4"
+            datamodel="DATAMODEL_FILELIST"
+            scrollbar="FILELIST_SCROLLBAR"
+            focusnormskin=""
+            focusactiveskin=""
+            itemdirection="vertical"
+            iteminterval="50"
+            itemsteps="4"
+            focusinterval="50"
+            focussteps="20"
+            isfocusatbg="no"
+            focusanchor="0"
+            imgdecindex="1"
+            isdynamicdecimg="no"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_UI_FILELIST_OnKeyDown"
+            oncellcolselect = "PDT_UI_FILELIST_GRID_OnCellColSelect"
+            onfocusmove="PDT_UI_FILELIST_GRID_OnFocusMove">
+
+                <scrollgridcol
+                    id="FILELIST_GRID_THUMB_VIDEO"
+                    colbinddb="yes"
+                    coldbindex="0"
+                    coltype="memimage"
+                    coltop="0"
+                    colleft="0"
+                    colwidth="103"
+                    colheight="78"
+                    coldataconv="PDT_UI_FILELIST_GRID_GetVideoThumbnail"/>
+
+                <scrollgridcol
+                    id="FILELIST_GRID_THUMB_PHOTO"
+                    colbinddb="yes"
+                    coldbindex="0"
+                    coltype="image"
+                    coltop="0"
+                    colleft="0"
+                    colwidth="103"
+                    colheight="78"
+                    coldataconv="PDT_UI_FILELIST_GRID_GetPhotoThumbnail"/>
+
+                <scrollgridcol
+                    id="FILELIST_GRID_FOCUS"
+                    colbinddb="no"
+                    coltype="image"
+                    coltop="0"
+                    colleft="0"
+                    colwidth="103"
+                    colheight="78"
+                    coldataconv="PDT_UI_FILELIST_GRID_GetFocusIcon"/>
+
+                <scrollgridcol
+                    id="FILELIST_GRID_SELECT"
+                    colbinddb="yes"
+                    coldbindex="1"
+                    coltype="image"
+                    coltop="6"
+                    colleft="65"
+                    colwidth="32"
+                    colheight="32"
+                    coldataconv="PDT_UI_FILELIST_GRID_GetSelIcon"/>
+
+        </scrollgrid>
+
+        <groupbox
+            id="FILELIST_GROUPBOX_TITLE_BELOW"
+            top="208"
+            left="0"
+            width="320"
+            height="32"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_TITLE_BG">
+
+            <label
+                id="FILELIST_LABEL_BACK"
+                top="0"
+                left="5"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_BACK"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <label
+                id="FILELIST_LABEL_MENU"
+                top="0"
+                left="110"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_MENU"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <label
+                id="FILELIST_LABEL_OK"
+                top="0"
+                left="220"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_OK"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+        </groupbox>
+
+    </window>
+
+</view>

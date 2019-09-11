@@ -1,0 +1,73 @@
+#*******************************************************************************
+#The rule of make Linux kernel module
+#*******************************************************************************
+$(HIFB_MOD_NAME)-objs = $(HIFB_SRC:%.c=%.o)
+$(MOD_NAME)-objs = $(HIFB_SRC_O:%.c=%.o)
+
+ifneq ($(KERNELRELEASE),)
+    obj-m += hifb.o
+    #obj-m += $(MOD_NAME).o
+endif
+
+ifeq ($(CROSS),arm-hisiv500-linux-)
+EXTRA_CFLAGS += -Wno-error=date-time
+else ifeq ($(CROSS),arm-hisiv600-linux-)
+EXTRA_CFLAGS += -Wno-error=date-time
+endif
+
+ifeq ($(HIARCH),hi3516ev200)
+        TDE_ROOT    := tde/tde_hi3516ev200
+	VGS_ROOT    := vgs/vgs_hi3516ev200
+else
+        TDE_ROOT    := tde/tde
+endif
+
+#*******************************************************************************
+.PHONY: default clean
+default:
+
+ifeq ($(MPP_BUILD), y)
+	@-pushd $(MPP_PATH)/component/hifb/include        > /dev/null; rm -f $(BASE_MKP_HEADER);         popd > /dev/null
+	@-pushd $(MPP_PATH)/component/hifb/include        > /dev/null; rm -f $(SYS_EXT_HEADER);          popd > /dev/null
+	@-pushd $(MPP_PATH)/component/hifb/include        > /dev/null; rm -f $(VO_EXT_HEADER);           popd > /dev/null
+	@-pushd $(MPP_PATH)/component/hifb/include        > /dev/null; rm -f $(TDE_EXT_HEADER);          popd > /dev/null
+	@-pushd $(MPP_PATH)/component/hifb/include        > /dev/null; rm -f $(TDE_MKP_HEADER);          popd > /dev/null
+	@-pushd $(MPP_PATH)/component/hifb/include        > /dev/null; rm -f $(OSAL_HEADER);             popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/base/ext_inc              > /dev/null; cp $(BASE_MKP_HEADER) $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/sys/ext_inc               > /dev/null; cp $(SYS_EXT_HEADER)  $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/vo/ext_inc                > /dev/null; cp $(VO_EXT_HEADER)   $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/base/ext_inc              > /dev/null; cp $(VB_EXT_HEADER)   $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/component/$(TDE_ROOT)/driver/include  > /dev/null; cp $(TDE_EXT_HEADER)  $(INC_DIR); popd > /dev/null
+ifeq ($(HIARCH),hi3516ev200)
+	@-pushd $(MPP_PATH)/cbb/$(VGS_ROOT)/ext_inc  > /dev/null; cp $(VGS_EXT_HEADER)  $(INC_DIR); popd > /dev/null
+	@-pushd $(MPP_PATH)/cbb/$(VGS_ROOT)/include  > /dev/null; cp $(VGS_HEADER)  $(INC_DIR); popd > /dev/null
+endif
+	@-pushd $(MPP_PATH)/component/$(TDE_ROOT)/include         > /dev/null; cp $(TDE_MKP_HEADER)  $(INC_DIR); popd > /dev/null
+	@-pushd $(SDK_PATH)/osal/include                  > /dev/null; cp $(OSAL_HEADER)     $(INC_DIR); popd > /dev/null
+endif
+
+	@echo -e "\e[0;32;1m--Compiling 'hiFB'... Configs as follow:\e[0;36;1m"
+	@echo ---- CROSS=$(CROSS)
+	@echo ---- HIARCH=$(HIARCH), HICHIP=$(HICHIP), CVER=$(CVER), DBG=$(HIDBG)
+	@echo ---- SDK_PATH=$(SDK_PATH) , PARAM_FILE=$(PARAM_FILE)
+	@echo ---- KERNEL_ROOT=$(KERNEL_ROOT)
+	@@echo -e "\e[0m"
+	@$(MAKE) -C $(KERNEL_ROOT) M=$(PWD) V=10 modules
+	@mkdir -p $(REL_KO) && cp -rf $(HIFB_MOD_NAME).ko $(REL_KO)
+	@mkdir -p $(REL_INC) && cp $(PWD)/include/$(HIFB_HEADER) $(REL_INC)
+#	@mkdir -p $(REL_OBJ) && cp -rf $(MOD_NAME).o $(REL_OBJ)
+
+clean:
+	@for x in `find . -name "*.o"`;do rm -rf $$x;done
+	@for x in `find . -name ".*.o.cmd"`;do rm -rf $$x;done
+#	@for x in `find . -name ".*.o.d"`;do rm -rf $$x;done
+	@for x in `find . -name "*.ko"`;do rm -rf $$x;done
+	@for x in `find . -name "*.mod.c"`;do rm -rf $$x;done
+	@for x in `find . -name ".*.ko.cmd"`;do rm -rf $$x;done
+#	@for x in `find . -name ".tmp_versions"`;do rm -rf $$x;done
+	@rm .tmp_versions  -fr
+	@rm Module.symvers -f
+	@rm modules.order  -f
+	@rm -rf $(REL_KO)/$(HIFB_MOD_NAME).ko
+	@rm -rf $(REL_INC)/$(HIFB_MOD_NAME)*.h
+	@rm -f $(REL_OBJ)/$(MOD_NAME).o

@@ -1,0 +1,21 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Device Configuration"
+
+menuconfig GAUGE
+	bool "GAUGE support"
+
+if GAUGE
+	choice
+		prompt "GAUGE Type"
+		config GAUGE_BQ27421
+			bool "bq27421"
+			depends on (HI3556AV100 && CONFIG_REFB_ACTIONCAM)
+		if ADC	
+	    config GAUGE_ADC
+			bool "GAUGE_ADC"
+	    endif
+	endchoice
+endif

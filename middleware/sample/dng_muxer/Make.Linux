@@ -1,0 +1,105 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+THIRDPARTY_DIR := $(MIDDLEWARE_DIR)/thirdparty
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+
+LIB_FLAGS := -L$(HIBERRY_COMMON_DIR)/log/lib \
+		   -L$(HIBERRY_COMMON_DIR)/securec/lib \
+		   -L$(HIBERRY_COMPONENT_DIR)/fileformat/common/lib \
+		   -L$(MIDDLEWARE_DIR)/sample/common/lib \
+		   $(MEDIA_LIBS_PATH_LINK) \
+		   -L$(THIRDPARTY_DIR)/tiff/tiff/_install/lib \
+		   -L$(HIBERRY_COMPONENT_DIR)/fileformat/dng/lib
+
+INC_FLAGS := -I$(HIBERRY_COMMON_DIR)/log/include \
+		   -I$(HIBERRY_COMPONENT_DIR)/fileformat/common/include \
+		   -I$(MIDDLEWARE_DIR)/sample/common/include \
+		   -I$(HIBERRY_COMMON_INC) \
+           -I$(MEDIA_ADPT_DIR)/include \
+		   -I$(THIRDPARTY_DIR)/tiff/tiff/_install/include \
+		   -I$(HIBERRY_COMPONENT_DIR)/fileformat/dng/include
+
+#===============================================================================
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+CFLAGS += -Wno-error
+
+COMPILE   =  $(CC) $(CFLAGS) -g -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TRAGET_LINUX := $(COMPILE_ROOT)/sample_dngmuxer
+.PHONY : all clean install
+all:$(TRAGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+
+HIBERRY_LIBS := -ldng \
+                -lmwlog \
+                -lsecurec \
+				-ltiff
+
+SYS_LIBS := -lm \
+			-ldl \
+			-lpthread
+
+ifeq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+LIB_FLAGS += -L$(HUTAF_LIB_DIR)
+HIBERRY_LIBS += $(HUTAF_LIBS)
+endif
+
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LIB_FLAGS) -Wl,-Bstatic $(HIBERRY_LIBS) -Wl,-Bdynamic $(SYS_LIBS)
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f sample_dngmuxer
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+
+LOG_LIB_DIR := $(HIBERRY_COMMON_DIR)/log/lib
+LOG_INC_DIR := $(HIBERRY_COMMON_DIR)/log/include
+
+
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+DNG_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/dng/lib
+DNG_INC_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/dng/include
+TIFF_INC_DIR := $(THIRDPARTY_DIR)/tiff/tiff/_install/include
+TIFF_LIB_DIR := $(THIRDPARTY_DIR)/tiff/tiff/_install/lib

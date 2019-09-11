@@ -1,0 +1,457 @@
+###########################################################################
+# Copyright (c) 2014- Hisilicon Technologies CO., Ltd.
+# 
+# Main makefile
+# 
+###########################################################################
+PROJECT_ROOT_DIR      := $(patsubst %/build,%,$(CURDIR))
+
+ANDROID_TOP_DIR       := $(patsubst %/vendor/hisi/histar_isp/hispv150/build,%,$(CURDIR))
+PROJECT_FIRMWARE_DIR  := $(PROJECT_ROOT_DIR)/firmware
+PROJECT_CUSTOM_DIR    := $(PROJECT_ROOT_DIR)/custom
+PROJECT_CAMERA_ALGO_DIR := $(PROJECT_ROOT_DIR)/../camera_algo/v150
+ISP_LIBS_DIR          := $(PROJECT_ROOT_DIR)/build/libs
+PROJECT_LITEOS_DIR   := $(PROJECT_ROOT_DIR)/firmware/system/HuaweiLite_OS
+PROJECT_BUILD_DIR     := $(PROJECT_ROOT_DIR)/build
+PROJECT_ALGO_OPS_DIR  := $(PROJECT_FIRMWARE_DIR)/algo_ops
+#PROJECT_ALGO_CORE_DIR := $(PROJECT_ROOT_DIR)/algo_core
+PROJECT_OUTPUT_DIR   := $(PROJECT_BUILD_DIR)/out
+PROJECT_DOC_DIR      := $(PROJECT_BUILD_DIR)/doc
+PROJECT_PREBUILD_DIR := $(PROJECT_BUILD_DIR)/prebuild
+PROJECT_INCLUDE_DIR  := $(PROJECT_ROOT_DIR)/include
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_integration
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/common
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/isp/
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/external
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/external/md
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/drivers
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/drivers/mntn
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/system
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/system/HuaweiLite_OS
+PROJECT_INCLUDE_DIR  += $(PROJECT_LITEOS_DIR)/kernel/base/include
+PROJECT_INCLUDE_DIR  += $(PROJECT_LITEOS_DIR)/platform/cpu/arm/cortex-a7
+PROJECT_INCLUDE_DIR  += $(PROJECT_LITEOS_DIR)/platform/bsp/isp150/config
+PROJECT_INCLUDE_DIR  += $(PROJECT_LITEOS_DIR)/platform/bsp/isp150/include
+PROJECT_INCLUDE_DIR  += $(PROJECT_LITEOS_DIR)/platform/bsp/isp150/include/asm
+PROJECT_INCLUDE_DIR  += $(PROJECT_LITEOS_DIR)/shell/include
+PROJECT_INCLUDE_DIR  += $(PROJECT_LITEOS_DIR)/perf
+PROJECT_INCLUDE_DIR  += $(PROJECT_LITEOS_DIR)/test/include
+
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/ae
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/af
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/awb
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/cc
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/ce
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/blc
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/dpcc
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/bas
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/scaler
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/common
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/chromatix
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/degamma
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/dis
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/drc
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/fd
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/flash
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/gamma
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/gcd
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/lsc
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/minilsc
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/rawnf
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/pdaf
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/sharpen
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/arsr
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/stat3a
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/tnr
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/yuvnf
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/lut3d
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/algo_core/autocls
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/include/tests
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/platform/hi3660
+
+PROJECT_INCLUDE_DIR  += $(PROJECT_FIRMWARE_DIR)/drivers/include
+PROJECT_INCLUDE_DIR  += $(PROJECT_FIRMWARE_DIR)/isp/include
+PROJECT_INCLUDE_DIR  += $(PROJECT_FIRMWARE_DIR)/isp/include/algo_integrated
+PROJECT_INCLUDE_DIR  += $(PROJECT_FIRMWARE_DIR)/isp/include/config_table
+PROJECT_INCLUDE_DIR  += $(PROJECT_FIRMWARE_DIR)/isp/include/dataflow
+PROJECT_INCLUDE_DIR  += $(PROJECT_FIRMWARE_DIR)/isp/include/modules
+PROJECT_INCLUDE_DIR  += $(PROJECT_FIRMWARE_DIR)/tests/ut/include
+PROJECT_OUTPUT_LIBS  := $(PROJECT_OUTPUT_DIR)/libs
+PROJECT_LIBS         :=
+
+PROJECT_CONFIG_FILE  := $(PROJECT_OUTPUT_DIR)/.config
+BUILD_STATIC_LIBRARY := $(PROJECT_BUILD_DIR)/build/build_static_lib.mk
+BUILD_ALGO_STATIC_LIBRARY := $(PROJECT_BUILD_DIR)/build/build_algo_static_lib.mk
+BUILD_CUSTOM_STATIC_LIBRARY := $(PROJECT_BUILD_DIR)/build/build_custom_static_lib.mk
+LINKER_SCRIPT        := $(PROJECT_BUILD_DIR)/build/bl_a7_hcc.ld
+CLEAR_VARS           := $(PROJECT_BUILD_DIR)/build/clear_vars.mk
+
+PROJECT_PREBUILD_SYS := $(PROJECT_PREBUILD_DIR)/gcc/linux-x86_64/arm/arm-none-eabi-4.7.1
+PREBUILD_LIBS        := $(PROJECT_PREBUILD_SYS)/arm-none-eabi/lib
+PREBUILD_LIBS        += $(PROJECT_PREBUILD_SYS)/lib/gcc/arm-none-eabi/4.7.1
+CROSS_COMPILE        := $(PROJECT_PREBUILD_SYS)/bin/arm-none-eabi-
+AR                   := $(SOURCEANALYZER) $(CROSS_COMPILE)ar
+CC                   := $(SOURCEANALYZER) $(CCACHE) $(CROSS_COMPILE)gcc
+LD                   := $(SOURCEANALYZER) $(CROSS_COMPILE)ld
+OBJCOPY              := $(CROSS_COMPILE)objcopy
+STRIP                := $(CROSS_COMPILE)strip
+OBJDUMP				 := $(CROSS_COMPILE)objdump
+READELF				 := $(CROSS_COMPILE)readelf
+
+PROJECT_LIBS_DIR_FIRMWARE   :=  $(PROJECT_OUTPUT_DIR)/libs/firmware
+PROJECT_LIBS_DIR_BOOTWARE   :=  $(PROJECT_OUTPUT_DIR)/libs/bootware
+PROJECT_LIBS_DIR_CUSTOM     :=  $(PROJECT_OUTPUT_DIR)/libs/custom
+PROJECT_LIBS_DIR_CAMERAALGO :=  $(PROJECT_OUTPUT_DIR)/libs/cameraalgo
+
+#pc-lint variables
+ALL_LINT_TARGET :=
+LINT_OUTPUT_DIR := $(ANDROID_TOP_DIR)/vendor/hisi/build/delivery/hi3660/obj/acore/obj/ISP_OBJ/
+
+PROJECT_CAMERA_ALGO_LIBS :=
+
+DEBUG := 1
+
+RM                   := rm -rf
+CP                   := cp
+MV                   := mv
+HIDE                 := @
+LDFLAGS              := -EL -d -static -Map $(PROJECT_OUTPUT_DIR)/image.map
+CFLAGS               := -g -Wall -O2 -march=armv7-a -fno-toplevel-reorder \
+                        -mlong-calls -fno-short-enums -fno-short-wchar     \
+                        -msoft-float -fdollars-in-identifiers -fno-builtin  \
+                        -fzero-initialized-in-bss -mlittle-endian -fno-common       \
+                        -mfloat-abi=softfp -mfpu=vfpv3-d16 -fno-strict-aliasing \
+                        -Werror
+
+ifeq ($(strip $(DEBUG)),1)
+CFLAGS += -fno-omit-frame-pointer -mapcs
+endif
+CFLAGS += -DLOSCFG_LIB_LIBC
+
+# Include prodcut config
+ifdef product
+	PRODUCT              ?= $(product)
+else
+	PRODUCT              ?= hi3660
+endif
+
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/config/$(PRODUCT)
+include $(PROJECT_ROOT_DIR)/config/$(PRODUCT)/product_config.mk	
+ifneq ($(wildcard $(PROJECT_FIRMWARE_DIR)),)
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/config/$(PRODUCT)
+PROJECT_INCLUDE_DIR  += $(PROJECT_ROOT_DIR)/platform/$(CFG_PLATFORM)
+endif
+
+### CPPFLAGS:(Objective) C/C++ preprocessor flags, e.g. -I<include dir> 
+CPPFLAGS             := $(addprefix -I,$(PROJECT_INCLUDE_DIR))
+LDFLAGS              += $(addprefix -L,$(PREBUILD_LIBS))
+
+OSTYPE               := liteos
+MMU                  := 1
+SMMU                 := 1
+TIMESTAMP            := 1
+ALGO_INT             := 0
+USEICACHE            := 1
+USEDCACHE            := 1
+USEHIGHINIT          := 1
+USEPTBLMAP           := 1
+SAMPLEBACK           := 0
+
+ifdef V
+    HIDE :=
+endif
+
+### Define the OS type, default is "rtos"
+ifdef os
+    OSTYPE := $(os)
+endif
+
+
+ifeq ($(strip $(MMU)),2)
+	LINKER_SCRIPT := $(PROJECT_BUILD_DIR)/build/bl_a7_hcc_mmu.ld
+else
+	ifeq ($(strip $(SAMPLEBACK)),1)
+	LINKER_SCRIPT := $(PROJECT_BUILD_DIR)/build/bl_a7_hcc_sample_back.ld
+	else
+	LINKER_SCRIPT := $(PROJECT_BUILD_DIR)/build/bl_a7_hcc.ld
+	endif
+endif
+
+ifeq ($(strip $(MMU)),2)
+    CFLAGS += -DMMU
+    CFLAGS += -DENABLE_MMU=2
+    CFLAGS += -DRPMSG_SERVICE=1
+    CFLAGS += -DUSE_VBOOTADDR
+else
+	ifeq ($(strip $(MMU)),1)
+		CFLAGS += -DMMU
+		CFLAGS += -DENABLE_MMU=1
+		CFLAGS += -DRPMSG_SERVICE=1
+	else
+		CFLAGS += -DENABLE_MMU=0
+		CFLAGS += -DRPMSG_SERVICE=0
+	endif
+endif
+
+ifeq ($(strip $(SMMU)),1)
+	CFLAGS += -DSMMU
+endif
+
+ifeq ($(strip $(BAREOS)),1)
+	CFLAGS += -DBOOT_BARE_OS
+endif
+
+ifeq ($(strip $(LLT)),1)
+	CFLAGS += -DTEST_RPMSG_LLT=1
+else
+	CFLAGS += -DTEST_RPMSG_LLT=0
+endif
+
+ifeq ($(strip $(RELEASE)),1)
+    CFLAGS += -DRELEASE_VERSION=1
+else
+    CFLAGS += -DRELEASE_VERSION=0
+endif
+
+ifeq ($(strip $(TIMESTAMP)),1)
+    CFLAGS += -DUSE_TIME_STAMP
+endif
+
+ifeq ($(strip $(ALGO_INT)),1)
+    #ifeq ($(strip $(SAMPLEBACK)),0)
+        CFLAGS += -DALGO_INT_ENABLE=1
+    #endif
+else
+    CFLAGS += -DALGO_INT_ENABLE=0
+endif
+
+ifeq ($(strip $(USEICACHE)),1)
+    CFLAGS += -DCONFIG_ICACHE=1
+else
+    CFLAGS += -DCONFIG_ICACHE=0
+endif
+
+ifeq ($(strip $(USEDCACHE)),1)
+    CFLAGS += -DCONFIG_DCACHE=1
+else
+    CFLAGS += -DCONFIG_DCACHE=0
+endif
+
+ifeq ($(strip $(USEHIGHINIT)),1)
+    CFLAGS += -DCONFIG_HIGHINIT=1
+else
+    CFLAGS += -DCONFIG_HIGHINIT=0
+endif
+
+ifeq ($(strip $(USEPTBLMAP)),1)
+    CFLAGS += -DCONFIG_PTBLMAP=1
+else
+    CFLAGS += -DCONFIG_PTBLMAP=0
+endif
+
+ifeq ($(strip $(SAMPLEBACK)),1)
+    CFLAGS += -DCONFIG_SAMPLEBACK=1
+else
+    CFLAGS += -DCONFIG_SAMPLEBACK=0
+endif
+
+CFLAGS += -DFW_VERSION="\"$(CFG_VERSION_NUMBER)\""
+
+# Figure out where we are.
+define my-dir
+$(strip                                                          \
+  $(eval LOCAL_MODULE_MAKEFILE := $$(lastword $$(MAKEFILE_LIST))) \
+  $(if $(filter $(CLEAR_VARS),$(LOCAL_MODULE_MAKEFILE)),           \
+    $(error LOCAL_PATH must be set before including $$(CLEAR_VARS)) \
+   ,                                                                 \
+    $(patsubst %/,%,$(dir $(LOCAL_MODULE_MAKEFILE)))                  \
+   )                                                                   \
+ )
+endef
+
+define gen-intermediates-dir
+$(strip $(subst $(PROJECT_ROOT_DIR), $(PROJECT_OUTPUT_DIR), $(1)))
+endef
+
+.PHONY: all
+DEFAULT_GOAL := all
+$(DEFAULT_GOAL):
+
+
+.PHONY:config
+config:
+	$(shell sh $())
+
+BW_LIBS     :=
+INIT_LIBS   :=
+PROJECT_LIBS         += $(wildcard $(PROJECT_BUILD_DIR)/libs/liteos/*.a)
+LDFLAGS              += $(addprefix -L,$(PROJECT_BUILD_DIR)/libs/liteos/)
+
+
+# Include LiteOS makefile here
+include $(PROJECT_LITEOS_DIR)/kernel/base/module.mk
+include $(PROJECT_LITEOS_DIR)/platform/module.mk
+#include $(PROJECT_LITEOS_DIR)/shell/module.mk
+#include $(PROJECT_LITEOS_DIR)/perf/module.mk
+#include $(PROJECT_LITEOS_DIR)/extended/module.mk
+#include $(PROJECT_LITEOS_DIR)/test/module.mk
+
+# firmware directory
+#ifneq ($(wildcard $(PROJECT_FIRMWARE_DIR)),)
+#include $(PROJECT_LITEOS_DIR)/kernel/base/module.mk
+#include $(PROJECT_LITEOS_DIR)/platform/module.mk
+#include $(PROJECT_FIRMWARE_DIR)/system/module.mk
+#include $(PROJECT_FIRMWARE_DIR)/drivers/module.mk
+#include $(PROJECT_FIRMWARE_DIR)/isp/module.mk
+#include $(PROJECT_FIRMWARE_DIR)/tests/module.mk
+#include $(PROJECT_ALGO_OPS_DIR)/module.mk
+#BW_LIBS     += $(PROJECT_LIBS_DIR_BOOTWARE)/libbootware.a
+#INIT_LIBS   += $(PROJECT_LIBS_DIR_FIRMWARE)/libinit.a
+#PROJECT_LIBS += $(INIT_LIBS)
+#else
+LDFLAGS += $(addprefix -L,$(ISP_LIBS_DIR)/$(PRODUCT))
+PROJECT_LIBS += $(wildcard $(ISP_LIBS_DIR)/$(PRODUCT)/firmware/*.a)
+INIT_LIBS += $(wildcard $(ISP_LIBS_DIR)/$(PRODUCT)/firmware/libinit.a)
+BW_LIBS      += $(wildcard $(ISP_LIBS_DIR)/$(PRODUCT)/bootware/*.a)
+#endif
+
+# custom directory
+ifndef ($(wildcard $(PROJECT_CUSTOM_DIR)),)
+include $(PROJECT_CUSTOM_DIR)/module.mk
+endif
+
+# algo_core directory
+ifneq ($(wildcard $(PROJECT_CAMERA_ALGO_DIR)),)
+include $(PROJECT_BUILD_DIR)/build/build_algo_code.mk
+else
+LDFLAGS += $(addprefix -L,$(ISP_LIBS_DIR)/$(PRODUCT)/cameraalgo/)
+PROJECT_LIBS += $(wildcard $(ISP_LIBS_DIR)/$(PRODUCT)/cameraalgo/*.a)
+endif
+	
+### Intermediate file with shell symbol table
+IMAGE_SYMBOL:= $(PROJECT_OUTPUT_DIR)/firmware/system/image.out
+SYMBOL_SRC  := $(PROJECT_OUTPUT_DIR)/firmware/system/symbol.c
+SYMBOL_OBJ  := $(patsubst %.c,%.o,$(SYMBOL_SRC))
+
+ifeq ($(strip $(SAMPLEBACK)),0)
+BOOTWARE_OBJ := $(PROJECT_OUTPUT_DIR)/firmware/bootware/histar_bootware.o
+endif
+IMAGE       := $(PROJECT_OUTPUT_DIR)/$(CFG_ARCH)_$(CFG_VERSION_NUMBER).elf
+FW_BINARY   := $(PROJECT_OUTPUT_DIR)/histar_isp_$(CFG_VERSION_NUMBER).bin
+FW_DOC      := doc/fw_doc.tar.bz2
+FW_SDK      := sdk
+BW_BINARY   := $(PROJECT_OUTPUT_DIR)/isp_bw.elf
+
+### make chromatix data image
+CHROMATIX_IMG = $(PROJECT_OUTPUT_DIR)/isp_dts.img
+CHROMATIX_DATA_PATH = $(PROJECT_ROOT_DIR)/custom/sensor
+DATA_SPERATE_PATH = $(PROJECT_ROOT_DIR)/build/separator
+EXCLUDE_PATH = imx214
+export PROJECT_INCLUDE_DIR
+### end
+
+all : $(CHROMATIX_IMG) $(FW_BINARY) $(FW_DOC) $(FW_SDK)
+
+$(CHROMATIX_IMG):
+	$(HIDE) make -C $(DATA_SPERATE_PATH) clean
+	$(HIDE) $(DATA_SPERATE_PATH)/chromatix_separator $(CHROMATIX_DATA_PATH) $(DATA_SPERATE_PATH) $(EXCLUDE_PATH)
+	$(HIDE) sh $(DATA_SPERATE_PATH)/separator.sh $(DATA_SPERATE_PATH)/chromatix_table.h $(CHROMATIX_DATA_PATH)/chromatix_table.h
+	$(HIDE) mkdir -p $(PROJECT_OUTPUT_DIR)
+	$(HIDE) make -C $(DATA_SPERATE_PATH)
+	$(HIDE) $(DATA_SPERATE_PATH)/create_image
+	$(HIDE) cp $(DATA_SPERATE_PATH)/isp_dts.img $(PROJECT_OUTPUT_DIR)
+	$(HIDE) make -C $(DATA_SPERATE_PATH) clean
+
+$(FW_BINARY):$(IMAGE)
+	$(HIDE)$(OBJCOPY)  -O binary $< $@
+	$(HIDE)echo "\033[36m$(FW_BINARY) ready\033[0m"
+	
+#ifneq ($(wildcard $(PROJECT_FIRMWARE_DIR)),)
+#$(BW_LIBS):$(PROJECT_FIRMWARE_DIR)/bootware/histar_bootware.S
+#	$(HIDE)test -d $(PROJECT_OUTPUT_DIR)/firmware/bootware || mkdir -p $(PROJECT_OUTPUT_DIR)/firmware/bootware
+#	$(HIDE)test -d $(PROJECT_LIBS_DIR_BOOTWARE) || mkdir -p $(PROJECT_LIBS_DIR_BOOTWARE)
+#	$(HIDE)$(CC) $(CFLAGS) $(CPPFLAGS) -c -Wall -g -march=armv7-a -DTEXT_BASE=0xFFFF0000 $< -o $(PROJECT_OUTPUT_DIR)/firmware/bootware/histar_bootware.o
+#	$(HIDE)$(AR) $(ARFLAGS) $(BW_LIBS) $(PROJECT_OUTPUT_DIR)/firmware/bootware/histar_bootware.o
+		
+#$(INIT_LIBS):$(PROJECT_FIRMWARE_DIR)/system/init.S $(PROJECT_LITEOS_DIR)/platform/bsp/isp150/reset_vector.S
+#	$(HIDE)test -d $(PROJECT_OUTPUT_DIR)/firmware/system || mkdir -p $(PROJECT_OUTPUT_DIR)/firmware/system
+#	$(HIDE)test -d $(PROJECT_LIBS_DIR_FIRMWARE) || mkdir -p $(PROJECT_LIBS_DIR_FIRMWARE)
+#	$(HIDE)$(CC) $(CFLAGS) $(CPPFLAGS) -c $(PROJECT_FIRMWARE_DIR)/system/init.S -o $(PROJECT_OUTPUT_DIR)/firmware/system/init.o
+#	$(HIDE)$(CC) $(CFLAGS) $(CPPFLAGS) -c $(PROJECT_LITEOS_DIR)/platform/bsp/isp150/reset_vector.S  -o $(PROJECT_OUTPUT_DIR)/firmware/system/reset_vector.o
+#	$(HIDE)$(AR) $(ARFLAGS) $(INIT_LIBS) $(PROJECT_OUTPUT_DIR)/firmware/system/init.o $(PROJECT_OUTPUT_DIR)/firmware/system/reset_vector.o
+
+#endif	
+
+$(IMAGE): $(PROJECT_LIBS) $(PROJECT_CAMERA_ALGO_LIBS) $(BW_LIBS)
+#echo "INIT_LIBS $(INIT_LIBS)"
+#	echo "BW_LIBS $(BW_LIBS)"
+	$(HIDE)$(LD) -r --whole-archive $^ --no-whole-archive -o $(IMAGE_SYMBOL)
+	$(HIDE)tclsh $(PROJECT_BUILD_DIR)/build/makeSymbolRun.tcl arm $(IMAGE_SYMBOL) $(SYMBOL_SRC)
+	$(HIDE)$(CC) $(CFLAGS) $(CPPFLAGS) -c $(SYMBOL_SRC) -o $(SYMBOL_OBJ)
+	$(HIDE)$(LD) $(LDFLAGS) -T $(LINKER_SCRIPT) $(DATAOBJS) --whole-archive $^ --no-whole-archive --start-group -lc_ori -lm -lgcc $(SYMBOL_OBJ) --end-group -o $@
+	$(RM) $(SYMBOL_SRC)
+	$(HIDE)tclsh $(PROJECT_BUILD_DIR)/build/makeSymbolRun.tcl arm $(IMAGE) $(SYMBOL_SRC)
+	$(HIDE)$(CC) $(CFLAGS) $(CPPFLAGS) -c $(SYMBOL_SRC) -o $(SYMBOL_OBJ)
+	$(HIDE)$(LD) $(LDFLAGS) -T $(LINKER_SCRIPT) $(DATAOBJS) --whole-archive $^ --no-whole-archive --start-group -lc_ori -lm -lgcc $(SYMBOL_OBJ) --end-group -o $@
+	$(HIDE)echo "\033[36m$(IMAGE) ready\033[0m"
+	$(HIDE)$(PROJECT_BUILD_DIR)/build/elf_size_check.sh $(IMAGE) $(PROJECT_ROOT_DIR)
+	$(HIDE)$(OBJDUMP) -d $@ > $@.dump
+	$(HIDE)$(READELF) -a $@ > $@.readelf
+	$(HIDE)$(CP) $@ $@.notstriped
+	$(HIDE)$(STRIP) $@
+	$(HIDE)$(CP) $@ $(PROJECT_OUTPUT_DIR)/isp_fw.elf
+
+.PHONY:clean
+clean :
+	$(RM) $(PROJECT_OUTPUT_DIR)
+	$(RM) $(PROJECT_DOC_DIR)
+
+.PHONY:doc
+doc : $(FW_DOC)
+$(FW_DOC):
+#	@echo "\033[33mGenerating DOC...\033[0m"
+#	@doxygen $(PROJECT_ROOT_DIR)/build/doxycfg > /dev/null
+#	@tar jcf ./doc/fw_doc.tar.bz2 ./doc/html > /dev/null
+#	@echo "\033[36m$(FW_DOC) ready\033[0m"
+
+.PHONY:sdk
+sdk:
+	@echo "\033[36m$(FW_SDK) TBD\033[0m"
+
+.PHONY:help
+help:
+	@echo 'Cleaning targets:'
+	@echo  '  clean       - Remove most generated files but keep the config and'
+	@echo  '                enough build support to build external modules'
+	@echo  '  distclean   - Remove all generated files'
+	@echo  ''
+	@echo  'Configuration targets:'
+	@echo  '  product     - Define a product, necessary, such as product=hi6250 for dallas
+	@echo  '  MMU         - Define a macro of MMU to toggle memory managerment'
+	@echo  '  SMMU        - Define a macro of SMMU to toggle smmu, if disable SMMU=0'
+	@echo  '  TIMESTAMP   - Define a macro of TIMESTAMP to toggle log timestamp, if disable TIMESTAMP=0'
+	@echo  '  UT          - Build the target including unit tests 'fpga_ut' module'
+	@echo  '  LLT         - Build the target including unit tests 'llt' module'
+	@echo  '  V           - Verbose all command line.'
+	@echo  ''
+	@echo  'Target:'
+	@echo  '  all         - Make all include genarate 'doc'.'
+	@echo  '  doc         - Genarate 'doc' HTML type by doxygen.'
+	@echo  '  sdk         - Genarate 'sdk' tookit.'
+	@echo  ''
+	@echo "\033[33mFor example:\033[0m"
+	@echo '  make all'
+	@echo '  make doc sdk'
+	@echo '  make UT=1'
+	@echo '  make V=1 os=rtos'
+	@echo "\033[31mDefault:\033[0m"
+	@echo '  make'
+	@echo '  is equal to run single RTOS with MMU and SMMU on austin fpga platform'
+	@echo '  make arch=austin_fpga MMU=1 SMMU=1'
+	@echo "\033[31mIf disable MMU:\033[0m"
+	@echo '  make MMU=0'
+	@echo "\033[31mIf run multiOS(android and RTOS):\033[0m"
+	@echo '  make MMU=2'
+
+##############################-<end>-##############################

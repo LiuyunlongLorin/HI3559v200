@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="ANIM_WIN"
+isusecommonskin="yes">
+    <window
+    id="ANIM_WIN"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    normalskin="common_skin_white"
+    opacity="255"
+    isrelease="yes"
+    onshow="AnimOnShowListener"
+    winlevel="0"
+    >
+        <image
+        id="ANIM_WIN_IMAGE1"
+        top="0"
+        left="0"
+        width="40"
+        height="35"
+        isrelease="yes"
+        islanchange="no"
+        normalskin="common_skin_white"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        isnofocus="yes"
+        image="./res/pic/win_back_no.png"
+        ontouchaction="ANIM_WIN_IMAGE1_ontouchaction"/>
+
+        <label
+        id="ANIM_WIN_LABEL1"
+        top="0"
+        left="40"
+        width="280"
+        height="35"
+        isrelease="yes"
+        islanchange="no"
+        normalskin="win_title_skin"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        font="simhei_font_text_20"
+        alignment="hcenter|vcenter"
+        isnofocus="no"
+        text="STR_HIGV_ANIM_SAMPLE"/>
+
+        <button
+        id="ANIM_BUTTON"
+        top="80"
+        left="30"
+        width="100"
+        height="100"
+        isrelease="yes"
+        islanchange="no"
+        normalskin="group_skin"
+        focusmode="auto"
+        text=""
+        alignment="hcenter|vcenter"
+        transparent="no"
+        isskinforcedraw="no"
+        isnofocus="no"
+        style="normal"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        font="simhei_font_text_20"
+        />
+
+    </window>
+</view>

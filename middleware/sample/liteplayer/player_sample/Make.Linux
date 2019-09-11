@@ -1,0 +1,82 @@
+#===============================================================================
+# export variable
+#===============================================================================
+LOCAL_DIR := $(shell pwd)
+MIDDLEWARE_DIR := $(LOCAL_DIR)/../../..
+include $(MIDDLEWARE_DIR)/base.mak
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+
+HIBERRY_LIB_DIR :=
+HIBERRY_INCLUDE_DIR := $(COMPONENT_DIR)/liteplayer/include
+
+SRC_ROOT :=   $(LOCAL_DIR)
+OBJ_ROOT :=   $(LOCAL_DIR)
+
+#****源代码路径********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(LOCAL_DIR)/player_sample.c
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+INC_FLAGS += -I$(HIBERRY_INCLUDE_DIR) \
+             -I$(COMMON_DIR)/log/include \
+             -I$(COMMON_DIR)/uproc/include \
+             -I$(COMMON_DIR)/include \
+			 $(MEDIA_INCLUDE_PATH)
+
+HIBERRY_LIB_DIR += -L$(COMMON_DIR)/log/lib \
+                   -L$(COMMON_DIR)/mbuffer/lib \
+				   -L$(THIRDPARTY_DIR)/openexif/lib \
+				   -L$(COMPONENT_DIR)/fileformat/exif/lib \
+				   -L$(COMPONENT_DIR)/statemachine/fsm/lib \
+                   -L$(COMPONENT_DIR)/liteplayer/lib \
+				   $(MEDIA_LIBS_PATH_LINK)
+
+CFLAGS += -Wno-error
+ifeq ($(CFG_OS_TYPE), linux_liteos)
+HIBERRY_LIBS_LINK := -lliteplayer -lavplay_linux -lmpf_demuxer -lexif -lopenexif -lfsm -lmwlog -lmbuf -lsecurec $(MEDIA_LIBS_LINK) -lstdc++
+else
+HIBERRY_LIBS_LINK := -lliteplayer -lavplay -lmpf_demuxer -lexif -lopenexif -lfsm -lmwlog -lmbuf -lsecurec $(MEDIA_LIBS_LINK) -lstdc++
+endif
+
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+HIBERRY_LIBS := -lpthread $(MEDIA_SO_LIBS_LINK) -Wl,-Bstatic $(HIBERRY_LIBS_LINK) -Wl,-Bdynamic -ldl -lm
+else
+HIBERRY_LIB_DIR += -L$(HUTAF_LIB_DIR)
+HIBERRY_LIBS := -lpthread $(MEDIA_SO_LIBS_LINK) $(HIBERRY_LIBS_LINK) -ldl -lm
+HIBERRY_LIBS += $(HUTAF_LIBS)
+endif
+TARGET_DIR := $(LOCAL_DIR)
+
+
+COMPILE   =  $(CC) $(CFLAGS) -c "$<" -o "$@" $(INC_FLAGS)
+TRAGET_LINUX := $(LOCAL_DIR)/sample_play
+.PHONY : all clean aac
+all:$(TRAGET_LINUX) aac
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	@$(COMPILE)
+
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(HIBERRY_LIB_DIR) $(HIBERRY_LIBS)
+
+aac:
+	@pushd $(LOCAL_DIR);cd AAC;make;popd
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f $(TRAGET_LINUX)
+	@pushd $(LOCAL_DIR);cd AAC;make clean;popd
+
+install:
+	if [ ! -d $(OUT_LITEOS_LIB_DIR) ]; then mkdir -p $(OUT_LITEOS_LIB_DIR);fi
+	@cp AAC/*.so $(OUT_LITEOS_LIB_DIR)/
+
+
+uninstall:
+	@rm $(OUT_LITEOS_LIB_DIR)/libhiaacdec.so -rf

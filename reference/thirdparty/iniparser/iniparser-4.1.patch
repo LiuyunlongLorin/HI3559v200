@@ -1,0 +1,1268 @@
+diff -uarN ./src/dictionary.c ../iniparser/src/dictionary.c
+--- ./src/dictionary.c	2017-11-02 17:09:15.000000000 +0800
++++ ../iniparser/src/dictionary.c	2018-12-27 11:08:18.000000000 +0800
+@@ -20,18 +20,43 @@
+ #include <string.h>
+ #include <unistd.h>
+ 
++#ifdef __cplusplus
++#if __cplusplus
++extern "C"{
++#endif
++#endif /* __cplusplus */
++
++
++
+ /** Maximum value size for integers and doubles. */
+ #define MAXVALSZ    1024
+ 
+ /** Minimal allocated number of entries in a dictionary */
+ #define DICTMINSZ   128
+ 
++/** Minimal allocated number of commnet in a dictionary */
++#define DICTCOMMENTMINSZ	128
++
+ /** Invalid key token */
+ #define DICT_INVALID_KEY    ((char*)-1)
+ 
+ /*---------------------------------------------------------------------------
+                             Private functions
+  ---------------------------------------------------------------------------*/
++/* Doubles the allocated size associated to a pointer */
++/* 'size' is the current allocated size. */
++void * mem_double(void * ptr, int size)
++{
++    void * newptr ;
++
++    newptr = calloc(2*size, 1);
++    if (newptr==NULL) {
++        return NULL ;
++    }
++    memcpy(newptr, ptr, size);
++    free(ptr);
++    return newptr ;
++}
+ 
+ /*-------------------------------------------------------------------------*/
+ /**
+@@ -43,7 +68,7 @@
+   for systems that do not have it.
+  */
+ /*--------------------------------------------------------------------------*/
+-static char * xstrdup(const char * s)
++char * xstrdup(const char * s)
+ {
+     char * t ;
+     size_t len ;
+@@ -146,22 +171,31 @@
+   it. If you do not know in advance (roughly) the number of entries in the
+   dictionary, give size=0.
+  */
+-/*-------------------------------------------------------------------------*/
+-dictionary * dictionary_new(size_t size)
++/*--------------------------------------------------------------------------*/
++dictionary * dictionary_new(int size)
+ {
+     dictionary  *   d ;
+ 
+     /* If no size was specified, allocate space for DICTMINSZ */
+     if (size<DICTMINSZ) size=DICTMINSZ ;
+ 
+-    d = (dictionary*) calloc(1, sizeof *d) ;
+-
+-    if (d) {
+-        d->size = size ;
+-        d->val  = (char**) calloc(size, sizeof *d->val);
+-        d->key  = (char**) calloc(size, sizeof *d->key);
+-        d->hash = (unsigned*) calloc(size, sizeof *d->hash);
++    if (!(d = (dictionary *)calloc(1, sizeof(dictionary)))) {
++        return NULL;
+     }
++    d->size = size ;
++    d->val  = (char**) calloc(size, sizeof *d->val);
++    d->key  = (char**) calloc(size, sizeof *d->key);
++    d->hash = (unsigned*) calloc(size, sizeof *d->hash);
++
++    /* save comment and space Line */
++    if (size<DICTCOMMENTMINSZ) size=DICTCOMMENTMINSZ ;
++    d->commSize = size ;
++    d->comment  = calloc(size, sizeof(char*));
++    memset(d->comment, 0, size*sizeof(char*));
++    d->commHash = calloc(size, sizeof(unsigned));
++    memset(d->commHash, 0, size*sizeof(unsigned));
++    d->commPlace= calloc(size, sizeof(unsigned char));
++    memset(d->commPlace, 0, size*sizeof(unsigned char));
+     return d ;
+ }
+ 
+@@ -176,7 +210,7 @@
+ /*--------------------------------------------------------------------------*/
+ void dictionary_del(dictionary * d)
+ {
+-    ssize_t  i ;
++    int  i ;
+ 
+     if (d==NULL) return ;
+     for (i=0 ; i<d->size ; i++) {
+@@ -185,6 +219,15 @@
+         if (d->val[i]!=NULL)
+             free(d->val[i]);
+     }
++    /* save comment and space Line*/
++    for (i=0 ; i<d->commSize ; i++) {
++        if (d->comment[i]!=NULL)
++            free(d->comment[i]);
++    }
++    free(d->comment);
++    free(d->commHash);
++    free(d->commPlace);
++
+     free(d->val);
+     free(d->key);
+     free(d->hash);
+@@ -209,8 +252,7 @@
+ const char * dictionary_get(const dictionary * d, const char * key, const char * def)
+ {
+     unsigned    hash ;
+-    ssize_t      i ;
+-
++    int      i ;
+     hash = dictionary_hash(key);
+     for (i=0 ; i<d->size ; i++) {
+         if (d->key[i]==NULL)
+@@ -254,11 +296,11 @@
+ /*--------------------------------------------------------------------------*/
+ int dictionary_set(dictionary * d, const char * key, const char * val)
+ {
+-    ssize_t         i ;
+-    unsigned       hash ;
++    int         i ;
++    unsigned    hash ;
+ 
+     if (d==NULL || key==NULL) return -1 ;
+-
++    
+     /* Compute hash for this key */
+     hash = dictionary_hash(key) ;
+     /* Find if value is already in dictionary */
+@@ -278,6 +320,7 @@
+             }
+         }
+     }
++
+     /* Add a new value */
+     /* See if dictionary needs to grow */
+     if (d->n==d->size) {
+@@ -297,6 +340,7 @@
+     d->val[i]  = (val ? xstrdup(val) : NULL) ;
+     d->hash[i] = hash;
+     d->n ++ ;
++
+     return 0 ;
+ }
+ 
+@@ -314,7 +358,7 @@
+ void dictionary_unset(dictionary * d, const char * key)
+ {
+     unsigned    hash ;
+-    ssize_t      i ;
++    int      i ;
+ 
+     if (key == NULL || d == NULL) {
+         return;
+@@ -362,7 +406,7 @@
+ /*--------------------------------------------------------------------------*/
+ void dictionary_dump(const dictionary * d, FILE * out)
+ {
+-    ssize_t  i ;
++    int  i ;
+ 
+     if (d==NULL || out==NULL) return ;
+     if (d->n<1) {
+@@ -378,3 +422,9 @@
+     }
+     return ;
+ }
++
++#ifdef __cplusplus
++#if __cplusplus
++}
++#endif
++#endif /* __cplusplus */
+diff -uarN ./src/dictionary.h ../iniparser/src/dictionary.h
+--- ./src/dictionary.h	2017-11-02 17:09:15.000000000 +0800
++++ ../iniparser/src/dictionary.h	2018-12-27 11:08:18.000000000 +0800
+@@ -24,8 +24,10 @@
+ #include <unistd.h>
+ 
+ #ifdef __cplusplus
+-extern "C" {
++#if __cplusplus
++extern "C"{
+ #endif
++#endif /* __cplusplus */
+ 
+ /*---------------------------------------------------------------------------
+                                 New types
+@@ -42,19 +44,48 @@
+   hash function.
+  */
+ /*-------------------------------------------------------------------------*/
++/** "CL_" is comment line's the head of name*/
++#define CL_NSBC                1  /** 1,No space before comment;                           example:|;comment*/
++#define CL_AKLR                2  /** 2,At the key line's right;                           example:|key = value    ;commnet*/
++#define CL_CLINE               3  /** 3,Line of commnet which at the key line's behind;    example;|               ;comment*/
++#define CL_SLINE               4  /** 4,Space Line;                                        example;|\r\n*/
++
+ typedef struct _dictionary_ {
+     int             n ;     /** Number of entries in dictionary */
+-    ssize_t         size ;  /** Storage size */
++    int         size ;  /** Storage size */
+     char        **  val ;   /** List of string values */
+     char        **  key ;   /** List of string keys */
+     unsigned     *  hash ;  /** List of hash values for keys */
++    
++    /*2006/03/11 blair add : save comment and space Line*/
++    int             commN;      /** Number of comment in dictionary */
++    int             commSize;   /** Storage size of comment*/
++    char        **  comment;    /** List of string comment and space Line*/
++    unsigned	 *	commHash;	/** List of hash values for keys ,signed the comment line is the key has the comment */
++    unsigned char * commPlace;  /** remember the comment at where the key keyhash signed.
++                                                0,the line has no comment;
++                                                1,no space before comment;
++                                                2,at the key line's right;
++                                                3,Line of commnet or at the key line's behind;
++                                                4,Space Line;*/
+ } dictionary ;
+ 
+ 
+ /*---------------------------------------------------------------------------
+                             Function prototypes
+  ---------------------------------------------------------------------------*/
++void * mem_double(void * ptr, int size);
++/*-------------------------------------------------------------------------*/
++/**
++  @brief    Duplicate a string
++  @param    s String to duplicate
++  @return   Pointer to a newly allocated string, to be freed with free()
+ 
++  This is a replacement for strdup(). This implementation is provided
++  for systems that do not have it.
++ */
++/*--------------------------------------------------------------------------*/
++char * xstrdup(const char * s);
+ /*-------------------------------------------------------------------------*/
+ /**
+   @brief    Compute the hash key for a string.
+@@ -80,7 +111,7 @@
+   dictionary, give size=0.
+  */
+ /*--------------------------------------------------------------------------*/
+-dictionary * dictionary_new(size_t size);
++dictionary * dictionary_new(int size);
+ 
+ /*-------------------------------------------------------------------------*/
+ /**
+@@ -167,7 +198,9 @@
+ void dictionary_dump(const dictionary * d, FILE * out);
+ 
+ #ifdef __cplusplus
++#if __cplusplus
+ }
+ #endif
++#endif /* __cplusplus */
+ 
+ #endif
+diff -uarN ./src/iniparser.c ../iniparser/src/iniparser.c
+--- ./src/iniparser.c	2017-11-02 17:09:15.000000000 +0800
++++ ../iniparser/src/iniparser.c	2018-12-27 11:08:18.000000000 +0800
+@@ -8,12 +8,20 @@
+ /*--------------------------------------------------------------------------*/
+ /*---------------------------- Includes ------------------------------------*/
+ #include <ctype.h>
+-#include <stdarg.h>
++#include <stdio.h>
++#include <syslog.h>
+ #include "iniparser.h"
+ 
++#ifdef __cplusplus
++#if __cplusplus
++extern "C"{
++#endif
++#endif /* __cplusplus */
++
+ /*---------------------------- Defines -------------------------------------*/
+-#define ASCIILINESZ         (1024)
++#define ASCIILINESZ         (8192)
+ #define INI_INVALID_KEY     ((char*)-1)
++#define CNOSK               0xFFFF
+ 
+ /*---------------------------------------------------------------------------
+                         Private to this module
+@@ -30,57 +38,27 @@
+     LINE_VALUE
+ } line_status ;
+ 
+-/*-------------------------------------------------------------------------*/
+-/**
+-  @brief    Convert a string to lowercase.
+-  @param    in   String to convert.
+-  @param    out Output buffer.
+-  @param    len Size of the out buffer.
+-  @return   ptr to the out buffer or NULL if an error occured.
+-
+-  This function convert a string into lowercase.
+-  At most len - 1 elements of the input string will be converted.
+- */
+-/*--------------------------------------------------------------------------*/
+-static const char * strlwc(const char * in, char *out, unsigned len)
+-{
+-    unsigned i ;
+-
+-    if (in==NULL || out == NULL || len==0) return NULL ;
+-    i=0 ;
+-    while (in[i] != '\0' && i < len-1) {
+-        out[i] = (char)tolower((int)in[i]);
+-        i++ ;
+-    }
+-    out[i] = '\0';
+-    return out ;
+-}
+ 
+ /*-------------------------------------------------------------------------*/
+ /**
+-  @brief    Duplicate a string
+-  @param    s String to duplicate
+-  @return   Pointer to a newly allocated string, to be freed with free()
++  @brief	Skip blanks until the first non-blank character.
++  @param	s	String to parse.
++  @return	Pointer to char inside given string.
+ 
+-  This is a replacement for strdup(). This implementation is provided
+-  for systems that do not have it.
++  This function returns a pointer to the first non-blank character in the
++  given string.
+  */
+ /*--------------------------------------------------------------------------*/
+-static char * xstrdup(const char * s)
+-{
+-    char * t ;
+-    size_t len ;
+-    if (!s)
+-        return NULL ;
+ 
+-    len = strlen(s) + 1 ;
+-    t = (char*) malloc(len) ;
+-    if (t) {
+-        memcpy(t, s, len) ;
+-    }
+-    return t ;
++char * strskp(char * s)
++{
++    char * skip = s;
++	if (s==NULL) return NULL ;
++    while (isspace((int)*skip) && *skip) skip++;
++    return skip ;
+ }
+ 
++
+ /*-------------------------------------------------------------------------*/
+ /**
+   @brief    Remove blanks at the beginning and the end of a string.
+@@ -88,7 +66,7 @@
+   @return   unsigned New size of the string.
+  */
+ /*--------------------------------------------------------------------------*/
+-static unsigned strstrip(char * s)
++unsigned strstrip(char * s)
+ {
+     char *last = NULL ;
+     char *dest = s;
+@@ -108,41 +86,33 @@
+     return last - s;
+ }
+ 
+-/*-------------------------------------------------------------------------*/
+-/**
+-  @brief    Default error callback for iniparser: wraps `fprintf(stderr, ...)`.
+- */
+-/*--------------------------------------------------------------------------*/
+-static int default_error_callback(const char *format, ...)
+-{
+-  int ret;
+-  va_list argptr;
+-  va_start(argptr, format);
+-  ret = vfprintf(stderr, format, argptr);
+-  va_end(argptr);
+-  return ret;
+-}
++char *pseek = NULL;
+ 
+-static int (*iniparser_error_callback)(const char*, ...) = default_error_callback;
+-
+-/*-------------------------------------------------------------------------*/
+-/**
+-  @brief    Configure a function to receive the error messages.
+-  @param    errback  Function to call.
++int iniparser_add_entry(
++    dictionary * d,
++    const char * sec,
++    const char * key,
++    const char * val)
++{
++    char longkey[2*ASCIILINESZ+1];
++
++    if((d == NULL) || (sec == NULL)) return -1;
++    /* Make a key as section:keyword */
++    if (key!=NULL) {
++        sprintf(longkey, "%s:%s", sec, key);
++    } else {
++        strcpy(longkey, sec);
++    }
++    /* Add (key,val) to dictionary */
++    if(0 != dictionary_set(d, longkey, val))
++    {
++        return 1;
++    }
+ 
+-  By default, the error will be printed on stderr. If a null pointer is passed
+-  as errback the error callback will be switched back to default.
+- */
+-/*--------------------------------------------------------------------------*/
+-void iniparser_set_error_callback(int (*errback)(const char *, ...))
+-{
+-  if (errback) {
+-    iniparser_error_callback = errback;
+-  } else {
+-    iniparser_error_callback = default_error_callback;
+-  }
++    return 0;
+ }
+ 
++
+ /*-------------------------------------------------------------------------*/
+ /**
+   @brief    Get number of sections in a dictionary
+@@ -244,6 +214,56 @@
+     return ;
+ }
+ 
++static unsigned char iniparser_save_comment(const dictionary * d, FILE * f, const unsigned int hash)
++{
++    int     ci;
++    unsigned char flag = 0; /* comment line flag */
++
++    for(ci=0; ci < d->commSize; ci++)
++    {
++        if(d->commPlace[ci] == 0)
++        {
++            continue;
++        }
++        if(d->commHash[ci] == hash)
++        {
++            flag = 1;
++            switch(d->commPlace[ci])
++            {
++                case 1:
++                {
++                    fprintf(f, "%s", d->comment[ci] ? d->comment[ci] : " ");
++                    break;
++                }
++                case 2:
++                {
++                    fseek(f,-1,SEEK_CUR);
++                    fprintf(f, "%s\n", d->comment[ci] ? d->comment[ci] : " ");
++                    break;
++                }
++                case 3:
++                {
++                    fprintf(f, "%50s%s", " ", d->comment[ci] ? d->comment[ci] : " ");
++                    break;
++                }
++                case 4:
++                {
++                    fprintf(f, "\r\n");
++                    break;
++                }
++                /*case 5:
++                {
++                    fprintf(f, "%48s\n", " ");
++                    break;
++                }*/
++                default:
++                    break;
++            }
++        }
++    }
++    return flag;
++}
++
+ /*-------------------------------------------------------------------------*/
+ /**
+   @brief    Save a dictionary to a loadable ini file
+@@ -260,24 +280,36 @@
+     int          i ;
+     int          nsec ;
+     const char * secname ;
+-
+     if (d==NULL || f==NULL) return ;
+ 
+     nsec = iniparser_getnsec(d);
+     if (nsec<1) {
+         /* No section in file: dump all keys as they are */
++        /* save comment and space Line*/
++        iniparser_save_comment(d, f, CNOSK);
++
+         for (i=0 ; i<d->size ; i++) {
+             if (d->key[i]==NULL)
+                 continue ;
+-            fprintf(f, "%s = %s\n", d->key[i], d->val[i]);
++            /*fprintf(f, "%s = %s\n", d->key[i], d->val[i]);*/
++            /* save comment and space Line*/
++            fprintf(f, "%-30s = \"%-15s\"\n", d->key[i], d->val[i]);
++            fprintf(f, "%-30s = \"%-15s\"\n", d->key[i],
++                    d->val[i] ? d->val[i] : " ");
++            /* save comment and space Line*/
++            iniparser_save_comment(d, f, d->hash[i]);
+         }
+         return ;
+     }
++
++    /* save comment and space Line*/
++    iniparser_save_comment(d, f, CNOSK);
++
+     for (i=0 ; i<nsec ; i++) {
+         secname = iniparser_getsecname(d, i) ;
+         iniparser_dumpsection_ini(d, secname, f);
+     }
+-    fprintf(f, "\n");
++    /*fprintf(f, "\n");*/
+     return ;
+ }
+ 
+@@ -296,6 +328,7 @@
+ void iniparser_dumpsection_ini(const dictionary * d, const char * s, FILE * f)
+ {
+     int     j ;
++    int hash;
+     char    keym[ASCIILINESZ+1];
+     int     seclen ;
+ 
+@@ -303,19 +336,30 @@
+     if (! iniparser_find_entry(d, s)) return ;
+ 
+     seclen  = (int)strlen(s);
+-    fprintf(f, "\n[%s]\n", s);
++    /*fprintf(f, "\n[%s]\n", s);*/
++
++    fprintf(f, "[%-48s\n", s);
++    fseek(f, 0-(49-strlen(s)), SEEK_CUR);
++    fprintf(f, "%c", ']');
++
++    fseek(f, 0, SEEK_END);
++    /* save comment and space Line*/
++    hash = dictionary_hash(s);
++    iniparser_save_comment(d, f, hash);
+     sprintf(keym, "%s:", s);
+     for (j=0 ; j<d->size ; j++) {
+         if (d->key[j]==NULL)
+             continue ;
+         if (!strncmp(d->key[j], keym, seclen+1)) {
+             fprintf(f,
+-                    "%-30s = %s\n",
++                    "%-30s = \"%-15s\"\n",
+                     d->key[j]+seclen+1,
+                     d->val[j] ? d->val[j] : "");
++            /* save comment and space Line*/
++            iniparser_save_comment(d, f, d->hash[j]);
+         }
+     }
+-    fprintf(f, "\n");
++    /*fprintf(f, "\n");*/
+     return ;
+ }
+ 
+@@ -339,8 +383,7 @@
+     if (! iniparser_find_entry(d, s)) return nkeys;
+ 
+     seclen  = (int)strlen(s);
+-    strlwc(s, keym, sizeof(keym));
+-    keym[seclen] = ':';
++    sprintf(keym, "%s:", s);
+ 
+     for (j=0 ; j<d->size ; j++) {
+         if (d->key[j]==NULL)
+@@ -378,8 +421,7 @@
+     if (! iniparser_find_entry(d, s)) return NULL;
+ 
+     seclen  = (int)strlen(s);
+-    strlwc(s, keym, sizeof(keym));
+-    keym[seclen] = ':';
++    sprintf(keym, "%s:", s);
+ 
+     i = 0;
+ 
+@@ -388,6 +430,7 @@
+             continue ;
+         if (!strncmp(d->key[j], keym, seclen+1)) {
+             keys[i] = d->key[j];
++            printf("keys[i]:%s\n",keys[i]);
+             i++;
+         }
+     }
+@@ -412,25 +455,25 @@
+ /*--------------------------------------------------------------------------*/
+ const char * iniparser_getstring(const dictionary * d, const char * key, const char * def)
+ {
+-    const char * lc_key ;
++    /*const char * lc_key ;*/
+     const char * sval ;
+-    char tmp_str[ASCIILINESZ+1];
++    /*char tmp_str[ASCIILINESZ+1];*/
+ 
+     if (d==NULL || key==NULL)
+         return def ;
+ 
+-    lc_key = strlwc(key, tmp_str, sizeof(tmp_str));
+-    sval = dictionary_get(d, lc_key, def);
++    /*lc_key = strlwc(key, tmp_str, sizeof(tmp_str));*/
++    sval = dictionary_get(d, key, def);
+     return sval ;
+ }
+ 
+ /*-------------------------------------------------------------------------*/
+ /**
+-  @brief    Get the string associated to a key, convert to an long int
++  @brief    Get the string associated to a key, convert to an int
+   @param    d Dictionary to search
+   @param    key Key string to look for
+   @param    notfound Value to return in case of error
+-  @return   long integer
++  @return   integer
+ 
+   This function queries a dictionary for a key. A key as read from an
+   ini file is given as "section:key". If the key cannot be found,
+@@ -451,46 +494,13 @@
+   Credits: Thanks to A. Becker for suggesting strtol()
+  */
+ /*--------------------------------------------------------------------------*/
+-long int iniparser_getlongint(const dictionary * d, const char * key, long int notfound)
++int iniparser_getint(const dictionary * d, const char * key, int notfound)
+ {
+     const char * str ;
+ 
+     str = iniparser_getstring(d, key, INI_INVALID_KEY);
+     if (str==INI_INVALID_KEY) return notfound ;
+-    return strtol(str, NULL, 0);
+-}
+-
+-
+-/*-------------------------------------------------------------------------*/
+-/**
+-  @brief    Get the string associated to a key, convert to an int
+-  @param    d Dictionary to search
+-  @param    key Key string to look for
+-  @param    notfound Value to return in case of error
+-  @return   integer
+-
+-  This function queries a dictionary for a key. A key as read from an
+-  ini file is given as "section:key". If the key cannot be found,
+-  the notfound value is returned.
+-
+-  Supported values for integers include the usual C notation
+-  so decimal, octal (starting with 0) and hexadecimal (starting with 0x)
+-  are supported. Examples:
+-
+-  "42"      ->  42
+-  "042"     ->  34 (octal -> decimal)
+-  "0x42"    ->  66 (hexa  -> decimal)
+-
+-  Warning: the conversion may overflow in various ways. Conversion is
+-  totally outsourced to strtol(), see the associated man page for overflow
+-  handling.
+-
+-  Credits: Thanks to A. Becker for suggesting strtol()
+- */
+-/*--------------------------------------------------------------------------*/
+-int iniparser_getint(const dictionary * d, const char * key, int notfound)
+-{
+-    return (int)iniparser_getlongint(d, key, notfound);
++    return (int)strtol(str, NULL, 0);
+ }
+ 
+ /*-------------------------------------------------------------------------*/
+@@ -600,8 +610,9 @@
+ /*--------------------------------------------------------------------------*/
+ int iniparser_set(dictionary * ini, const char * entry, const char * val)
+ {
+-    char tmp_str[ASCIILINESZ+1];
+-    return dictionary_set(ini, strlwc(entry, tmp_str, sizeof(tmp_str)), val) ;
++    /*char tmp_str[ASCIILINESZ+1];
++    return dictionary_set(ini, strlwc(entry, tmp_str, sizeof(tmp_str)), val) ;*/
++    return dictionary_set(ini, entry, val) ;
+ }
+ 
+ /*-------------------------------------------------------------------------*/
+@@ -616,10 +627,11 @@
+ /*--------------------------------------------------------------------------*/
+ void iniparser_unset(dictionary * ini, const char * entry)
+ {
+-    char tmp_str[ASCIILINESZ+1];
+-    dictionary_unset(ini, strlwc(entry, tmp_str, sizeof(tmp_str)));
++    /*char tmp_str[ASCIILINESZ+1];
++    dictionary_unset(ini, strlwc(entry, tmp_str, sizeof(tmp_str)));*/
++    dictionary_unset(ini, entry);
+ }
+-
++#if 0
+ /*-------------------------------------------------------------------------*/
+ /**
+   @brief    Load a single line from an INI file
+@@ -640,7 +652,7 @@
+     char * line = NULL;
+     size_t      len ;
+ 
+-    line = xstrdup(input_line);
++    line = _strdup(input_line);
+     len = strstrip(line);
+ 
+     sta = LINE_UNPROCESSED ;
+@@ -657,14 +669,9 @@
+         strlwc(section, section, len);
+         sta = LINE_SECTION ;
+     } else if (sscanf (line, "%[^=] = \"%[^\"]\"", key, value) == 2
+-           ||  sscanf (line, "%[^=] = '%[^\']'",   key, value) == 2) {
+-        /* Usual key=value with quotes, with or without comments */
+-        strstrip(key);
+-        strlwc(key, key, len);
+-        /* Don't strip spaces from values surrounded with quotes */
+-        sta = LINE_VALUE ;
+-    } else if (sscanf (line, "%[^=] = %[^;#]", key, value) == 2) {
+-        /* Usual key=value without quotes, with or without comments */
++           ||  sscanf (line, "%[^=] = '%[^\']'",   key, value) == 2
++           ||  sscanf (line, "%[^=] = %[^;#]",     key, value) == 2) {
++        /* Usual key=value, with or without comments */
+         strstrip(key);
+         strlwc(key, key, len);
+         strstrip(value);
+@@ -696,6 +703,59 @@
+     free(line);
+     return sta ;
+ }
++#endif
++
++/* read ini file to memory */
++static char* iniparser_open(const char * ininame)
++{
++    FILE* ini;
++    long fsize;
++    char* buf;
++    size_t result;
++    if ((ini=fopen(ininame, "rb"))==NULL) {
++        return NULL ;
++    }
++    /*get file size*/
++    fseek (ini,0,SEEK_END);
++    fsize = ftell (ini);
++    rewind (ini);
++    buf = (char*)malloc(sizeof(char)*fsize+1);
++    if(buf == NULL)
++    {
++        printf("iniparser malloc fail\n");
++        fclose(ini);
++        return NULL ;
++    }
++
++    result = fread(buf,1,fsize,ini);
++    if((long)result != fsize)
++    {
++        printf("read inifile fail\n");
++        fclose(ini);
++        return NULL;
++    }
++    fclose(ini);
++    buf[fsize] = '\0';
++    return buf;/* buf should be free by caller */
++}
++
++char* iniparser_gets(char *s, int n,  char *stream)
++{
++    register int c = 0;
++    register char *cs;
++    if(pseek == NULL)
++    {
++        pseek = stream;
++    }
++    cs=s;
++    while(--n>0 &&(c = *pseek++)!='\0')
++    if ((*cs++=  c) =='\n')
++    {
++        break;
++    }
++    *cs ='\0';
++    return (c == '\0' && cs == s) ?NULL :s ;
++}
+ 
+ /*-------------------------------------------------------------------------*/
+ /**
+@@ -713,110 +773,263 @@
+ /*--------------------------------------------------------------------------*/
+ dictionary * iniparser_load(const char * ininame)
+ {
+-    FILE * in ;
++    /*FILE * in ;*/
+ 
+-    char line    [ASCIILINESZ+1] ;
+-    char section [ASCIILINESZ+1] ;
+-    char key     [ASCIILINESZ+1] ;
+-    char tmp     [(ASCIILINESZ * 2) + 1] ;
+-    char val     [ASCIILINESZ+1] ;
++    char line    [ASCIILINESZ+1];
++    char section [ASCIILINESZ+1];
++    char key     [ASCIILINESZ+1];
++    char tmp     [ASCIILINESZ+1];
++    char val     [ASCIILINESZ+1];
++    char comment [ASCIILINESZ+1];
+ 
+-    int  last=0 ;
+     int  len ;
+     int  lineno=0 ;
+-    int  errs=0;
+-    int  mem_err=0;
+-
++    char * where ;
++    char * pstream;
+     dictionary * dict ;
++    int last = 0;
+ 
+-    if ((in=fopen(ininame, "r"))==NULL) {
+-        iniparser_error_callback("iniparser: cannot open %s\n", ininame);
++    if ((pstream=iniparser_open(ininame))==NULL) {
++        fprintf(stderr, "iniparser: cannot open %s\n", ininame);
+         return NULL ;
+     }
+-
+     dict = dictionary_new(0) ;
+     if (!dict) {
+-        fclose(in);
++        /*fclose(in);*/
++        free(pstream);
+         return NULL ;
+     }
+-
+     memset(line,    0, ASCIILINESZ);
+     memset(section, 0, ASCIILINESZ);
+     memset(key,     0, ASCIILINESZ);
++    memset(tmp,     0, ASCIILINESZ);
+     memset(val,     0, ASCIILINESZ);
+-    last=0 ;
+-
+-    while (fgets(line+last, ASCIILINESZ-last, in)!=NULL) {
++    memset(comment, 0, ASCIILINESZ);
++    while (iniparser_gets(line + last, ASCIILINESZ - last, pstream)!=NULL)
++    {
+         lineno++ ;
++        where = line;   /* Skip leading spaces */
++        comment[0] = 0;
+         len = (int)strlen(line)-1;
+-        if (len<=0)
++        if (len==0)
+             continue;
+         /* Safety check against buffer overflows */
+-        if (line[len]!='\n' && !feof(in)) {
+-            iniparser_error_callback(
+-              "iniparser: input line too long in %s (%d)\n",
+-              ininame,
+-              lineno);
+-            dictionary_del(dict);
+-            fclose(in);
+-            return NULL ;
++        if (line[len]!='\n' && (len == (ASCIILINESZ - 1))) {
++            fprintf(stderr,
++                    "iniparser: input line too long in %s (%d):%s\n",
++                    ininame,
++                    lineno,
++                    line);
++            #if HI_OS_TYPE == HI_OS_LINUX
++            syslog(LOG_NOTICE, "iniparser: input line too long in %s (%d)", ininame, lineno);
++            #endif
++            memset(line, 0, ASCIILINESZ);
++            while (iniparser_gets(line, ASCIILINESZ, pstream))
++            {
++                len = (int)strlen(line)-1;
++                if (line[len]!='\n')
++                {
++                    memset(line, 0, ASCIILINESZ);
++                    continue;
++                }
++                else
++                {
++                    memset(line, 0, ASCIILINESZ);
++                    break;
++                }
++            }
++            continue;
+         }
++
++        /* detect multi-line */
+         /* Get rid of \n and spaces at end of line */
+         while ((len>=0) &&
+-                ((line[len]=='\n') || (isspace(line[len])))) {
++				((line[len]=='\n') || (line[len]=='\r')))
++        {
+             line[len]=0 ;
+             len-- ;
+         }
+-        if (len < 0) { /* Line was entirely \n and/or spaces */
+-            len = 0;
+-        }
+         /* Detect multi-line */
+-        if (line[len]=='\\') {
++        //printf("len = %dict\n", len);
++        //printf("line[%dict] = %c, %dict\n", len, line[len], line[len]);
++        if (line[len]=='\\')
++        {
+             /* Multi-line value */
+             last=len ;
+             continue ;
+         } else {
+             last=0 ;
+         }
+-        switch (iniparser_line(line, section, key, val)) {
+-            case LINE_EMPTY:
+-            case LINE_COMMENT:
+-            break ;
+ 
+-            case LINE_SECTION:
+-            mem_err = dictionary_set(dict, section, NULL);
+-            break ;
+ 
+-            case LINE_VALUE:
+-            sprintf(tmp, "%s:%s", section, key);
+-            mem_err = dictionary_set(dict, tmp, val);
+-            break ;
++        /* save comment and space Line*/
++        /*if (*where==';' || *where=='#' || *where==0)*/
++        if (*where==';' || *where=='#')/*; comment*/
++        {
++            strcpy(comment,where);
++            /*no space commnet line*/
++            iniparser_add_comment(dict, section, key, comment, CL_NSBC);
++        }
++        else
++        {
++            where = strskp(line); /* Skip leading spaces */
++            /*if((sscanf (where, " ; %[^\n]", comment) == 1)
++                ||(sscanf (where, " # %[^\n]", comment) == 1))*//*   ; comment*/
++            if (*where==';' || *where=='#')
++            {
++                strcpy(comment,where);
++                /*comment line with space*/
++                iniparser_add_comment(dict, section, key, comment, CL_CLINE);
++                last = 0;
++                continue ; /* Comment lines */
++            }
++            else
++            {
++                if ((sscanf(where, "[%[^]]] %[^\n]", section, comment)==2)
++                    || (sscanf(where, "[%[^]]", section)==1))/*[sec];comment*/
++                {
++                    /* Valid section name */
++                    key[0] = 0;
++                    /*strcpy(section, strlwc(section, tmp, sizeof(tmp)));*/
++                    iniparser_add_entry(dict, section, NULL, NULL);
++                    if(comment[0] != 0)
++                    {
++                        /*The comment at key line's right*/
++                        iniparser_add_comment(dict, section, key, comment, CL_AKLR);
++                    }
++                }
++                else /*key = value ;comment*/
++                {
++                    /*2006/03/13 blair modify : save comment and space Line*/
++                    if (sscanf(where, "%[^=] = \"%[^\"]\" %[^\n]", key, val,
++                            comment) == 3
++                       ||  sscanf(where, "%[^=] = \"%[^\"]\"", key, val) == 2
++                       ||  sscanf(where, "%[^=] = '%[^\']' %[^\n]", key, val,
++                                comment) == 3
++                       ||  sscanf(where, "%[^=] = '%[^\']'",   key, val) == 2
++                       ||  sscanf(where, "%[^=] = %[^;] %[^\n]", key, val,
++                                comment) == 3
++                       ||  sscanf(where, "%[^=] = %[^;]", key, val ) == 2
++                       ||  sscanf(where, "%[^=] = %[^\n]", key,
++                                comment ) == 2
++                       ||  sscanf(where, "%[^=] = ", key) == 1)
++                    {
++                        /*strcpy(key, strlwc(key, tmp, sizeof(tmp)));*/
++                        /*
++                         * sscanf cannot handle "" or '' as empty value,
++                         * this is done here
++                         */
++                        if (!strcmp(val, "\"\"") || !strcmp(val, "''")) {
++                            val[0] = (char)0;
++                        } else {
++                            strstrip(val);
++                        }
++                        strstrip(key);
++                        iniparser_add_entry(dict, section, key, val);
++                        if(comment[0] != 0)
++                        {
++                            /*The comment at key line's right*/
++                            iniparser_add_comment(dict, section, key, comment, CL_AKLR);
++                        }
++                    }
++                    else
++                    {
++                        comment[0] = 0;
++                        /*Space Line*/
++                        iniparser_add_comment(dict, section, key, comment, CL_SLINE);
++                    }
++                }
++            }
++        }
++        last = 0;
++    }
++    pseek = NULL;
++    free(pstream);
+ 
+-            case LINE_ERROR:
+-            iniparser_error_callback(
+-              "iniparser: syntax error in %s (%d):\n-> %s\n",
+-              ininame,
+-              lineno,
+-              line);
+-            errs++ ;
+-            break;
++    return dict ;
++}
+ 
+-            default:
+-            break ;
++/*-------------------------------------------------------------------------*/
++/**
++  @brief    add comment
++  @param  ini     Dictionary to modify
++  @param  sec    section string
++  @param  key    Key string
++  @param  comment    comment string
++  @return  0 success, -1 failed
++
++  save comment and space Line.
++ */
++/*--------------------------------------------------------------------------*/
++int iniparser_add_comment(
++    dictionary          *d,
++    const char          *sec,
++    const char          *key,
++    const char          *comment,
++    const unsigned char place)
++{
++    char        longkey[1024] = {0};
++    unsigned    hash;
++    int         i;
++
++    if ((d == NULL) || (sec == NULL)  || (place < 1)) return -1;
++
++    /* Make a key as section:keyword */
++    if(sec[0] != 0)
++    {
++        if (key[0]!=0) {
++            snprintf(longkey, 1024, "%s:%s", sec, key);
++        } else {
++            strncpy(longkey, sec, 1024);
+         }
+-        memset(line, 0, ASCIILINESZ);
+-        last=0;
+-        if (mem_err<0) {
+-            iniparser_error_callback("iniparser: memory allocation failure\n");
+-            break ;
++    }
++    else
++    {
++        if (key[0]!=0) {
++            snprintf(longkey, 1024, "%s", key);
++        } else {
++            longkey[0] = 0;
+         }
+     }
+-    if (errs) {
+-        dictionary_del(dict);
+-        dict = NULL ;
++
++    /* Compute hash for this key */
++    if(longkey[0]!='\0')
++    {
++        hash = dictionary_hash(longkey);
+     }
+-    fclose(in);
+-    return dict ;
++    else
++    {
++        hash = CNOSK;
++    }
++
++    /* Add a new value */
++    /* See if dictionary needs to grow */
++    if (d->commN == d->commSize)
++    {
++        /* Reached maximum size: reallocate blackboard */
++        d->comment  = (char **)mem_double((void*)d->comment, d->commSize * sizeof(char*));
++        d->commHash = (unsigned *)mem_double((void*)d->commHash, d->commSize * sizeof(unsigned));
++        d->commPlace= (unsigned char *)mem_double((void*)d->commPlace, d->commSize * sizeof(unsigned char));
++
++        /* Double size */
++        d->commSize *= 2 ;
++    }
++
++    /* Insert comment in the first empty slot */
++    for (i=0 ; i<d->commSize ; i++)
++    {
++        if (d->commPlace[i] == 0)
++        {
++            /* Add comment here */
++            break ;
++        }
++    }
++    d->commHash[i] = hash;
++    d->commPlace[i]= place;
++    d->comment[i] ? free(d->comment[i]),d->comment[i]=NULL: NULL;
++    d->comment[i]  = (comment[0] != 0) ? xstrdup(comment) : NULL;
++    d->commN ++ ;
++    return 0;
+ }
+ 
+ /*-------------------------------------------------------------------------*/
+@@ -834,3 +1047,9 @@
+ {
+     dictionary_del(d);
+ }
++
++#ifdef __cplusplus
++#if __cplusplus
++}
++#endif
++#endif /* __cplusplus */
+diff -uarN ./src/iniparser.h ../iniparser/src/iniparser.h
+--- ./src/iniparser.h	2017-11-02 17:09:15.000000000 +0800
++++ ../iniparser/src/iniparser.h	2018-12-27 11:08:18.000000000 +0800
+@@ -7,6 +7,16 @@
+ */
+ /*--------------------------------------------------------------------------*/
+ 
++/*
++readme:
++    1. the same config item should not be existed, otherwise parser error occured.
++    2. to section, '[',']' should be written at the same line, charactor expect
++        space should not appeared in the section line.
++    3. key and its corresponding value should be appeared at the same line.
++    4. Please do not use such as'\r','\n','[',']', ';' ', and other special characters.
++    5. ';' as a comment character, all subsequent characters will be considered a comment.
++*/
++
+ #ifndef _INIPARSER_H_
+ #define _INIPARSER_H_
+ 
+@@ -28,20 +38,19 @@
+ #include "dictionary.h"
+ 
+ #ifdef __cplusplus
+-extern "C" {
++#if __cplusplus
++extern "C"{
+ #endif
++#endif /* __cplusplus */
+ 
+-/*-------------------------------------------------------------------------*/
+-/**
+-  @brief    Configure a function to receive the error messages.
+-  @param    errback  Function to call.
++#define KVCSIZE             512         /*KEY and VALUE and COMMENT'size is 512*/
+ 
+-  By default, the error will be printed on stderr. If a null pointer is passed
+-  as errback the error callback will be switched back to default.
+- */
+-/*--------------------------------------------------------------------------*/
+ 
+-void iniparser_set_error_callback(int (*errback)(const char *, ...));
++int iniparser_add_entry(
++    dictionary * d,
++    const char * sec,
++    const char * key,
++    const char * val);/*20060311 blair modify :add documents*/
+ 
+ /*-------------------------------------------------------------------------*/
+ /**
+@@ -204,34 +213,6 @@
+ 
+ /*-------------------------------------------------------------------------*/
+ /**
+-  @brief    Get the string associated to a key, convert to an long int
+-  @param    d Dictionary to search
+-  @param    key Key string to look for
+-  @param    notfound Value to return in case of error
+-  @return   integer
+-
+-  This function queries a dictionary for a key. A key as read from an
+-  ini file is given as "section:key". If the key cannot be found,
+-  the notfound value is returned.
+-
+-  Supported values for integers include the usual C notation
+-  so decimal, octal (starting with 0) and hexadecimal (starting with 0x)
+-  are supported. Examples:
+-
+-  - "42"      ->  42
+-  - "042"     ->  34 (octal -> decimal)
+-  - "0x42"    ->  66 (hexa  -> decimal)
+-
+-  Warning: the conversion may overflow in various ways. Conversion is
+-  totally outsourced to strtol(), see the associated man page for overflow
+-  handling.
+- */
+-/*--------------------------------------------------------------------------*/
+-long int iniparser_getlongint(const dictionary * d, const char * key, long int notfound);
+-
+-
+-/*-------------------------------------------------------------------------*/
+-/**
+   @brief    Get the string associated to a key, convert to a double
+   @param    d Dictionary to search
+   @param    key Key string to look for
+@@ -338,6 +319,27 @@
+ /*--------------------------------------------------------------------------*/
+ dictionary * iniparser_load(const char * ininame);
+ 
++
++/*-------------------------------------------------------------------------*/
++/**
++  @brief    add comment
++  @param  ini     Dictionary to modify
++  @param  sec    section string
++  @param  key    Key string
++  @param  comment    comment string
++  @return  0 success, -1 failed
++
++  save comment and space Line.
++ */
++/*--------------------------------------------------------------------------*/
++int iniparser_add_comment(
++    dictionary          *d,
++    const char          *sec,
++    const char          *key,
++    const char          *comment,
++    const unsigned char place);
++
++
+ /*-------------------------------------------------------------------------*/
+ /**
+   @brief    Free all memory associated to an ini dictionary
+@@ -352,7 +354,10 @@
+ void iniparser_freedict(dictionary * d);
+ 
+ #ifdef __cplusplus
++#if __cplusplus
+ }
+ #endif
++#endif /* __cplusplus */
+ 
+ #endif
++

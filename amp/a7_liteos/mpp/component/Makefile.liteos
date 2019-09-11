@@ -1,0 +1,30 @@
+#*******************************************************************************
+#The rule of make HuaweiLite module
+#*******************************************************************************
+
+CFLAGS += $(MKP_CFLAGS)
+
+OBJS = $(SRCS:%.c=%.o)
+
+LIB := lib$(TARGET).a
+
+.PHONY: all clean
+
+all: $(OBJS) $(LIB)
+	@echo -e "\e[0;32;1m--Compiling '$(TARGET)'...\e[0;36;1m" 
+	@echo -e "\e[0m" 
+	@mkdir -p $(REL_KO) && cp -rf $(LIB) $(REL_KO)
+	@mkdir -p $(REL_INC)
+	@$(call maco_cp_file,$(INC_FILE),$(REL_INC))
+	
+	
+$(OBJS): %.o : %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIB): $(OBJS)
+	@$(AR) $(ARFLAGS) $@ $(OBJS)
+
+clean:
+	@rm -f $(OBJS) $(LIB)
+	@rm -f $(REL_KO)/$(LIB)
+	

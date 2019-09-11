@@ -1,0 +1,9 @@
+# Hisilicon Hi35xx sample Makefile.param
+
+ifeq ($(MAPI_PARAM_FILE), )
+    MAPI_PARAM_FILE:=../../../../Makefile.param
+    include $(MAPI_PARAM_FILE)
+endif
+
+
+CFLAGS += -I$(REL_INC)

@@ -1,0 +1,13 @@
+config LOSCFG_DRIVERS_SPI
+    bool "Enable SPI"
+    default y
+    depends on LOSCFG_DRIVERS && LOSCFG_FS_VFS
+    help
+      Answer Y to enable LiteOS support spi.
+
+config LOSCFG_DRIVERS_SPI_DMA
+    bool "Spi dma mode"
+    default n
+    depends on LOSCFG_DRIVERS_SPI && LOSCFG_DRIVERS_HIEDMAC
+    help
+      Answer Y to enable spi dma mode for transfer.

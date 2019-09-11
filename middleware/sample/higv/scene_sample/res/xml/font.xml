@@ -1,0 +1,68 @@
+<font
+    id="simhei_font_text_10"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="10"
+    isbold="no"
+    isitalic=""/>
+
+<font
+    id="simhei_font_text_20"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="20"
+    isbold="no"
+    isitalic=""/>
+
+<font
+    id="simhei_font_text_24"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="24"
+    isbold="no"
+    isitalic=""/>
+<font
+    id="simhei_font_text_28"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="28"
+    isbold="no"
+    isitalic=""/>
+<font
+    id="simhei_font_text_32"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="32"
+    isbold="no"
+    isitalic=""/>
+<font
+    id="simhei_font_text_36"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="36"
+    isbold="no"
+    isitalic=""/>
+
+<font
+    id="simhei_font_text_40"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="40"
+    isbold="no"
+    isitalic=""/>
+
+<font
+    id="notosans_font_text_20"
+    sbname="./res/font/ttf/NotoSans-Regular.ttf"
+    mbname=""
+    size="20"
+    isbold=""
+    isitalic=""/>
+
+<font
+    id="msuighur_font_text_30"
+    sbname="./res/font/ttf/MSUIGHUR.TTF"
+    mbname=""
+    size="30"
+    isbold=""
+    isitalic=""/>

@@ -1,0 +1,13 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+menu "Video Detect Configuration"
+config VIDEO_DETECT
+	bool "VIDEO_DETECT support"
+	if VIDEO_DETECT	
+		config MOTIONDETECT
+		bool "MOTIONDETECT support"
+    endif
+endmenu

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="WIN_CLOCK"
+isusecommonskin="yes">
+    <window
+    id="WIN_CLOCK"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    normalskin="common_skin_white"
+    opacity="255"
+    winlevel="0"
+    >
+
+    <image
+        id="WIN_CLOCK_HIDE"
+        top="0"
+        left="0"
+        width="40"
+        height="35"
+        isrelease="no"
+        islanchange="no"
+        normalskin="common_skin_white"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        isnofocus="yes"
+        image="./res/pic/win_back_no.png"
+        ongesturetap="WIN_CLOCK_HIDE_ongesturetap"/>
+
+    <label
+        id="WIN_CLOCK_LABEL1"
+        top="0"
+        left="40"
+        width="280"
+        height="35"
+        isrelease="no"
+        islanchange="no"
+        normalskin="win_title_skin"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        font="simhei_font_text_20"
+        alignment="hcenter|vcenter"
+        isnofocus="no"
+        text="STR_SCENE_SAMPLE"/>
+
+    <clock
+        id = "CLOCK_WIN_CLOCK_TIME"
+        top = "100"
+        left = "0"
+        width = "320"
+        height = "38"
+        normalskin = "group_skin"
+        transparent = "yes"
+        isrelease = "yes"
+        leftorderobj = ""
+        rightorderobj = ""
+        uporderobj = ""
+        ontimeupdate = "OnTimeUndateListener"
+        minunit = "second"
+        dispmode = "format"
+        cursortype="image"
+        isskinforcedraw="no"
+        font="simhei_font_text_20"
+        text = "TIMEFMT_SHORT_DATETIME"
+        />
+
+    </window>
+</view>

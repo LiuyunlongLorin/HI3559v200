@@ -1,0 +1,78 @@
+
+LOCAL_DIR := $(shell pwd)
+MIDDLEWARE_DIR := $(LOCAL_DIR)/../../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+#OSAL_ROOT = $(MIDDLEWARE_DIR)/../osal
+APP_INIT_DIR := $(MEDIA_ADPT_ROOT)/$(CFG_CHIP_TYPE)/HuaweiLite
+SRCS := $(wildcard *.c)
+SRCS += $(LITEOS_ROOT)/kernel/extended/dynload/src/los_dynload_gsymbol.c
+SRCS +=  $(shell find $(APP_INIT_DIR) -maxdepth 1  -name '*.c' -print)
+TARGET := sample_play
+
+
+CUR_DIR := $(shell pwd)
+
+
+HIBERRY_INCLUDE_DIR := $(COMPONENT_DIR)/liteplayer/include
+
+INC_FLAGS += -I$(HIBERRY_INCLUDE_DIR) \
+             -I$(COMMON_DIR)/log/include \
+             -I$(COMMON_DIR)/include \
+			 $(MEDIA_INCLUDE_PATH)
+
+HIBERRY_LIB_DIR += -L$(COMMON_DIR)/log/lib \
+                   -L$(COMMON_DIR)/mbuffer/lib \
+                   -L$(COMPONENT_DIR)/liteplayer/lib \
+				   -L$(COMPONENT_DIR)/fileformat/exif/lib \
+				   -L$(THIRDPARTY_DIR)/openexif/lib \
+				   $(MEDIA_LIBS_PATH_LINK)
+INC_FLAGS += -I$(MIDDLEWARE_DIR)/../mpp/include
+# compile linux or HuaweiLite
+
+LD_LIB += $(SENSOR_LIBS) $(HIBERRY_LIB_DIR)  $(MEDIA_LIBS_LINK) -lhi_osal -lliteplayer -lmpf_demuxer -lavplay -lfsm -lexif -lopenexif -laacdec -lmwlog -lmbuf
+LIBDEP = --start-group $(LITEOS_LIBS) --end-group
+LDFLAGS := $(LITEOS_LDFLAGS) --gc-sections
+# target source
+
+OBJS  := $(SRCS:%.c=%.o)
+OBJS += $(COMM_OBJ)
+
+FFDEMUX_LIB := $(MIDDLEWARE_DIR)/component/liteplayer/lib/libffmpeg_demuxer.so
+DYNLOAD_DIR := $(LITEOS_ROOT)/tools/scripts/dynload_tools
+
+#CFLAGS += -I$(OSAL_ROOT)/include
+CFLAGS += $(INC_FLAGS)
+
+CFLAGS += -DHI_ACODEC_TYPE_INNER
+
+BIN := $(TARGET).bin
+MAP := $(TARGET).map
+ASM := $(TARGET).asm
+
+.PHONY : clean all prepare
+
+all: prepare $(BIN)
+
+prepare:
+	@pushd $(LOCAL_DIR);cd AAC;make;popd
+	@mkdir -p so;cp $(FFDEMUX_LIB) so/; cp AAC/lib*.so so
+	@echo "./sym.sh so"; pushd $(LOCAL_DIR); cd $(DYNLOAD_DIR); chmod 777 * -R;./sym.sh $(LOCAL_DIR)/so
+
+$(BIN):$(TARGET)
+	@$(OBJCOPY) -O binary $(TARGET) $(BIN)
+
+$(TARGET):$(OBJS)
+	$(LD) $(LDFLAGS) -Map=$(MAP) -o $(TARGET) $(OBJS) $(LD_LIB) $(LIBDEP)
+	$(OBJDUMP) -d $(TARGET) >$(ASM)
+
+$(OBJS):%.o:%.c
+	$(AT)$(CC) -nostdlib -nostdinc $(CFLAGS) -c $< -o $@
+
+clean:
+	@rm -f $(TARGET) $(BIN) $(MAP) *.asm
+	@rm -f $(OBJS)
+	@rm -f $(COMM_OBJ)
+	@rm -rf $(LOCAL_DIR)/so
+	@pushd $(LOCAL_DIR);cd AAC;make clean;popd

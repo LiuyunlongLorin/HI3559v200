@@ -1,0 +1,5 @@
+config LOSCFG_DRIVERS_UART
+    bool "General Uart"
+
+    help
+      Answer Y to enable LiteOS support uart with vfs.

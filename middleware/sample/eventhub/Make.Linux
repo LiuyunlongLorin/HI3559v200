@@ -1,0 +1,87 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+LOG_LIB_DIR := $(HIBERRY_COMMON_DIR)/log/lib
+LOG_INC_DIR := $(HIBERRY_COMMON_DIR)/log/include
+MESSAGEHANDLER_LIB_DIR := $(HIBERRY_COMMON_DIR)/msghandler/lib
+MESSAGEHANDLER_INC_DIR := $(HIBERRY_COMMON_DIR)/msghandler/include
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+EVENTHUB_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/eventhub/lib
+EVENTHUB_INC_DIR := $(HIBERRY_COMPONENT_DIR)/eventhub/include
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+LIB_FLAGS := -L$(LOG_LIB_DIR) \
+			 -L$(EVENTHUB_LIB_DIR) \
+			 -L$(MESSAGEHANDLER_LIB_DIR) \
+			 -L$(HIBERRY_COMMON_DIR)/securec/lib \
+			 -L$(MIDDLEWARE_DIR)/sample/common/lib \
+			 $(MEDIA_LIBS_PATH_LINK)
+
+INC_FLAGS += -I$(HIBERRY_COMMON_INC) \
+			-I$(LOG_INC_DIR) \
+			-I$(EVENTHUB_INC_DIR) \
+			-I$(MESSAGEHANDLER_INC_DIR) \
+			-I$(MEDIA_ADPT_DIR)/include \
+			-I$(COMPILE_ROOT) \
+			-I$(COMPILE_ROOT)/state
+
+HIBERRY_LIBS := -leventhub \
+				-lmessagehandler \
+				-lmwlog \
+                -lsecurec \
+				-luproc \
+				-lstdc++
+HIBERRY_LIBS += $(MEDIA_LIBS_LINK)
+SYS_LIBS := -lm \
+			-ldl \
+			-lpthread
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+CFLAGS += -Wno-error 
+
+COMPILE   =  $(CC) $(CFLAGS) -g -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TRAGET_LINUX := $(COMPILE_ROOT)/sample_eventhub
+.PHONY : all clean install
+all:$(TRAGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+
+ifeq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+LIB_FLAGS += -L$(HUTAF_LIB_DIR)
+HIBERRY_LIBS += $(HUTAF_LIBS)
+endif
+
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LIB_FLAGS) -Wl,-Bstatic $(HIBERRY_LIBS) -Wl,-Bdynamic $(SYS_LIBS)
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f $(TRAGET_LINUX)

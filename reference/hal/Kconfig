@@ -1,0 +1,22 @@
+#
+# For a description of the syntax of this configuration file,
+# see build/scripts/Documentation/kbuild/kconfig-language.txt.
+#
+
+menu "Peripheral"
+
+source reference/hal/common/Kconfig
+source reference/hal/wifi/Kconfig
+source reference/hal/gauge/Kconfig
+source reference/hal/screen/Kconfig
+source reference/hal/touchpad/Kconfig
+source reference/hal/gsensor/Kconfig
+source reference/hal/ahd/Kconfig
+source reference/hal/led/Kconfig
+source reference/hal/motionsensor/Kconfig
+source reference/hal/watchdog/Kconfig
+source reference/hal/gps/Kconfig
+source reference/hal/acc/Kconfig
+
+endmenu
+

@@ -1,0 +1,14 @@
+prefix=/home/lorin/lorin/Hi3559V200_MobileCam_SDK_V1.0.1.2/reference/thirdparty/freetype/freetype-2.9.1/_INSTALL
+exec_prefix=/home/lorin/lorin/Hi3559V200_MobileCam_SDK_V1.0.1.2/reference/thirdparty/freetype/freetype-2.9.1/_INSTALL
+libdir=/home/lorin/lorin/Hi3559V200_MobileCam_SDK_V1.0.1.2/reference/thirdparty/freetype/freetype-2.9.1/_INSTALL/lib
+includedir=/home/lorin/lorin/Hi3559V200_MobileCam_SDK_V1.0.1.2/reference/thirdparty/freetype/freetype-2.9.1/_INSTALL/include
+
+Name: FreeType 2
+URL: https://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 22.1.16
+Requires:
+Requires.private: 
+Libs: -L${libdir} -lfreetype
+Libs.private: -lbz2
+Cflags: -I${includedir}/freetype2

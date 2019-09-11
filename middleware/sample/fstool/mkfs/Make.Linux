@@ -1,0 +1,54 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../../..
+include $(MIDDLEWARE_DIR)/base.mak
+
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+FSTOOL_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fstool/lib
+FSTOOL_INC_DIR := $(HIBERRY_COMPONENT_DIR)/fstool/include
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+SECUREC_LIB_DIR := $(HIBERRY_COMMON_DIR)/securec/lib
+#****src dir********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+INC_FLAGS += -I$(FSTOOL_INC_DIR) -I$(MEDIA_ADPT_DIR)/include
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+
+COMPILE   =  $(CC) $(CFLAGS) -g -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TARGET_LINUX := $(COMPILE_ROOT)/himkfs.vfat
+.PHONY : all clean
+all:$(TARGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+HIBERRY_LIBS :=  -Wl,-Bstatic -lfstool $(MEDIA_LIBS_LINK) -lsecurec -Wl,-Bdynamic
+$(TARGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -lpthread $(HIBERRY_LIBS) -lm -ldl -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic -L$(FSTOOL_LIB_DIR) -L$(SECUREC_LIB_DIR)
+else
+HIBERRY_LIBS := -lfstool -lsecurec
+$(TARGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -L$(FSTOOL_LIB_DIR) -L$(HUTAF_LIB_DIR) -lpthread $(HIBERRY_LIBS) -lm -ldl -lstdc++ $(HUTAF_LIBS)
+endif
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f himkfs.vfat

@@ -1,0 +1,1629 @@
+diff -uarN thttpd-2.29/config.h thttpd-2.29-hisnet/config.h
+--- thttpd-2.29/config.h	2011-09-12 00:41:37.000000000 +0800
++++ thttpd-2.29-hisnet/config.h	2019-03-01 16:43:44.147013191 +0800
+@@ -68,6 +68,7 @@
+ /* When virtual hosting, enable the central directory on every host: */
+ #define CGI_PATTERN "/*/cgi-bin/*"
+ #endif
++#define INTERNAL_CGI_PATTERN "cgi-bin/hisnet/"
+ 
+ /* CONFIGURE: How many seconds to allow CGI programs to run before killing
+ ** them.  This is in case someone writes a CGI program that goes into an
+@@ -83,9 +84,9 @@
+ ** no limit (and you'd better have a lot of memory).  This can also be
+ ** set in the runtime config file.
+ */
+-#ifdef notdef
+-#define CGI_LIMIT 50
+-#endif
++//#ifdef notdef
++#define CGI_LIMIT 30
++//#endif
+ 
+ /* CONFIGURE: How many seconds to allow for reading the initial request
+ ** on a new connection.
+@@ -136,7 +137,7 @@
+ ** If you undefine this then thttpd will not implement authentication
+ ** at all and will not check for auth files, which saves a bit of CPU time.
+ */
+-#define AUTH_FILE ".htpasswd"
++//#define AUTH_FILE ".htpasswd"
+ 
+ /* CONFIGURE: The default character set name to use with text MIME types.
+ ** This gets substituted into the MIME types where they have a "%s".
+@@ -261,13 +262,13 @@
+ ** is generated.  If ERR_DIR is not defined at all, only the built-in error
+ ** pages will be generated.
+ */
+-#define ERR_DIR "errors"
++//#define ERR_DIR "errors"
+ 
+ /* CONFIGURE: Define this if you want a standard HTML tail containing
+ ** $SERVER_SOFTWARE and $SERVER_ADDRESS to be appended to the custom error
+ ** pages.  (It is always appended to the built-in error pages.)
+ */
+-#define ERR_APPEND_SERVER_INFO
++//#define ERR_APPEND_SERVER_INFO
+ 
+ /* CONFIGURE: nice(2) value to use for CGI programs.  If this is undefined,
+ ** CGI programs run at normal priority.
+@@ -291,7 +292,7 @@
+ /* CONFIGURE: Seconds between stats syslogs.  If this is undefined then
+ ** no stats are accumulated and no stats syslogs are done.
+ */
+-#define STATS_TIME 3600
++//#define STATS_TIME 3600
+ 
+ /* CONFIGURE: The mmap cache tries to keep the total number of mapped
+ ** files below this number, so you don't run out of kernel file descriptors.
+@@ -348,7 +349,7 @@
+ /* CONFIGURE: Whether to fflush() the log file after each request.  If
+ ** this is turned off there's a slight savings in CPU cycles.
+ */
+-#define FLUSH_LOG_EVERY_TIME
++//#define FLUSH_LOG_EVERY_TIME
+ 
+ /* CONFIGURE: Time between updates of the throttle table's rolling averages. */
+ #define THROTTLE_TIME 2
+diff -uarN thttpd-2.29/fdwatch.c thttpd-2.29-hisnet/fdwatch.c
+--- thttpd-2.29/fdwatch.c	2014-12-11 04:51:36.000000000 +0800
++++ thttpd-2.29-hisnet/fdwatch.c	2019-03-01 16:43:44.147013191 +0800
+@@ -1,6 +1,6 @@
+ /* fdwatch.c - fd watcher routines, either select() or poll()
+ **
+-** Copyright © 1999,2000 by Jef Poskanzer <jef@mail.acme.com>.
++** Copyright ? 1999,2000 by Jef Poskanzer <jef@mail.acme.com>.
+ ** All rights reserved.
+ **
+ ** Redistribution and use in source and binary forms, with or without
+@@ -162,13 +162,12 @@
+ fdwatch_get_nfiles( void )
+     {
+     int i;
+-#ifdef RLIMIT_NOFILE
+-    struct rlimit rl;
+-#endif /* RLIMIT_NOFILE */
+ 
++#ifndef __LITEOS__
+     /* Figure out how many fd's we can have. */
+     nfiles = getdtablesize();
+ #ifdef RLIMIT_NOFILE
++	struct rlimit rl;
+     /* If we have getrlimit(), use that, and attempt to raise the limit. */
+     if ( getrlimit( RLIMIT_NOFILE, &rl ) == 0 )
+ 	{
+@@ -181,6 +180,9 @@
+ 	    nfiles = rl.rlim_cur;
+ 	}
+ #endif /* RLIMIT_NOFILE */
++#else
++    nfiles = 512;
++#endif //#ifndef __LITEOS__
+ 
+ #if defined(HAVE_SELECT) && ! ( defined(HAVE_POLL) || defined(HAVE_DEVPOLL) || defined(HAVE_KQUEUE) )
+     /* If we use select(), then we must limit ourselves to FD_SETSIZE. */
+diff -uarN thttpd-2.29/libhttpd.c thttpd-2.29-hisnet/libhttpd.c
+--- thttpd-2.29/libhttpd.c	2018-05-24 03:23:06.000000000 +0800
++++ thttpd-2.29-hisnet/libhttpd.c	2019-03-01 16:44:54.409417009 +0800
+@@ -115,12 +115,21 @@
+ #define MIN(a,b) ((a) < (b) ? (a) : (b))
+ #endif
+ 
++#ifdef __cplusplus
++#if __cplusplus
++extern "C"{
++#endif
++#endif /* End of #ifdef __cplusplus */
++
++#ifdef __LITEOS__
++#define syslog(priority, fmt...)
++#endif
+ 
+ /* Forwards. */
+ static void check_options( void );
+ static void free_httpd_server( httpd_server* hs );
+ static int initialize_listen_socket( httpd_sockaddr* saP );
+-static void add_response( httpd_conn* hc, char* str );
++//static void add_response( httpd_conn* hc, char* str );
+ static void send_mime( httpd_conn* hc, int status, char* title, char* encodings, char* extraheads, char* type, off_t length, time_t mod );
+ static void send_response( httpd_conn* hc, int status, char* title, char* extraheads, char* form, char* arg );
+ static void send_response_tail( httpd_conn* hc );
+@@ -136,7 +145,7 @@
+ #endif /* AUTH_FILE */
+ static void send_dirredirect( httpd_conn* hc );
+ static int hexit( char c );
+-static void strdecode( char* to, char* from );
++//static void strdecode( char* to, char* from );
+ #ifdef GENERATE_INDEXES
+ static void strencode( char* to, int tosize, char* from );
+ #endif /* GENERATE_INDEXES */
+@@ -192,6 +201,21 @@
+ */
+ static int sub_process = 0;
+ 
++static PTR_FUNC_InternalCgiProc s_pfunInternalCgiProc = NULL;
++static PTR_FUNC_UploadFile_Open s_pfunFopen = NULL;
++static PTR_FUNC_UploadFile_Write s_pfunFwrite = NULL;
++int HI_THTTPD_RegisterInternalCgiProc(PTR_FUNC_InternalCgiProc pfunInternalCgiProc)
++{
++    s_pfunInternalCgiProc = pfunInternalCgiProc;
++    return 0;
++}
++
++int HI_THTTPD_RegisterUploadFileProc(PTR_FUNC_UploadFile_Open pfunFopen,PTR_FUNC_UploadFile_Write pfunFwrite)
++{
++    s_pfunFopen = pfunFopen;
++    s_pfunFwrite = pfunFwrite;
++    return 0;
++}
+ 
+ static void
+ check_options( void )
+@@ -259,7 +283,9 @@
+ 	{
+ 	hs->binding_hostname = (char*) 0;
+ 	hs->server_hostname = (char*) 0;
++#ifndef __LITEOS__
+ 	if ( gethostname( ghnbuf, sizeof(ghnbuf) ) < 0 )
++#endif //#ifndef __LITEOS__
+ 	    ghnbuf[0] = '\0';
+ #ifdef SERVER_NAME_LIST
+ 	if ( ghnbuf[0] != '\0' )
+@@ -531,8 +557,8 @@
+     "No request appeared within a reasonable time period.\n";
+ 
+ static char* err451title = "Unavailable For Legal Reasons";
+-static char* err451form =
+-    "You do not have legal permission to get URL '%.80s' from this server.\n";
++//static char* err451form =
++//    "You do not have legal permission to get URL '%.80s' from this server.\n";
+ 
+ static char* err500title = "Internal Error";
+ static char* err500form =
+@@ -548,7 +574,7 @@
+ 
+ 
+ /* Append a string to the buffer waiting to be sent as response. */
+-static void
++void
+ add_response( httpd_conn* hc, char* str )
+     {
+     size_t len;
+@@ -1234,7 +1260,7 @@
+ /* Copies and decodes a string.  It's ok for from and to to be the
+ ** same string.
+ */
+-static void
++void
+ strdecode( char* to, char* from )
+     {
+     for ( ; *from != '\0'; ++to, ++from )
+@@ -1268,7 +1294,7 @@
+ 	    }
+ 	else
+ 	    {
+-	    (void) sprintf( to, "%%%02x", (int) *from & 0xff );
++	    (void) snprintf( to,3, "%%%02x", (int) *from & 0xff );
+ 	    to += 3;
+ 	    tolen += 3;
+ 	    }
+@@ -1480,7 +1506,8 @@
+ 	** URL for the CGI instead of a local symlinked one.
+ 	*/
+ 	struct stat sb;
+-	if ( stat( path, &sb ) != -1 )
++	if (( stat( path, &sb ) != -1 )
++        ||(NULL!=strstr(path,INTERNAL_CGI_PATTERN)))
+ 	    {
+ 	    checkedlen = strlen( path );
+ 	    httpd_realloc_str( &checked, &maxchecked, checkedlen );
+@@ -1598,7 +1625,11 @@
+ 	/* Try reading the current filename as a symlink */
+ 	if ( checked[0] == '\0' )
+ 	    continue;
++#ifndef __LITEOS__
+ 	linklen = readlink( checked, lnk, sizeof(lnk) - 1 );
++#else
++    linklen = -1;
++#endif
+ 	if ( linklen == -1 )
+ 	    {
+ 	    if ( errno == EINVAL )
+@@ -1778,6 +1809,7 @@
+     hc->keep_alive = 0;
+     hc->should_linger = 0;
+     hc->file_address = (char*) 0;
++    hc->distrib_flag = 0;
+     return GC_OK;
+     }
+ 
+@@ -2473,13 +2505,25 @@
+ 
+     if ( hc->file_address != (char*) 0 )
+ 	{
++#ifndef __LITEOS__
+ 	mmc_unmap( hc->file_address, &(hc->sb), nowP );
++#else
++    (void)close((int)(hc->file_address));
++#endif //#ifndef __LITEOS__
+ 	hc->file_address = (char*) 0;
+ 	}
+     if ( hc->conn_fd >= 0 )
+ 	{
+-	(void) close( hc->conn_fd );
+-	hc->conn_fd = -1;
++        if(hc->distrib_flag == 1)
++        {
++            /*this fd is distrib,not close in httpd_close_conn*/
++            hc->conn_fd = -1;
++        }
++        else
++        {
++            (void)close( hc->conn_fd );
++            hc->conn_fd = -1;
++        }
+ 	}
+     }
+ 
+@@ -2689,6 +2733,206 @@
+     }
+ #endif /* CGI_TIMELIMIT */
+ 
++static ssize_t read_head(httpd_conn *hc, void *buf, size_t count)
++{
++    ssize_t numRead;    /* # of bytes fetched by last read()*/
++    ssize_t totRead;    /* Total bytes read so far*/
++    unsigned char *buffer;
++
++    if (count <= 0 || buf == NULL){
++        errno = EINVAL;
++        return -1;
++    }
++
++    buffer = buf;
++    totRead = 0;
++
++    while (totRead<count)
++    {
++        if (hc->checked_idx < hc->read_idx)
++        {
++            buffer[totRead] = hc->read_buf[hc->checked_idx];
++            hc->checked_idx++;
++            numRead = 1;
++        }
++        else
++        {
++            numRead = read(hc->conn_fd, &(buffer[totRead]), 1);
++        }
++
++        if (numRead == -1)
++        {
++            if (errno == EINTR || errno == EAGAIN )
++            {
++                /*Interrupted ----> restart read()*/
++                usleep(1000*500);
++                continue;
++            }
++            else
++            {
++                printf("[%s](%d)errno=%d:%s\n",__func__,__LINE__,errno,strerror(errno));
++                return -1;
++            }
++        }
++        else if (numRead == 0)
++        {
++            /* EOF*/
++             break;
++        }
++        else
++        {
++            totRead ++;
++            if(totRead >=2)
++            {
++    	        if (buffer[totRead-1]== '\n'
++                  &&buffer[totRead-2]== '\r'
++                  &&buffer[totRead-3]== '\n'
++                  &&buffer[totRead-4]== '\r')
++    	        {
++    	        	break;
++    	        }
++            }
++        }
++    }
++    return totRead;
++}
++
++static int upload_file(httpd_conn *hc)
++{
++#define RECV_BUF_LEN  (1024*1024)
++#ifndef __LITEOS__
++    char RecvBuf[RECV_BUF_LEN] = {0};
++#else
++    char *RecvBuf = (char*)malloc(RECV_BUF_LEN);
++#endif
++    size_t DatLen = 0;
++    size_t Headlen = 0;
++    size_t BoundaryLen = 0;
++    ssize_t retval = 0;
++    char *pboundary = strstr(hc->contenttype,"boundary=");
++    char filepath[PATH_MAX] = {0};
++    FILE *fp = NULL;
++    if(NULL!=pboundary)
++    {
++        BoundaryLen = strnlen(pboundary,hc->read_idx)-strlen("boundary=");
++    }
++
++    Headlen = read_head(hc, RecvBuf, RECV_BUF_LEN);
++    if(0>=Headlen)
++    {
++        printf("[%s](%d)read_head err.Headlen=%d\n",__func__,__LINE__,Headlen);
++        send_mime(hc, 500, err500title, hc->encodings, "",hc->type, (off_t)-1, (time_t)0);
++#ifdef __LITEOS__
++        free(RecvBuf);
++#endif
++        return -1;
++    }
++
++    char *filename = strstr(RecvBuf,"filename=");
++    if(NULL==filename)
++    {
++        printf("[%s](%d)not found filename\n",__func__,__LINE__);
++        send_mime(hc, 500, err500title, hc->encodings, "",hc->type, (off_t)-1, (time_t)0);
++#ifdef __LITEOS__
++        free(RecvBuf);
++#endif
++        return -1;
++    }
++    filename += strlen("filename=")+1;
++    filename = strtok(filename,"\"");
++    snprintf(filepath,sizeof(filepath),"%s/%s",hc->origfilename,filename);
++    size_t DataSize = hc->contentlength-Headlen-BoundaryLen-8;
++    if(s_pfunFopen)
++    {
++        unsigned int offset = 0;
++        char *range = strstr(RecvBuf,"Range: bytes ");
++        if(NULL!=range)
++        {
++            range += strlen("Range: bytes ");
++            offset = atoi(range);
++        }
++        s_pfunFopen(filepath, offset, DataSize, &fp);
++    }
++    else
++    {
++        fp=fopen(filepath, "w");
++    }
++    if(NULL==fp)
++    {
++        printf("[%s](%d)fopen %s fail.errno=%d:%s\n",__func__,__LINE__,filepath,errno,strerror(errno));
++        send_mime(hc, 500, err500title, hc->encodings, "",hc->type, (off_t)-1, (time_t)0);
++#ifdef __LITEOS__
++        free(RecvBuf);
++#endif
++        return -1;
++    }
++    printf("start recv file:%s,size=%u\n",filepath,DataSize);
++
++    while ( DatLen < DataSize )
++    {
++        if (hc->checked_idx < hc->read_idx)
++        {
++            memcpy(RecvBuf, hc->read_buf + hc->checked_idx, hc->read_size - hc->checked_idx);
++            retval = hc->read_size - hc->checked_idx;
++            hc->checked_idx += retval;
++        }
++        else
++        {
++            retval = read(hc->conn_fd, RecvBuf, MIN((DataSize-DatLen), RECV_BUF_LEN));
++        }
++
++        if (retval < 0)
++        {
++            if ( errno == EINTR || errno == EAGAIN || errno == EWOULDBLOCK )
++            {
++                /*Interrupted ----> restart read()*/
++                usleep(1000*500);
++                continue;
++            }
++            else
++            {
++                printf("errno=%d:%s\n",errno,strerror(errno));
++                break;
++            }
++        }
++        else if (retval == 0)
++        {
++            /* EOF*/
++             break;
++        }
++        else
++        {
++            if(s_pfunFwrite)
++            {
++                s_pfunFwrite( (const unsigned char*)RecvBuf, retval, fp);
++            }
++            else
++            {
++                if(retval!=fwrite(RecvBuf,1,retval,fp))
++                {
++                    printf("[%s](%d)fwrite %s fail.errno=%d:%s\n",__func__,__LINE__,filepath,errno,strerror(errno));
++                    fclose(fp);
++                    send_mime(hc, 500, err500title, hc->encodings, "",hc->type, (off_t)-1, (time_t)0);
++#ifdef __LITEOS__
++                    free(RecvBuf);
++#endif
++                    return -1;
++                }
++            }
++            DatLen+=retval;
++            printf(".");
++        }
++    }
++    fflush(fp);
++    fclose(fp);
++    printf("\nrecv file:%s over,length=%u\n",filepath,DatLen);
++    read(hc->conn_fd, RecvBuf, hc->contentlength-Headlen-DataSize);
++    send_mime(hc, 200, ok200title, hc->encodings, "",hc->type, (off_t)-1, (time_t)0);
++#ifdef __LITEOS__
++    free(RecvBuf);
++#endif
++    return 0;
++}
+ 
+ #ifdef GENERATE_INDEXES
+ 
+@@ -2988,6 +3232,11 @@
+ 	hc->bytes_sent = CGI_BYTECOUNT;
+ 	hc->should_linger = 0;
+ 	}
++    else if( hc->method == METHOD_POST )
++    {
++        closedir( dirp );
++        return upload_file( hc );
++    }
+     else
+ 	{
+ 	closedir( dirp );
+@@ -3262,8 +3511,9 @@
+     {
+     int r;
+     char buf[1024];
+-    size_t headers_size, headers_len;
+-    char* headers;
++    size_t  headers_len;
++    char headers[1024+500];
++    //char* headers;
+     char* br;
+     int status;
+     char* title;
+@@ -3275,8 +3525,8 @@
+     httpd_clear_ndelay( hc->conn_fd );
+ 
+     /* Slurp in all headers. */
+-    headers_size = 0;
+-    httpd_realloc_str( &headers, &headers_size, 500 );
++    //headers_size = 0;
++    //httpd_realloc_str( &headers, &headers_size, 500 );
+     headers_len = 0;
+     for (;;)
+ 	{
+@@ -3291,7 +3541,7 @@
+ 	    br = &(headers[headers_len]);
+ 	    break;
+ 	    }
+-	httpd_realloc_str( &headers, &headers_size, headers_len + r );
++	//httpd_realloc_str( &headers, &headers_size, headers_len + r );
+ 	(void) memmove( &(headers[headers_len]), buf, r );
+ 	headers_len += r;
+ 	headers[headers_len] = '\0';
+@@ -3396,7 +3646,7 @@
+     ** fd, and all of those are set to close-on-exec, so we don't
+     ** have to close anything else.
+     */
+-    closelog();
++    //closelog();
+ 
+     /* If the socket happens to be using one of the stdin/stdout/stderr
+     ** descriptors, move it to another descriptor so that the dup2 calls
+@@ -3554,6 +3804,8 @@
+ 
+     /* Default behavior for SIGPIPE. */
+ #ifdef HAVE_SIGSET
++    typedef void (*sighandler_t)(int);
++    extern sighandler_t sigset(int sig, sighandler_t disp);
+     (void) sigset( SIGPIPE, SIG_DFL );
+ #else /* HAVE_SIGSET */
+     (void) signal( SIGPIPE, SIG_DFL );
+@@ -3637,13 +3889,21 @@
+ 
+     expnlen = strlen( hc->expnfilename );
+ 
++
++    if(NULL!=strstr(hc->expnfilename,INTERNAL_CGI_PATTERN)&&NULL!=s_pfunInternalCgiProc)
++    {
++        figure_mime( hc );
++		send_mime(hc, 200, ok200title, hc->encodings, "",hc->type, (off_t)-1, (time_t)0);
++        s_pfunInternalCgiProc(hc);
++		return 0;
++    }
+     /* Stat the file. */
+     if ( stat( hc->expnfilename, &hc->sb ) < 0 )
+ 	{
+ 	httpd_send_err( hc, 500, err500title, "", err500form, hc->encodedurl );
+ 	return -1;
+ 	}
+-
++#if 0
+     /* Is it world-readable or world-executable?  We check explicitly instead
+     ** of just trying to open it, so that no one ever gets surprised by
+     ** a file that's not set world-readable and yet somehow is
+@@ -3661,7 +3921,7 @@
+ 	    hc->encodedurl );
+ 	return -1;
+ 	}
+-
++#endif
+     /* Is it a directory? */
+     if ( S_ISDIR(hc->sb.st_mode) )
+ 	{
+@@ -3680,8 +3940,15 @@
+ 	     strcmp( hc->origfilename, "." ) != 0 &&
+ 	     hc->origfilename[strlen( hc->origfilename ) - 1] != '/' )
+ 	    {
+-	    send_dirredirect( hc );
+-	    return -1;
++            if(hc->method == METHOD_POST)
++            {
++                upload_file( hc );
++            }
++            else
++            {
++                send_dirredirect( hc );
++            }
++	        return -1;
+ 	    }
+ 
+ 	/* Check for an index file. */
+@@ -3703,6 +3970,7 @@
+ 
+ 	/* Nope, no index file, so it's an actual directory request. */
+ #ifdef GENERATE_INDEXES
++#if 0
+ 	/* Directories must be readable for indexing. */
+ 	if ( ! ( hc->sb.st_mode & S_IROTH ) )
+ 	    {
+@@ -3716,6 +3984,7 @@
+ 		hc->encodedurl );
+ 	    return -1;
+ 	    }
++#endif
+ #ifdef AUTH_FILE
+ 	/* Check authorization for this directory. */
+ 	if ( auth_check( hc, hc->expnfilename ) == -1 )
+@@ -3820,6 +4089,7 @@
+ 	 match( hc->hs->cgi_pattern, hc->expnfilename ) )
+ 	return cgi( hc );
+ 
++#if 0 /*can click the file in any authority */
+     /* It's not CGI.  If it's executable or there's pathinfo, someone's
+     ** trying to either serve or run a non-CGI file as CGI.   Either case
+     ** is prohibited.
+@@ -3835,6 +4105,7 @@
+ 	    hc->encodedurl );
+ 	return -1;
+ 	}
++#endif
+     if ( hc->pathinfo[0] != '\0' )
+ 	{
+ 	syslog(
+@@ -4277,3 +4548,9 @@
+ 	    str_alloc_count, (unsigned long) str_alloc_size,
+ 	    (float) str_alloc_size / str_alloc_count );
+     }
++
++#ifdef __cplusplus
++#if __cplusplus
++}
++#endif
++#endif /* End of #ifdef __cplusplus */
+diff -uarN thttpd-2.29/libhttpd.h thttpd-2.29-hisnet/libhttpd.h
+--- thttpd-2.29/libhttpd.h	2018-05-24 02:46:35.000000000 +0800
++++ thttpd-2.29-hisnet/libhttpd.h	2019-03-01 16:43:44.000000000 +0800
+@@ -1,6 +1,6 @@
+ /* libhttpd.h - defines for libhttpd
+ **
+-** Copyright © 1995,1998,1999,2000,2001 by Jef Poskanzer <jef@mail.acme.com>.
++** Copyright ? 1995,1998,1999,2000,2001 by Jef Poskanzer <jef@mail.acme.com>.
+ ** All rights reserved.
+ **
+ ** Redistribution and use in source and binary forms, with or without
+@@ -35,11 +35,19 @@
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
+ #include <netdb.h>
++#include <sys/stat.h>
+ 
++#ifdef __cplusplus
++#if __cplusplus
++extern "C"{
++#endif
++#endif /* End of #ifdef __cplusplus */
++
++#if 0
+ #if defined(AF_INET6) && defined(IN6_IS_ADDR_V4MAPPED)
+ #define USE_IPV6
+ #endif
+-
++#endif
+ 
+ /* A few convenient defines. */
+ 
+@@ -145,6 +153,7 @@
+     struct stat sb;
+     int conn_fd;
+     char* file_address;
++    int distrib_flag; //distrib link flag
+     } httpd_conn;
+ 
+ /* Methods. */
+@@ -288,4 +297,22 @@
+ /* Generate debugging statistics syslog message. */
+ void httpd_logstats( long secs );
+ 
++/* Copies and decodes a string.  It's ok for from and to to be the same string. */
++void strdecode( char* to, char* from );
++
++void add_response( httpd_conn* hc, char* str );
++
++typedef int (*PTR_FUNC_InternalCgiProc)( httpd_conn* hc );
++int HI_THTTPD_RegisterInternalCgiProc(PTR_FUNC_InternalCgiProc pfunInternalCgiProc);
++
++typedef int (*PTR_FUNC_UploadFile_Open)( const char* path, unsigned int offset, unsigned int size, FILE** fp);
++typedef int (*PTR_FUNC_UploadFile_Write)( const unsigned char* data, unsigned int size, FILE* fp);
++int HI_THTTPD_RegisterUploadFileProc(PTR_FUNC_UploadFile_Open pfunFopen,PTR_FUNC_UploadFile_Write pfunFwrite);
++
++#ifdef __cplusplus
++#if __cplusplus
++}
++#endif
++#endif /* End of #ifdef __cplusplus */
++
+ #endif /* _LIBHTTPD_H_ */
+diff -uarN thttpd-2.29/Makefile thttpd-2.29-hisnet/Makefile
+--- thttpd-2.29/Makefile	1970-01-01 08:00:00.000000000 +0800
++++ thttpd-2.29-hisnet/Makefile	2019-03-01 16:43:44.463013179 +0800
+@@ -0,0 +1,201 @@
++# Generated automatically from Makefile.in by configure.
++# Makefile.in for thttpd
++#
++# Copyright ?1995,1998 by Jef Poskanzer <jef@mail.acme.com>.
++# All rights reserved.
++#
++# Redistribution and use in source and binary forms, with or without
++# modification, are permitted provided that the following conditions
++# are met:
++# 1. Redistributions of source code must retain the above copyright
++#    notice, this list of conditions and the following disclaimer.
++# 2. Redistributions in binary form must reproduce the above copyright
++#    notice, this list of conditions and the following disclaimer in the
++#    documentation and/or other materials provided with the distribution.
++#
++# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++# SUCH DAMAGE.
++
++# Various configurable paths (remember to edit Makefile.in, not Makefile)
++
++CUR_DIR      := $(shell pwd)
++REF_ROOT     ?= $(CUR_DIR)/../../..
++include $(REF_ROOT)/build/base.mak
++
++CreateResult :=
++dummy := $(call CreateDir, $(REF_OUT_THIRD_LIB))
++ifneq ($(strip CreateResult),)
++    err = $(error $(CreateResult))
++endif
++
++export CC
++CFLAGS += $(VSS_DEFS) $(VSS_CFLAGS)
++
++DEST_DIR = $(CUR_DIR)/lib
++
++# Top level hierarchy.
++prefix = /usr/local
++exec_prefix = ${prefix}
++# Pathname of directory to install the binary.
++BINDIR = ${exec_prefix}/sbin
++# Pathname of directory to install the man page.
++MANDIR = ${prefix}/man
++# Pathname of directory to install the CGI programs.
++WEBDIR = $(prefix)/www
++
++# CONFIGURE: The group that the web directory belongs to.  This is so that
++# the makeweb program can be installed set-group-id to that group, and make
++# subdirectories.  If you're not going to use makeweb, ignore this.
++WEBGROUP =	www
++
++# CONFIGURE: Directory for CGI executables.
++CGIBINDIR =	$(WEBDIR)/cgi-bin
++
++# You shouldn't need to edit anything below here.
++
++
++CCOPT =		-O2
++DEFS =		-DHAVE__PROGNAME=1 -DHAVE_FCNTL_H=1 -DHAVE_GRP_H=1 -DHAVE_MEMORY_H=1 -DHAVE_PATHS_H=1 -DHAVE_POLL_H=1 -DHAVE_SYS_POLL_H=1 -DTIME_WITH_SYS_TIME=1 -DHAVE_DIRENT_H=1 -DHAVE_LIBCRYPT=1 -DHAVE_STRERROR=1 -DHAVE_WAITPID=1 -DHAVE_VSNPRINTF=1 -DHAVE_DAEMON=1 -DHAVE_SETSID=1 -DHAVE_GETADDRINFO=1 -DHAVE_GETNAMEINFO=1 -DHAVE_GAI_STRERROR=1 -DHAVE_SIGSET=1 -DHAVE_ATOLL=1 -DHAVE_UNISTD_H=1 -DHAVE_GETPAGESIZE=1 -DHAVE_MMAP=1 -DHAVE_SELECT=1 -DHAVE_POLL=1 -DHAVE_TM_GMTOFF=1 -DHAVE_INT64T=1 -DHAVE_SOCKLENT=1
++INCLS =		-I.
++CFLAGS +=	$(CCOPT) $(DEFS) $(INCLS) -Wno-error=unused-but-set-variable
++LDFLAGS =
++LIBS =		-lcrypt
++NETLIBS =
++INSTALL =	/usr/bin/install -c
++
++
++
++.c.o:
++	@rm -f $@
++	@$(CC) $(CFLAGS) -c $*.c
++
++SRC =		thttpd.c libhttpd.c fdwatch.c mmc.c timers.c match.c tdate_parse.c
++
++OBJ =		$(SRC:.c=.o)
++
++ALL =		thttpd
++
++GENHDR =	mime_encodings.h mime_types.h
++
++CLEANFILES =	$(ALL) $(OBJ) $(GENSRC) $(GENHDR) libthttpd.a
++
++#SUBDIRS =	cgi-src extras
++SUBDIRS =
++
++all:		this subdirs myinstall
++this:		$(ALL)
++
++thttpd: $(OBJ)
++	@rm -f $@
++#	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJ) $(LIBS) $(NETLIBS)
++	$(AR) -rv libthttpd.a $(OBJ)
++
++mime_encodings.h:	mime_encodings.txt
++	rm -f mime_encodings.h
++	sed < mime_encodings.txt > mime_encodings.h \
++	  -e 's/#.*//' -e 's/[ 	]*$$//' -e '/^$$/d' \
++	  -e 's/[ 	][ 	]*/", 0, "/' -e 's/^/{ "/' -e 's/$$/", 0 },/'
++
++mime_types.h:	mime_types.txt
++	rm -f mime_types.h
++	sed < mime_types.txt > mime_types.h \
++	  -e 's/#.*//' -e 's/[ 	]*$$//' -e '/^$$/d' \
++	  -e 's/[ 	][ 	]*/", 0, "/' -e 's/^/{ "/' -e 's/$$/", 0 },/'
++
++
++subdirs:
++	for i in $(SUBDIRS) ; do ( \
++	    cd $$i ; \
++	    pwd ; \
++	    $(MAKE) $(MFLAGS) \
++		WEBDIR=$(WEBDIR) \
++		CGIBINDIR=$(CGIBINDIR) \
++		MANDIR=$(MANDIR) \
++		WEBGROUP=$(WEBGROUP) \
++	) ; done
++
++myinstall: all
++	mkdir -p  $(DEST_DIR)
++	mkdir -p  $(DEST_DIR)/include
++	cp -rf libthttpd.a $(DEST_DIR)/
++	cp -rf libthttpd.a $(REF_OUT_THIRD_LIB)
++	cp -rf libhttpd.h $(DEST_DIR)/include
++	cp -rf thttpd.h $(DEST_DIR)/include
++
++install:	installthis install-man installsubdirs
++
++installthis:
++	-mkdir -p $(DESTDIR)$(BINDIR)
++	$(INSTALL) -m 555 -o bin -g bin thttpd $(DESTDIR)$(BINDIR)
++
++install-man:
++	-mkdir -p $(DESTDIR)$(MANDIR)/man8
++	$(INSTALL) -m 444 -o bin -g bin thttpd.8 $(DESTDIR)$(MANDIR)/man8
++
++installsubdirs:
++	for i in $(SUBDIRS) ; do ( \
++	    cd $$i ; \
++	    pwd ; \
++	    $(MAKE) $(MFLAGS) \
++		WEBDIR=$(WEBDIR) \
++		CGIBINDIR=$(CGIBINDIR) \
++		MANDIR=$(MANDIR) \
++		WEBGROUP=$(WEBGROUP) \
++		install \
++	) ; done
++
++
++clean:		cleansubdirs
++	rm -rf $(DEST_DIR)
++	rm -f $(OBJ)
++	rm -f libthttpd.a
++	rm -f $(REF_OUT_THIRD_LIB)/libthttpd.a
++
++distclean:	distcleansubdirs
++	rm -f $(CLEANFILES) Makefile config.cache config.log config.status tags
++
++cleansubdirs:
++	for i in $(SUBDIRS) ; do ( \
++	    cd $$i ; \
++	    pwd ; \
++	    $(MAKE) $(MFLAGS) clean \
++	) ; done
++
++distcleansubdirs:
++	for i in $(SUBDIRS) ; do ( \
++	    cd $$i ; \
++	    pwd ; \
++	    $(MAKE) $(MFLAGS) distclean \
++	) ; done
++
++tags:
++	ctags -wtd *.c *.h
++
++tar:
++	@name=`sed -n -e '/SERVER_SOFTWARE/!d' -e 's,.*thttpd/,thttpd-,' -e 's, .*,,p' version.h` ; \
++	  rm -rf $$name ; \
++	  mkdir $$name ; \
++	  tar cf - `cat FILES` | ( cd $$name ; tar xfBp - ) ; \
++	  chmod 644 $$name/Makefile.in $$name/config.h $$name/mime_encodings.txt $$name/mime_types.txt ; \
++	  chmod 755 $$name/cgi-bin $$name/cgi-src $$name/contrib $$name/contrib/redhat-rpm $$name/extras $$name/scripts ; \
++	  tar cf $$name.tar $$name ; \
++	  rm -rf $$name ; \
++	  gzip $$name.tar
++
++thttpd.o:	config.h version.h libhttpd.h fdwatch.h mmc.h timers.h match.h
++libhttpd.o:	config.h version.h libhttpd.h mime_encodings.h mime_types.h \
++		mmc.h timers.h match.h tdate_parse.h
++fdwatch.o:	fdwatch.h
++mmc.o:		mmc.h libhttpd.h
++timers.o:	timers.h
++match.o:	match.h
++tdate_parse.o:	tdate_parse.h
+diff -uarN thttpd-2.29/mmc.c thttpd-2.29-hisnet/mmc.c
+--- thttpd-2.29/mmc.c	2015-11-06 02:13:49.000000000 +0800
++++ thttpd-2.29-hisnet/mmc.c	2019-03-01 16:43:44.463013179 +0800
+@@ -103,7 +103,9 @@
+ 
+ 
+ /* Forwards. */
++#ifndef __LITEOS__
+ static void panic( void );
++#endif
+ static void really_unmap( Map** mm );
+ static int check_hash_size( void );
+ static int add_hash( Map* m );
+@@ -194,6 +196,7 @@
+ 	m->addr = (void*) 1;	/* arbitrary non-NULL address */
+     else
+ 	{
++#ifndef __LITEOS__
+ 	size_t size_size = (size_t) m->size;	/* loses on files >2GB */
+ #ifdef HAVE_MMAP
+ 	/* Map the file into memory. */
+@@ -242,7 +245,9 @@
+ 	    return (void*) 0;
+ 	    }
+ #endif /* HAVE_MMAP */
++#endif //#ifndef __LITEOS__
+ 	}
++#ifndef __LITEOS__
+     (void) close( fd );
+ 
+     /* Put the Map into the hash table. */
+@@ -264,6 +269,10 @@
+ 
+     /* And return the address. */
+     return m->addr;
++#else
++//In LiteOS, we can only accept one client to download one file one time.
++    return (void*)fd;
++#endif //#ifndef __LITEOS__
+     }
+ 
+ 
+@@ -343,7 +352,7 @@
+ 	}
+     }
+ 
+-
++#ifndef __LITEOS__
+ static void
+ panic( void )
+     {
+@@ -362,7 +371,7 @@
+ 	    mm = &(*mm)->next;
+ 	}
+     }
+-
++#endif
+ 
+ static void
+ really_unmap( Map** mm )
+diff -uarN thttpd-2.29/thttpd.c thttpd-2.29-hisnet/thttpd.c
+--- thttpd-2.29/thttpd.c	2015-10-20 07:40:46.000000000 +0800
++++ thttpd-2.29-hisnet/thttpd.c	2019-03-01 16:45:30.253625874 +0800
+@@ -1,6 +1,6 @@
+ /* thttpd.c - tiny/turbo/throttling HTTP server
+ **
+-** Copyright © 1995,1998,1999,2000,2001,2015 by
++** Copyright ? 1995,1998,1999,2000,2001,2015 by
+ ** Jef Poskanzer <jef@mail.acme.com>. All rights reserved.
+ **
+ ** Redistribution and use in source and binary forms, with or without
+@@ -60,6 +60,8 @@
+ #include "timers.h"
+ #include "match.h"
+ 
++#include "thttpd.h"
++
+ #ifndef SHUT_WR
+ #define SHUT_WR 1
+ #endif
+@@ -68,6 +70,15 @@
+ typedef long long int64_t;
+ #endif
+ 
++#ifdef __cplusplus
++#if __cplusplus
++extern "C"{
++#endif
++#endif /* End of #ifdef __cplusplus */
++
++#ifdef __LITEOS__
++#define syslog(priority, fmt...)
++#endif
+ 
+ static char* argv0;
+ static int debug;
+@@ -137,18 +148,23 @@
+ off_t stats_bytes;
+ int stats_simultaneous;
+ 
+-static volatile int got_hup, got_usr1, watchdog_flag;
+-
++//static volatile int got_hup, got_usr1, watchdog_flag;
++static PTR_FUNC_DistribLink s_pfunDistribLink=NULL;
++int HI_THTTPD_RegisterDistribLink(PTR_FUNC_DistribLink pfunDistribLink)
++{
++    s_pfunDistribLink = pfunDistribLink;
++    return 0;
++}
+ 
+ /* Forwards. */
+ static void parse_args( int argc, char** argv );
+-static void usage( void );
+-static void read_config( char* filename );
+-static void value_required( char* name, char* value );
+-static void no_value_required( char* name, char* value );
+-static char* e_strdup( char* oldstr );
++//static void usage( void );
++//static void read_config( char* filename );
++//static void value_required( char* name, char* value );
++//static void no_value_required( char* name, char* value );
++//static char* e_strdup( char* oldstr );
+ static void lookup_hostname( httpd_sockaddr* sa4P, size_t sa4_len, int* gotv4P, httpd_sockaddr* sa6P, size_t sa6_len, int* gotv6P );
+-static void read_throttlefile( char* tf );
++//static void read_throttlefile( char* tf );
+ static void shut_down( void );
+ static int handle_newconnect( struct timeval* tvP, int listen_fd );
+ static void handle_read( connecttab* c, struct timeval* tvP );
+@@ -170,7 +186,7 @@
+ static void logstats( struct timeval* nowP );
+ static void thttpd_logstats( long secs );
+ 
+-
++#if 0
+ /* SIGTERM and SIGINT say to exit immediately. */
+ static void
+ handle_term( int sig )
+@@ -349,17 +365,19 @@
+ 	httpd_set_logfp( hs, logfp );
+ 	}
+     }
++#endif
+ 
+ 
+-int
+-main( int argc, char** argv )
+-    {
+-    char* cp;
+-    struct passwd* pwd;
+-    uid_t uid = 32767;
+-    gid_t gid = 32767;
++//int
++//main( int argc, char** argv )
++void* thttpd_start_main(void* pvParam)
++    {
++    //char* cp;
++    //struct passwd* pwd;
++    //uid_t uid = 32767;
++    //gid_t gid = 32767;
+     char cwd[MAXPATHLEN+1];
+-    FILE* logfp;
++    FILE* logfp = NULL;
+     int num_ready;
+     int cnum;
+     connecttab* c;
+@@ -368,18 +386,19 @@
+     httpd_sockaddr sa6;
+     int gotv4, gotv6;
+     struct timeval tv;
++    prctl(PR_SET_NAME, (unsigned long)"thttpdmain", 0,0,0);
+ 
+-    argv0 = argv[0];
++    //argv0 = argv[0];
+ 
+-    cp = strrchr( argv0, '/' );
+-    if ( cp != (char*) 0 )
+-	++cp;
+-    else
+-	cp = argv0;
+-    openlog( cp, LOG_NDELAY|LOG_PID, LOG_FACILITY );
++    //cp = strrchr( argv0, '/' );
++    //if ( cp != (char*) 0 )
++	//++cp;
++    //else
++	//cp = argv0;
++    //openlog( "thttpd", LOG_CONS|LOG_NDELAY|LOG_PID, LOG_LPR );
+ 
+     /* Handle command-line arguments. */
+-    parse_args( argc, argv );
++    parse_args( 0, NULL );
+ 
+     /* Read zone info now, in case we chroot(). */
+     tzset();
+@@ -390,13 +409,14 @@
+ 	{
+ 	syslog( LOG_ERR, "can't find any valid address" );
+ 	(void) fprintf( stderr, "%s: can't find any valid address\n", argv0 );
+-	exit( 1 );
++	return (void*)-1;
+ 	}
+ 
+     /* Throttle file. */
+     numthrottles = 0;
+     maxthrottles = 0;
+     throttles = (throttletab*) 0;
++#if 0
+     if ( throttlefile != (char*) 0 )
+ 	read_throttlefile( throttlefile );
+ 
+@@ -543,7 +563,7 @@
+ 	(void) fprintf( pidfp, "%d\n", (int) getpid() );
+ 	(void) fclose( pidfp );
+ 	}
+-
++#endif
+     /* Initialize the fdwatch package.  Have to do this before chroot,
+     ** if /dev/poll is used.
+     */
+@@ -551,10 +571,11 @@
+     if ( max_connects < 0 )
+ 	{
+ 	syslog( LOG_CRIT, "fdwatch initialization failure" );
+-	exit( 1 );
++	return (void*)-1;
+ 	}
+     max_connects -= SPARE_FDS;
+ 
++#if 0
+     /* Chroot if requested. */
+     if ( do_chroot )
+ 	{
+@@ -630,7 +651,7 @@
+     got_usr1 = 0;
+     watchdog_flag = 0;
+     (void) alarm( OCCASIONAL_TIME * 3 );
+-
++#endif
+     /* Initialize the timer package. */
+     tmr_init();
+ 
+@@ -644,19 +665,19 @@
+ 	no_symlink_check, do_vhost, do_global_passwd, url_pattern,
+ 	local_pattern, no_empty_referrers );
+     if ( hs == (httpd_server*) 0 )
+-	exit( 1 );
++    return (void*)-1;
+ 
+     /* Set up the occasional timer. */
+     if ( tmr_create( (struct timeval*) 0, occasional, JunkClientData, OCCASIONAL_TIME * 1000L, 1 ) == (Timer*) 0 )
+ 	{
+ 	syslog( LOG_CRIT, "tmr_create(occasional) failed" );
+-	exit( 1 );
++	return (void*)-1;
+ 	}
+     /* Set up the idle timer. */
+     if ( tmr_create( (struct timeval*) 0, idle, JunkClientData, 5 * 1000L, 1 ) == (Timer*) 0 )
+ 	{
+ 	syslog( LOG_CRIT, "tmr_create(idle) failed" );
+-	exit( 1 );
++	return (void*)-1;
+ 	}
+     if ( numthrottles > 0 )
+ 	{
+@@ -664,7 +685,7 @@
+ 	if ( tmr_create( (struct timeval*) 0, update_throttles, JunkClientData, THROTTLE_TIME * 1000L, 1 ) == (Timer*) 0 )
+ 	    {
+ 	    syslog( LOG_CRIT, "tmr_create(update_throttles) failed" );
+-	    exit( 1 );
++        return (void*)-1;
+ 	    }
+ 	}
+ #ifdef STATS_TIME
+@@ -672,14 +693,14 @@
+     if ( tmr_create( (struct timeval*) 0, show_stats, JunkClientData, STATS_TIME * 1000L, 1 ) == (Timer*) 0 )
+ 	{
+ 	syslog( LOG_CRIT, "tmr_create(show_stats) failed" );
+-	exit( 1 );
++	return (void*)-1;
+ 	}
+ #endif /* STATS_TIME */
+     start_time = stats_time = time( (time_t*) 0 );
+     stats_connections = 0;
+     stats_bytes = 0;
+     stats_simultaneous = 0;
+-
++#if 0/*confict with ipcm*/
+     /* If we're root, try to become someone else. */
+     if ( getuid() == 0 )
+ 	{
+@@ -714,13 +735,14 @@
+ 		LOG_WARNING,
+ 		"started as root without requesting chroot(), warning only" );
+ 	}
++#endif
+ 
+     /* Initialize our connections table. */
+     connects = NEW( connecttab, max_connects );
+     if ( connects == (connecttab*) 0 )
+ 	{
+ 	syslog( LOG_CRIT, "out of memory allocating a connecttab" );
+-	exit( 1 );
++	return (void*)-1;
+ 	}
+     for ( cnum = 0; cnum < max_connects; ++cnum )
+ 	{
+@@ -745,13 +767,14 @@
+     (void) gettimeofday( &tv, (struct timezone*) 0 );
+     while ( ( ! terminate ) || num_connects > 0 )
+ 	{
++#if 0
+ 	/* Do we need to re-open the log file? */
+ 	if ( got_hup )
+ 	    {
+ 	    re_open_logfile();
+ 	    got_hup = 0;
+ 	    }
+-
++#endif
+ 	/* Do the fd watch. */
+ 	num_ready = fdwatch( tmr_mstimeout( &tv ) );
+ 	if ( num_ready < 0 )
+@@ -759,7 +782,7 @@
+ 	    if ( errno == EINTR || errno == EAGAIN )
+ 		continue;       /* try again */
+ 	    syslog( LOG_ERR, "fdwatch - %m" );
+-	    exit( 1 );
++        return (void*)-1;
+ 	    }
+ 	(void) gettimeofday( &tv, (struct timezone*) 0 );
+ 
+@@ -810,7 +833,7 @@
+ 		    }
+ 	    }
+ 	tmr_run( &tv );
+-
++#if 0
+ 	if ( got_usr1 && ! terminate )
+ 	    {
+ 	    terminate = 1;
+@@ -823,20 +846,21 @@
+ 		httpd_unlisten( hs );
+ 		}
+ 	    }
++#endif
+ 	}
+ 
+     /* The main loop terminated. */
+     shut_down();
+     syslog( LOG_NOTICE, "exiting" );
+-    closelog();
+-    exit( 0 );
++    //closelog();
++	return 0;
+     }
+ 
+ 
+ static void
+ parse_args( int argc, char** argv )
+     {
+-    int argn;
++    //int argn;
+ 
+     debug = 0;
+     port = DEFAULT_PORT;
+@@ -880,6 +904,9 @@
+     charset = DEFAULT_CHARSET;
+     p3p = "";
+     max_age = -1;
++    debug = 1;
++    no_symlink_check = 1;
++#if 0
+     argn = 1;
+     while ( argn < argc && argv[argn][0] == '-' )
+ 	{
+@@ -983,9 +1010,10 @@
+ 	}
+     if ( argn != argc )
+ 	usage();
++#endif
+     }
+ 
+-
++#if 0
+ static void
+ usage( void )
+     {
+@@ -1221,7 +1249,7 @@
+ 	}
+     return newstr;
+     }
+-
++#endif
+ 
+ static void
+ lookup_hostname( httpd_sockaddr* sa4P, size_t sa4_len, int* gotv4P, httpd_sockaddr* sa6P, size_t sa6_len, int* gotv6P )
+@@ -1249,7 +1277,7 @@
+ 	(void) fprintf(
+ 	    stderr, "%s: getaddrinfo %s - %s\n",
+ 	    argv0, hostname, gai_strerror( gaierr ) );
+-	exit( 1 );
++	return;
+ 	}
+ 
+     /* Find the first IPv6 and IPv4 entries. */
+@@ -1280,7 +1308,7 @@
+ 		LOG_CRIT, "%.80s - sockaddr too small (%lu < %lu)",
+ 		hostname, (unsigned long) sa6_len,
+ 		(unsigned long) aiv6->ai_addrlen );
+-	    exit( 1 );
++        return;
+ 	    }
+ 	(void) memset( sa6P, 0, sa6_len );
+ 	(void) memmove( sa6P, aiv6->ai_addr, aiv6->ai_addrlen );
+@@ -1297,7 +1325,7 @@
+ 		LOG_CRIT, "%.80s - sockaddr too small (%lu < %lu)",
+ 		hostname, (unsigned long) sa4_len,
+ 		(unsigned long) aiv4->ai_addrlen );
+-	    exit( 1 );
++        return;
+ 	    }
+ 	(void) memset( sa4P, 0, sa4_len );
+ 	(void) memmove( sa4P, aiv4->ai_addr, aiv4->ai_addrlen );
+@@ -1336,7 +1364,7 @@
+ 		(void) fprintf(
+ 		    stderr, "%s: gethostbyname %s failed\n", argv0, hostname );
+ #endif /* HAVE_HSTRERROR */
+-		exit( 1 );
++        return;
+ 		}
+ 	    if ( he->h_addrtype != AF_INET )
+ 		{
+@@ -1344,7 +1372,7 @@
+ 		(void) fprintf(
+ 		    stderr, "%s: %s - non-IP network address\n",
+ 		    argv0, hostname );
+-		exit( 1 );
++        return;
+ 		}
+ 	    (void) memmove(
+ 		&sa4P->sa_in.sin_addr.s_addr, he->h_addr, he->h_length );
+@@ -1356,7 +1384,7 @@
+ #endif /* USE_IPV6 */
+     }
+ 
+-
++#if 0
+ static void
+ read_throttlefile( char* tf )
+     {
+@@ -1452,7 +1480,7 @@
+ 	}
+     (void) fclose( fp );
+     }
+-
++#endif
+ 
+ static void
+ shut_down( void )
+@@ -1496,7 +1524,7 @@
+ handle_newconnect( struct timeval* tvP, int listen_fd )
+     {
+     connecttab* c;
+-    ClientData client_data;
++    //ClientData client_data;
+ 
+     /* This loops until the accept() fails, trying to start new
+     ** connections as fast as possible so we don't overrun the
+@@ -1519,7 +1547,7 @@
+ 	if ( first_free_connect == -1 || connects[first_free_connect].conn_state != CNST_FREE )
+ 	    {
+ 	    syslog( LOG_CRIT, "the connects free list is messed up" );
+-	    exit( 1 );
++	    return -1;
+ 	    }
+ 	c = &connects[first_free_connect];
+ 	/* Make the httpd_conn if necessary. */
+@@ -1529,7 +1557,7 @@
+ 	    if ( c->hc == (httpd_conn*) 0 )
+ 		{
+ 		syslog( LOG_CRIT, "out of memory allocating an httpd_conn" );
+-		exit( 1 );
++	    return -1;
+ 		}
+ 	    c->hc->initialized = 0;
+ 	    ++httpd_conn_count;
+@@ -1554,21 +1582,26 @@
+ 	first_free_connect = c->next_free_connect;
+ 	c->next_free_connect = -1;
+ 	++num_connects;
+-	client_data.p = c;
++	//client_data.p = c;
+ 	c->active_at = tvP->tv_sec;
+ 	c->wakeup_timer = (Timer*) 0;
+ 	c->linger_timer = (Timer*) 0;
+ 	c->next_byte_index = 0;
+ 	c->numtnums = 0;
+ 
++#ifndef __LITEOS__
+ 	/* Set the connection file descriptor to no-delay mode. */
+ 	httpd_set_ndelay( c->hc->conn_fd );
++#endif //#ifndef __LITEOS__
+ 
+ 	fdwatch_add_fd( c->hc->conn_fd, c, FDW_READ );
+ 
+ 	++stats_connections;
+ 	if ( num_connects > stats_simultaneous )
+ 	    stats_simultaneous = num_connects;
++#ifdef __LITEOS__
++    return 0;
++#endif //#ifndef __LITEOS__
+ 	}
+     }
+ 
+@@ -1576,8 +1609,8 @@
+ static void
+ handle_read( connecttab* c, struct timeval* tvP )
+     {
+-    int sz;
+-    ClientData client_data;
++    int sz=0;
++    //ClientData client_data;
+     httpd_conn* hc = c->hc;
+ 
+     /* Is there room in our buffer to read more bytes? */
+@@ -1619,6 +1652,19 @@
+ 	}
+     hc->read_idx += sz;
+     c->active_at = tvP->tv_sec;
++	/*receive data from client, use s_pfunDistribLink to do corresponding action*/
++    if(s_pfunDistribLink != NULL)
++    {
++		int s32Ret = 0;
++		hc->read_buf[hc->read_idx] = '\0';
++		s32Ret = s_pfunDistribLink(hc->conn_fd,hc->read_buf,hc->read_idx);
++        if(WEBSERVER_NO_DISTRIBLINK!=s32Ret)
++        {
++		    hc->distrib_flag = 1;
++		    finish_connection( c, tvP );
++            return;
++        }
++    }
+ 
+     /* Do we have a complete request yet? */
+     switch ( httpd_got_request( hc ) )
+@@ -1688,12 +1734,73 @@
+     c->conn_state = CNST_SENDING;
+     c->started_at = tvP->tv_sec;
+     c->wouldblock_delay = 0;
+-    client_data.p = c;
++    //client_data.p = c;
+ 
+     fdwatch_del_fd( hc->conn_fd );
+     fdwatch_add_fd( hc->conn_fd, c, FDW_WRITE );
+     }
+ 
++#ifdef __LITEOS__
++#include "asm/delay.h"
++static int liteos_sendfile(int file_fd,int conn_fd,size_t len)
++{
++    int buffsize = 512*1024;
++	char *buff = (char*)malloc(buffsize);
++	if (NULL == buff)
++    {
++		printf("[%s:%d]malloc %d bytes failed.\n", __FUNCTION__, __LINE__, buffsize);
++		return 0;
++	}
++
++    int flags;
++    if ((flags = fcntl(conn_fd, F_GETFL, NULL)) < 0) {
++        return 0;
++    }
++    if (fcntl(conn_fd, F_SETFL, flags | O_NONBLOCK) == -1) {
++        return 0;
++    }
++    //printf("[%s:%d]len %d bytes\n", __FUNCTION__, __LINE__, len);
++    size_t total_sendlen=0;
++    while (total_sendlen < len)
++    {
++        size_t readlen = read(file_fd, buff, MIN(buffsize,(len-total_sendlen)));
++        if (readlen < 0)
++        {
++            free(buff);
++            printf("[%s:%d]read fail:%s\n",__FUNCTION__, __LINE__,strerror(errno));
++            return total_sendlen;
++        }
++
++        size_t sendlen = 0;
++        int retry = 0;
++        //printf("[%s:%d]send %d bytes\n", __FUNCTION__, __LINE__, readlen);
++        while (sendlen < readlen)
++        {
++            ssize_t ret = write(conn_fd, buff + sendlen, readlen - sendlen);
++            if (0 > ret)
++            {
++                if ( errno == EINTR || errno == EAGAIN || errno == EWOULDBLOCK )
++                {
++                    udelay(10000);
++                    retry++;
++                    if (retry < 200)
++                    {
++                        continue;
++                    }
++                }
++                free(buff);
++                printf("[%s:%d]send fail:%s\n",__FUNCTION__, __LINE__,strerror(errno));
++                return total_sendlen;
++            }
++            sendlen += ret;
++        }
++        total_sendlen += sendlen;
++        //printf("[%s:%d]send %d bytes, return %d, and total %d bytes\n", __FUNCTION__, __LINE__, readlen, sendlen, total_sendlen);
++    }
++    free(buff);
++    return total_sendlen;
++}
++#endif
+ 
+ static void
+ handle_send( connecttab* c, struct timeval* tvP )
+@@ -1720,6 +1827,7 @@
+ 	}
+     else
+ 	{
++#ifndef __LITEOS__
+ 	/* Yes.  We'll combine headers and file into a single writev(),
+ 	** hoping that this generates a single packet.
+ 	*/
+@@ -1730,6 +1838,13 @@
+ 	iv[1].iov_base = &(hc->file_address[c->next_byte_index]);
+ 	iv[1].iov_len = MIN( c->end_byte_index - c->next_byte_index, max_bytes );
+ 	sz = writev( hc->conn_fd, iv, 2 );
++#else
++    int fd = (int)(hc->file_address);
++	int tot_len=MIN( c->end_byte_index - c->next_byte_index, max_bytes );
++    sz = write(hc->conn_fd, hc->response, hc->responselen);
++	lseek(fd, c->next_byte_index, SEEK_SET);
++    sz += liteos_sendfile(fd, hc->conn_fd, tot_len);
++#endif //#ifndef __LITEOS__
+ 	}
+ 
+     if ( sz < 0 && errno == EINTR )
+@@ -1759,7 +1874,7 @@
+ 	if ( c->wakeup_timer == (Timer*) 0 )
+ 	    {
+ 	    syslog( LOG_CRIT, "tmr_create(wakeup_connection) failed" );
+-	    exit( 1 );
++        return;
+ 	    }
+ 	return;
+ 	}
+@@ -1845,7 +1960,7 @@
+ 	    if ( c->wakeup_timer == (Timer*) 0 )
+ 		{
+ 		syslog( LOG_CRIT, "tmr_create(wakeup_connection) failed" );
+-		exit( 1 );
++        return;
+ 		}
+ 	    }
+ 	}
+@@ -2017,7 +2132,10 @@
+ 	if ( c->conn_state != CNST_PAUSING )
+ 	    fdwatch_del_fd( c->hc->conn_fd );
+ 	c->conn_state = CNST_LINGERING;
+-	shutdown( c->hc->conn_fd, SHUT_WR );
++    if(c->hc->distrib_flag != 1)
++    {
++	    shutdown( c->hc->conn_fd, SHUT_WR );
++    }
+ 	fdwatch_add_fd( c->hc->conn_fd, c, FDW_READ );
+ 	client_data.p = c;
+ 	if ( c->linger_timer != (Timer*) 0 )
+@@ -2027,7 +2145,7 @@
+ 	if ( c->linger_timer == (Timer*) 0 )
+ 	    {
+ 	    syslog( LOG_CRIT, "tmr_create(linger_clear_connection) failed" );
+-	    exit( 1 );
++        return;
+ 	    }
+ 	}
+     else
+@@ -2122,7 +2240,7 @@
+     {
+     mmc_cleanup( nowP );
+     tmr_cleanup();
+-    watchdog_flag = 1;		/* let the watchdog know that we are alive */
++    //watchdog_flag = 1;		/* let the watchdog know that we are alive */
+     }
+ 
+ 
+@@ -2179,3 +2297,9 @@
+     stats_bytes = 0;
+     stats_simultaneous = 0;
+     }
++
++#ifdef __cplusplus
++#if __cplusplus
++}
++#endif
++#endif /* End of #ifdef __cplusplus */
+diff -uarN thttpd-2.29/thttpd.h thttpd-2.29-hisnet/thttpd.h
+--- thttpd-2.29/thttpd.h	1970-01-01 08:00:00.000000000 +0800
++++ thttpd-2.29-hisnet/thttpd.h	2019-03-01 16:43:44.000000000 +0800
+@@ -0,0 +1,30 @@
++#ifndef __HI_THTTPD_H__
++#define __HI_THTTPD_H__
++
++#include <semaphore.h>
++#include <sys/prctl.h>
++#include "timers.h"
++
++#ifdef __cplusplus
++#if __cplusplus
++extern "C"{
++#endif
++#endif /* __cplusplus */
++
++
++#define WEBSERVER_NO_DISTRIBLINK 200//when PTR_FUNC_DistribLink don't process pMsgBuffAddr, return this value
++
++typedef int (*PTR_FUNC_DistribLink)(int s32LinkFd,char* pMsgBuffAddr,unsigned int u32MsgLen);
++int HI_THTTPD_RegisterDistribLink(PTR_FUNC_DistribLink pfunDistribLink);
++
++void* thttpd_start_main(void* pvParam);
++
++#ifdef __cplusplus
++#if __cplusplus
++}
++#endif
++#endif /* End of #ifdef __cplusplus */
++
++#endif /* End of #ifndef __HI_THTTPD_H__ */
++
++

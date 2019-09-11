@@ -1,0 +1,13 @@
+nclude $(LITEOSTOPDIR)/config.mk
+
+ARFLAGS = cr
+
+all:
+    mkdir -p $(OUT)/lib
+    cp -rf $(LITEOS_CPU_TYPE)/*.a $(OUT)/lib
+
+
+clean:
+    rm -rf $(OUT)/lib/libvirpart.a
+
+.PHONY: all clean

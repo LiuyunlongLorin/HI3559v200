@@ -1,0 +1,71 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+LOG_LIB_DIR := $(HIBERRY_COMMON_DIR)/log/lib
+LOG_INC_DIR := $(HIBERRY_COMMON_DIR)/log/include
+MESSAGEHANDLER_LIB_DIR := $(HIBERRY_COMMON_DIR)/msghandler/lib
+MESSAGEHANDLER_INC_DIR := $(HIBERRY_COMMON_DIR)/msghandler/include
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+STATEMACHINE_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/statemachine/hfsm/lib
+STATEMACHINE_INC_DIR := $(HIBERRY_COMPONENT_DIR)/statemachine/hfsm/include
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+INC_FLAGS += -I$(HIBERRY_COMMON_INC) -I$(NDK_HEADER_PATH) -I$(NDK_HEADER_PATH)/inner \
+		-I$(LOG_INC_DIR) \
+		-I$(STATEMACHINE_INC_DIR) \
+		-I$(MESSAGEHANDLER_INC_DIR) \
+		-I$(MEDIA_ADPT_DIR)/include \
+		-I$(COMPILE_ROOT) \
+		-I$(COMPILE_ROOT)/state
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+CFLAGS += -Wno-error
+
+COMPILE   =  $(CC) $(CFLAGS) -g -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TRAGET_LINUX := $(COMPILE_ROOT)/sample_hfsm
+.PHONY : all clean install
+all:$(TRAGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+HIBERRY_LIBS :=  -Wl,-Bstatic -lhfsm -lmessagehandler -lmwlog $(MEDIA_LIBS_LINK) -Wl,-Bdynamic
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -L$(LOG_LIB_DIR) -lpthread  $(HIBERRY_LIBS) $(HI_MAPI_LIBS) -lm -ldl -L$(STATEMACHINE_LIB_DIR) -L$(MESSAGEHANDLER_LIB_DIR) -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic $(MEDIA_LIBS_PATH_LINK)
+else
+HIBERRY_LIBS := -lhfsm -lmwlog
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(MEDIA_LIBS_PATH_LINK)  -L$(LOG_LIB_DIR) -L$(HUTAF_LIB_DIR) -lpthread -lstdc++ $(HIBERRY_LIBS)  -lm -ldl $(HUTAF_LIBS)
+endif
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f $(TRAGET_LINUX)

@@ -1,0 +1,11 @@
+#
+# For a description of the syntax of this configuration file,
+# see build/scripts/Documentation/kbuild/kconfig-language.txt.
+#
+mainmenu "Hisilicon SDK Configuration"
+
+source build/Kconfig.arch
+source build/Kconfig.board
+source build/Kconfig.build
+source build/Kconfig.memory
+source reference/Kconfig

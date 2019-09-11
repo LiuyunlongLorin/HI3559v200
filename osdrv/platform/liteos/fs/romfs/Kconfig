@@ -1,0 +1,6 @@
+config LOSCFG_FS_ROMFS
+	bool "Enable ROMFS"
+	default y
+	depends on LOSCFG_FS_VFS
+        help
+	  Answer Y to enable LiteOS support romfs filesystem.

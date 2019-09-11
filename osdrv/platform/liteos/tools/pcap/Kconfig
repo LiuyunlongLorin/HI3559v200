@@ -1,0 +1,6 @@
+config LOSCFG_NET_PCAP
+    bool "Enable Pcap"
+    default y
+    depends on LOSCFG_NET_LWIP_SACK && LOSCFG_DEBUG_VERSION && LOSCFG_SHELL
+    help
+      Answer Y to enable LiteOS support pcap.

@@ -1,0 +1,6 @@
+config LOSCFG_DRIVERS_REGULATOR
+    bool "Enable Regulator"
+    default y
+    depends on LOSCFG_DRIVERS
+    help
+      Answer Y to enable LiteOS to support Regulator

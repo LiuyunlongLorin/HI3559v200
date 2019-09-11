@@ -1,0 +1,70 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+
+HIBERRY_COMMON_INCLUDE := $(MIDDLEWARE_DIR)/common/include
+HIBERRY_SERVERCOMMON_INCLUDE := $(MIDDLEWARE_DIR)/sample/livestream/server_common/include
+HIBERRY_MBUFFER_LIB := $(MIDDLEWARE_DIR)/common/mbuffer/lib
+HIBERRY_SERVERCOMMON_LIB := $(MIDDLEWARE_DIR)/sample/livestream/server_common/lib
+HIBERRY_RTSPSVR_INCLUDE := $(MIDDLEWARE_DIR)/sample/livestream/rtspserver/include
+HIBERRY_RTSPSVR_LIB := $(MIDDLEWARE_DIR)/sample/livestream/rtspserver/lib
+
+HIBERRY_INC_DIR += $(HIBERRY_COMMON_INCLUDE) -I$(HIBERRY_RTSPSVR_INCLUDE) -I$(HIBERRY_SERVERCOMMON_INCLUDE)
+SAMPLE_INCLUDE_DIR := $(MIDDLEWARE_DIR)/sample/rtspserver
+#===============================================================================
+# sample common deps
+#===============================================================================
+SAMPLE_COMMON_INC := $(MIDDLEWARE_DIR)/sample/common/include
+SAMPLE_COMMON_LIB_DIR := $(MIDDLEWARE_DIR)/sample/common/lib
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -maxdepth 1  -name '*.c' -print)
+
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+INC_FLAGS :=  -I$(HIBERRY_INC_DIR) -I$(SAMPLE_INCLUDE_DIR) -I$(SAMPLE_COMMON_INC) -I$(MEDIA_ADPT_DIR)/include $(MEDIA_INCLUDE_PATH) $(MEDIA_DEPRECATED_INC_PATH)
+
+RTSPSVR_LIBS := -lrtspserver
+SERVERCOMMON_LIBS := -lservercommon
+MBUFFER_LIBS := -lmbuf
+
+CFLAGS += -Wno-error
+
+CFLAGS += -L$(HIBERRY_RTSPSVR_LIB) -L$(HIBERRY_SERVERCOMMON_LIB) -L$(SAMPLE_COMMON_LIB_DIR) -L$(HIBERRY_MBUFFER_LIB) $(MEDIA_LIBS_PATH_LINK)
+TARGET_DIR := $(COMPILE_ROOT)
+
+
+COMPILE   =  $(CC) $(CFLAGS) -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TRAGET_LINUX := $(COMPILE_ROOT)/sample_rtspserver
+.PHONY : all clean install
+all:$(TRAGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+HI_MEDIA_LIBS := -Wl,-Bstatic $(MEDIA_LIBS_LINK) -Wl,-Bdynamic
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^  -lpthread -Wl,-Bstatic $(RTSPSVR_LIBS) $(SERVERCOMMON_LIBS)  -lsamplecomm $(MBUFFER_LIBS) -Wl,-Bdynamic $(HI_MEDIA_LIBS) -lm -ldl
+else
+HI_MEDIA_LIBS := $(MEDIA_LIBS_LINK)
+CFLAGS += -L$(HUTAF_LIB_DIR)
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^  -lpthread $(RTSPSVR_LIBS) $(SERVERCOMMON_LIBS) $(MBUFFER_LIBS)  $(HI_MEDIA_LIBS) -lsamplecomm -lm -ldl $(HUTAF_LIBS)
+endif
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f sample_rtspserver

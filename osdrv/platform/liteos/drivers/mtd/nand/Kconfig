@@ -1,0 +1,36 @@
+config LOSCFG_DRIVERS_MTD_NAND
+    bool "Enable MTD nandflash"
+    default y
+    depends on LOSCFG_DRIVERS_MTD
+    help
+      Answer Y to support nandflash.
+
+choice
+    depends    on LOSCFG_DRIVERS_MTD_NAND
+    prompt "NandFlash Chips"
+    default LOSCFG_DRIVERS_MTD_NAND_HINFC620
+
+config LOSCFG_DRIVERS_MTD_NAND_HINFC620
+    depends on LOSCFG_PLATFORM_HI3516A
+    bool "Enable hinfc620 for parallel nand"
+    help
+      Answer Y to support hinfc620.
+
+config LOSCFG_DRIVERS_MTD_NAND_HISNFC100
+    depends on LOSCFG_PLATFORM_HI3516A
+    bool "Enable hisnfc100 for spi nand"
+    help
+      Answer Y to support hisnfc100.
+
+config LOSCFG_DRIVERS_MTD_NAND_HIFMC100
+    depends on LOSCFG_PLATFORM_HI3518EV200 || LOSCFG_PLATFORM_HI3519 || LOSCFG_PLATFORM_HI3519V101 || LOSCFG_PLATFORM_HI3559 || LOSCFG_PLATFORM_HI3516CV300 || LOSCFG_PLATFORM_HI3559AV100ES || LOSCFG_PLATFORM_HI3516EV200
+    bool "Enable hifmc100 for spi nand"
+    help
+      Answer Y to support hifmc100.
+
+config LOSCFG_DRIVERS_MTD_NAND_HIFMC100_PARALLEL
+    depends on LOSCFG_PLATFORM_HI3519 || LOSCFG_PLATFORM_HI3519V101 || LOSCFG_PLATFORM_HI3559 || LOSCFG_PLATFORM_HI3559AV100ES
+    bool "Enable hifmc100 for parallel nand"
+    help
+      Answer Y to support hifmc100.
+endchoice

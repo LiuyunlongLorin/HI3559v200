@@ -1,0 +1,18 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Device Configuration"
+
+menuconfig MOTIONSENSOR
+	bool "MOTIONSENSOR support"
+
+if MOTIONSENSOR
+	choice
+		prompt "MOTIONSENSOR Type"
+		config MOTIONSENSOR_IMC20690
+			bool "IMC20690"
+			depends on !HI3559AV100
+	endchoice
+endif
+

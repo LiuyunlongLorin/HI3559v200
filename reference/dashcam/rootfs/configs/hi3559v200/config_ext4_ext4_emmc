@@ -1,0 +1,2 @@
+setenv bootargs 'mem=96M quiet console=ttyAMA0,115200 clk_ignore_unused rw rootwait root=/dev/mmcblk0p6 rootfstype=ext4 blkdevparts=mmcblk0:1M(u-boot.bin),1M(rawparam),1M(rawparambak),8M(media_app.bin),5M(uImage),rootfs_ext4size(rootfs.ext4),appfs_ext4size(appfs.ext4),-(storage)'
+setenv bootcmd 'mmc read 0 param_readaddr 800 800;mmc read 0 parambak_readaddr 1000 800;cread param_readaddr parambak_readaddr 0x10000 param_baseaddr;mmc read 0 liteos_textbase 1800 4000;go_cpu1 liteos_textbase;mmc read 0 linux_bootaddr 5800 2800;bootm linux_bootaddr'

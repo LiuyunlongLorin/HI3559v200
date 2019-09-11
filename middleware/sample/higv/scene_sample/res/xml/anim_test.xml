@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="ANIM_TEST"
+isusecommonskin="yes">
+<window
+    id="ANIM_TEST"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    normalskin="common_skin_white"
+    opacity="255"
+    winlevel="0"
+    ontouchaction="ANIM_TEST_ontouchaction"
+    >
+
+    <image
+        id="ANIM_TEST_HIDE"
+        top="0"
+        left="0"
+        width="40"
+        height="35"
+        isrelease="no"
+        islanchange="no"
+        normalskin="common_skin_white"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        isnofocus="yes"
+        image="./res/pic/win_back_no.png"
+        ongesturetap="ANIM_TEST_ongesturetap"/>
+
+    <label
+        id="ANIM_TEST_LABEL1"
+        top="0"
+        left="40"
+        width="280"
+        height="35"
+        isrelease="no"
+        islanchange="no"
+        normalskin="win_title_skin"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        font="simhei_font_text_20"
+        alignment="hcenter|vcenter"
+        isnofocus="no"
+        text="STR_ANIM_TEST"/>
+
+    <image
+        id="ANIM_TEST_TEST"
+        top="36"
+        left="30"
+        width="140"
+        height="100"
+        isrelease="no"
+        islanchange="no"
+        normalskin="common_skin_white"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        isnofocus="yes"
+        image="./res/pic/image/IMG_PNG.png"
+        ongesturetap="ANIM_TEST_ongesturetap"/>
+
+    <image
+        id="SHOW_IMAGE"
+        top="45"
+        left="30"
+        width="180"
+        height="100"
+        isrelease="yes"
+        normalskin="common_skin_white"
+        transparent="no"
+        anim="anim_test_roll_up_down"
+        image="./res/pic/image/IMG_JPG.jpg"
+        />
+</window>
+</view>

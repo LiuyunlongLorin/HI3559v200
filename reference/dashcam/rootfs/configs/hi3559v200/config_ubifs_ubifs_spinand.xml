@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="GB2312" ?>
+<Partition_Info>
+<Part Sel="1" PartitionName="fastboot" FlashType="nand" FileSystem="none" Start="0" Length="256K" SelectFile="u-boot.bin"/>
+<Part Sel="1" PartitionName="rawparam" FlashType="nand" FileSystem="none" Start="1M" Length="128K" SelectFile="rawparam"/>
+<Part Sel="1" PartitionName="rawparambak" FlashType="nand" FileSystem="none" Start="2M" Length="128K" SelectFile="rawparambak"/>
+<Part Sel="1" PartitionName="media_app.bin" FlashType="nand" FileSystem="none" Start="3M" Length="8M" SelectFile="media_app_zip.bin"/>
+<Part Sel="1" PartitionName="kernel" FlashType="nand" FileSystem="none" Start="11M" Length="5M" SelectFile="uImage"/>
+<Part Sel="1" PartitionName="rootfs" FlashType="nand" FileSystem="none" Start="16M" Length="12M" SelectFile="rootfs.ubifs"/>
+<Part Sel="1" PartitionName="appfs" FlashType="nand" FileSystem="none" Start="28M" Length="30M" SelectFile="appfs.ubifs"/>
+</Partition_Info>

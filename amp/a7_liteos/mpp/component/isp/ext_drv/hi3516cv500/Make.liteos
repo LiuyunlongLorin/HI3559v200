@@ -1,0 +1,28 @@
+#*******************************************************************************
+#The rule of make HuaweiLite module
+#*******************************************************************************
+
+EXTDRV_KO=$(REL_KO)/extdrv
+CFLAGS += $(EXTDRV_CFLAGS)
+
+OBJS = $(SRCS:%.c=%.o)
+
+LIB := lib$(TARGET).a
+
+.PHONY: all clean
+
+all: $(OBJS) $(LIB) 
+	@echo -e "\e[0;32;1m--Compiling '$(TARGET)'...\e[0;36;1m" 
+	@echo -e "\e[0m" 
+	@mkdir -p $(EXTDRV_KO) && cp -rf $(LIB) $(EXTDRV_KO)
+	
+$(OBJS): %.o : %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIB): $(OBJS)
+	@$(AR) $(ARFLAGS) $@ $(OBJS)
+
+clean:
+	@rm -f $(OBJS) $(LIB)
+	@rm -f $(EXTDRV_KO)/$(LIB)
+	

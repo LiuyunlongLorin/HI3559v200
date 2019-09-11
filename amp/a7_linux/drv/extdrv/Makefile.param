@@ -1,0 +1,36 @@
+
+ifeq ($(PARAM_FILE), ) 
+    PARAM_FILE:=../../mpp/Makefile.param
+    include $(PARAM_FILE)
+endif
+
+ifeq ($(MPP_BUILD), y)
+ifeq ($(CBB_PARAM_FILE), ) 
+    CBB_PARAM_FILE:=../../../../mpp/cbb/Makefile.param
+    include $(CBB_PARAM_FILE)
+endif
+endif
+#*******************************************************************************
+#Set the source code and include path
+
+#*******************************************************************************
+#Include bvt all modules subdir INC.
+# The common head include file
+
+#
+export EXTDRV_PARAM_FILE
+
+#*******************************************************************************
+#used to linux kernel kbuild EXTRA_CFLAGS or HuaweiLite build flags.
+EXTDRV_CFLAGS += -Wall -D$(HIARCH) -DHICHIP=$(HICHIP) -D$(HI_FPGA)
+
+#NOTES! pls active the macro USE_SYSCTL and _USE_LLI_,when you run in FPGA board
+#NOTES! pls Inactive these two macro if you run in 3510 DEMO board
+EXTDRV_CFLAGS += -D_USE_LLI_
+
+EXTDRV_CFLAGS += $(DRV_CFLAGS)
+
+
+#*******************************************************************************
+#
+export EXTDRV_CFLAGS

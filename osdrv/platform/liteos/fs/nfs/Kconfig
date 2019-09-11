@@ -1,0 +1,8 @@
+config LOSCFG_FS_NFS
+    bool "Enable NFS"
+    default y
+    depends on LOSCFG_FS_VFS
+    depends on LOSCFG_NET_LWIP_SACK
+    depends on LOSCFG_DEBUG_VERSION
+    help
+      Answer Y to enable LiteOS support nfs filesystem.

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# mmz configure
+mmz_anonymous_start=0x0;    # mmz anonymous start address
+mmz_anonymous_size=0K;      # mmz anonymous size
+mmz_higo_start=0x0;         # mmz higo start address
+mmz_higo_size=0K;           # mmz higo size
+mmz_map=0x0;                # liteos mmz start
+mmz_map_len=0K;             # liteos mmz len
+
+insert_ipcm()
+{
+	cd /app/komod/
+	insmod hi_ipcm.ko
+	insmod hi_virt-tty.ko
+}
+
+insert_sysmod()
+{
+	cd /app/komod/
+	insmod hi_osal.ko anony=1 mmz_allocator=hisi mmz=anonymous,0,${mmz_anonymous_start},${mmz_anonymous_size}:higo_mmz,1,${mmz_higo_start},${mmz_higo_size} map_mmz=${mmz_map},${mmz_map_len} || report_error
+	insmod hi3559v200_base.ko
+	insmod hi3559v200_sys.ko
+	insmod hi3559v200_tde.ko
+	#ALL insmod hifb.ko video="hifb:vram0_size:4050"    # default fb0:w*h*2*1/1024
+	#LCD insmod hifb.ko video="hifb:vram0_size:600"     # default fb0:w*h*2*2/1024
+	insmod hi_gpio.ko
+	#insmod dwc3.ko
+	insmod hi_userproc.ko
+}
+
+# system link
+insert_ipcm
+
+# insert system module
+insert_sysmod;

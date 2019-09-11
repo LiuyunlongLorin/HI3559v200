@@ -1,0 +1,13 @@
+include $(LITEOSTOPDIR)/config.mk
+
+ARFLAGS = cr
+
+all:
+	mkdir -p $(OUT)/lib
+	cp -rf $(LITEOS_CPU_TYPE)/*.a $(OUT)/lib
+
+
+clean:
+	rm -rf $(OUT)/lib/libcortex-a7.a
+
+.PHONY: all clean

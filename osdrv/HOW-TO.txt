@@ -1,0 +1,95 @@
+﻿========================================================
+===========Linux+Huawei LiteOS 使用指南=================
+========================================================
+
+1.取得OSDRV编译完成后，生成镜像：
+    hi3559v200_spi_amp_image_uclibc
+        ├── rootfs_hi3559v200_128k.jffs2
+        ├── rootfs_hi3559v200_256k.jffs2
+        ├── rootfs_hi3559v200_2k_128k_32M.ubifs
+        ├── rootfs_hi3559v200_2k_24bit.yaffs2
+        ├── rootfs_hi3559v200_2k_4bit.yaffs2
+        ├── rootfs_hi3559v200_4k_24bit.yaffs2
+        ├── rootfs_hi3559v200_4k_256k_50M.ubifs
+        ├── rootfs_hi3559v200_4k_4bit.yaffs2
+        ├── rootfs_hi3559v200_64k.jffs2
+        ├── sample.bin
+        ├── u-boot-hi3559v200.bin
+        └── uImage_hi3559v200_amp
+
+2.烧写（具体分区及镜像大小请根据实际生成大小而定！）
+    ①通过Hitool将u-boot-hi3559v200.bin烧写到Flash 0~1M空间，也可在Uboot命令下通过网络烧写，命令：
+        tftp 83000000 u-boot-hi3559v200.bin
+        spinor:
+            sf probe 0; sf erase 0 100000;sf write 83000000 0x0 0x100000
+		spinand:
+			nand erase 0 100000;nand write 83000000 0x0 0x100000
+		emmc:
+			emmc write 0 83000000 0 800
+    ②uboot下烧写Linux镜像：
+        tftp 0x83000000 uImage_hi3559v200_amp
+        spinor:
+            sf probe 0; sf erase 0x100000 0x400000; sf write 0x83000000 0x100000 0x400000
+		spinand:
+			nand erase 0x100000 0x400000; nand write 0x83000000 0x100000 0x400000
+		emmc:
+			emmc write 0 0x83000000 0x100000 0x400000
+    ③uboot下烧写rootfs：
+	    spinor:
+			mw.b 0x83000000 0xff 0xa00000; tftp 0x83000000 rootfs_hi3559v200_64k.jffs2
+            sf probe 0; sf erase 0x500000 0xa00000; sf write 0x83000000 0x500000 $filesize
+		spinand:
+			mw.b 0x83000000 0xff 0x2000000; tftp 0x83000000 rootfs_hi3559v200_xxx.yaffs2
+			nand erase 0x500000 0x2000000; nand write 0x83000000 0x500000 $filesize
+		emmc:
+			tftp 0x83000000 rootfs_hi3559v200_96M.ext4
+			emmc write 0 0x83000000 0x500000 $filesize
+    ④uboot下烧写Huawei LiteOS镜像：
+        tftp 0x83000000 sample.bin
+        spinor:
+            sf probe 0; sf erase 0xf00000 0x100000; sf write 0x83000000 0xf00000 0x100000
+		spinand:
+			sf erase 0x2500000 0x100000; sf write 0x83000000 0x2500000 0x100000
+		emmc:
+			emmc write 0 0x83000000 0x32800 0x800
+    ⑤配置bootargs:
+        spinor: 
+            setenv bootargs 'mem=96M console=ttyAMA0 clk_ignore_unused rw root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=hi_sfc:1M(boot),4M(kernel),10M(rootfs)';sa
+		spinand:
+			setenv bootargs 'mem=96M console=ttyAMA0,115200 clk_ignore_unused rw root=/dev/mtdblock2 rootfstype=jffs2 mtdparts=hi_sfc:1M(boot),4M(kernel),32M(rootfs)';sa
+		emmc:
+			setenv bootargs 'mem=96M console=ttyAMA0,115200 root=/dev/mmcblk0p3 rootfstype=ext4 rw rootwait blkdevparts=mmcblk0:1M(boot),4M(kernel),96M(rootfs)';sa
+    ⑥配置bootcmd:
+        spinor:
+            setenv bootcmd 'sf probe 0;sf read 0x80200000 0xf00000 0x100000;go_cpu1 0x80200000;sf read 0x83000000 0x100000 0x400000;bootm 0x83000000';sa
+		spinand:
+			setenv bootcmd 'nand read 0x80200000 0x2500000 0x100000;go_cpu1 0x80200000;nand read 0x83000000 0x100000 0x400000;bootm 0x83000000';sa
+		emmc:
+			setenv bootcmd 'sf read 0x80200000 0x32800 0x800;go_cpu1 0x80200000;mmc read 0 83000000 800 2000;bootm 83000000';sa
+
+3.启动Linux后，根据使用场景在Linux下执行如下操作：
+    a， 以太网启用方式：
+        /komod目录下执行：insmod hisi-femac.ko；
+    b， USB转网口启用方式：
+        /komod目录下执行：usb2net_load.sh
+    c， SD卡启用方式：
+        /komod目录下执行：mmc_load.sh
+
+4.双系统使用：启动Linux后，在Linux环境下执行如下操作：
+    ①加载ipcm,virt-tty模块
+        insmod /komod/hi_ipcm.ko
+        insmod /komod/hi_virt-tty.ko
+    ②配置Linux网络(自定IP),并配置telnetd
+        ifconfig eth0 xx.xx.xxx.xx
+        telnetd
+    ③新建一个telnet终端，连接到Linux单板，在telnet端输入命令：
+        virt-tty a7
+        进入Huawei LiteOS的控制台，即可使用Huawei LiteOS
+    ④使用sharefs
+        在Linux控制台新建文件夹/sharefs
+        mkdir /sharefs
+        运行sharefs后台程序
+        sharefs &
+        在Huawei LiteOS控制台可访问/sharefs目录
+        ls /sharefs
+        Huawei LiteOS访问的/sharefs即是Linux端的/sharefs目录

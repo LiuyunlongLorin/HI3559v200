@@ -1,0 +1,6 @@
+config LOSCFG_FS_VFS
+    bool "Enable VFS"
+    default y
+
+    help
+      Answer Y to enable LiteOS support virtual filesystem.

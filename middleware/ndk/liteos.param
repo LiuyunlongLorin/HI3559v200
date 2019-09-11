@@ -1,0 +1,67 @@
+ifeq ($(HIARCH), hi3559av100)
+    export LITEOS_PLATFORM?=hi3559av100
+endif
+
+##############################################################################
+# HuaweiLite Compile
+
+export KERNEL_NAME=liteos_a53
+
+# Allocated the kernel position
+ifeq ($(HIARCH), hi3559av100)
+    export KERNEL_ROOT=$(OSDRV_ROOT)/platform/$(KERNEL_NAME)/liteos
+else ifeq ($(HIARCH),hi3556av100)
+    export KERNEL_ROOT=$(OSDRV_ROOT)/platform/liteos
+else ifeq ($(HIARCH),hi3519av100)
+    export KERNEL_ROOT=$(OSDRV_ROOT)/platform/liteos
+else ifeq ($(HIARCH),hi3518ev300)
+    export KERNEL_ROOT=$(OSDRV_ROOT)/platform/liteos/liteos
+else
+    export KERNEL_ROOT=$(OSDRV_ROOT)/platform/liteos
+endif
+
+# Define cross compiler
+ifeq ($(LIBC),glibc)
+    ifeq ($(HIARCH), hi3559av100)
+        export CROSS_COMPILE?= aarch64-himix100-linux-
+        export CROSS?= aarch64-himix100-linux-
+    else ifeq ($(HIARCH), hi3556av100)
+        export CROSS_COMPILE?= arm-himix200-linux-
+        export CROSS?= arm-himix200-linux-
+    else ifeq ($(HIARCH), hi3519av100)
+        export CROSS_COMPILE?= arm-himix200-linux-
+        export CROSS?= arm-himix200-linux-
+    else
+        export CROSS_COMPILE?= arm-himix100-linux-
+        export CROSS?= arm-himix100-linux-
+    endif
+else
+    export CROSS_COMPILE?=arm-hisiv500-linux-
+    export CROSS?=arm-hisiv500-linux-
+endif
+
+ifeq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+    export HUTAF_LLT_WRAPPER := lltwrapper
+    export CC := $(HUTAF_LLT_WRAPPER) $(CROSS)gcc
+    export AR:=$(CROSS)ar
+else
+    export CC:=$(CROSS)gcc
+    export AR:=$(CROSS)ar
+endif
+
+
+export LITEOSTOPDIR     = $(KERNEL_ROOT)
+include $(LITEOSTOPDIR)/config.mk
+
+CFLAGS += -fno-builtin -nostdinc -nostdlib
+CFLAGS += $(LITEOS_CFLAGS)
+CFLAGS += $(LIBS_CFLAGS)
+CFLAGS += $(MAPI_CFLAGS)
+CFLAGS += -D__HuaweiLite__
+
+
+##############################################################################
+
+export MPI_OUT_PATH := $(MPP_OUT_PATH)/liteos/single
+export REL_INC  := $(REL_PATH)/slave/include
+export REL_LIB  := $(REL_PATH)/slave/lib

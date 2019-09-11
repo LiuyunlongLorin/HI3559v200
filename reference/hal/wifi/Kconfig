@@ -1,0 +1,27 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Device Configuration"
+
+menuconfig WIFI
+	bool "WIFI support"
+
+if WIFI
+	choice
+		prompt "WIFI Type"
+		config WIFI_BCM6255
+			bool "bcm6255"
+			depends on (HI3559AV100 || HI3556AV100 || HI3519AV100)
+		config WIFI_RTL8189
+			bool "rtl8189"
+			depends on (HI3559V200 || HI3556V200 || HI3518EV300)
+		config WIFI_BCM6356S
+			bool "bcm6356s"
+			depends on (HI3559AV100 && REFB_PANOCAM)
+		config WIFI_BCM6214A
+			bool "bcm6214a"
+			depends on (HI3556AV100 && REFB_ACTIONCAM)
+	endchoice
+endif
+

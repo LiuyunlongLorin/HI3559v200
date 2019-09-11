@@ -1,0 +1,11 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+#comment "Raw Debug Select"
+
+menu "RawDebug Configuration"
+config RAWDEBUG
+    bool "RawDebug support"
+endmenu

@@ -1,0 +1,64 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+LOG_LIB_DIR := $(HIBERRY_COMMON_DIR)/log/lib
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+STORAGE_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/storage/lib
+STORAGE_INC_DIR := $(HIBERRY_COMPONENT_DIR)/storage/include
+FSTOOL_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fstool/lib
+FSTOOL_INC_DIR := $(HIBERRY_COMPONENT_DIR)/fstool/include
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+
+#****src dir********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+INC_FLAGS += -I$(HIBERRY_COMMON_INC) -I$(FSTOOL_INC_DIR) -I$(STORAGE_INC_DIR) -I$(MEDIA_ADPT_DIR)/include
+
+INC_FLAGS += $(MEDIA_INCLUDE_PATH)
+TARGET_DIR := $(COMPILE_ROOT)
+
+
+COMPILE   =  $(CC) $(CFLAGS) -g -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TARGET_LINUX := $(COMPILE_ROOT)/sample_storage
+.PHONY : all clean
+all:$(TARGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+HIBERRY_LIBS :=  -Wl,-Bstatic -lstorage -lfstool -lmwlog $(MEDIA_LIBS_LINK) -Wl,-Bdynamic
+$(TARGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -L$(LOG_LIB_DIR) -lpthread $(HIBERRY_LIBS) -lm -ldl -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic -L$(FSTOOL_LIB_DIR) -L$(STORAGE_LIB_DIR) $(MEDIA_LIBS_PATH_LINK)
+else
+HIBERRY_LIBS := -lstorage -lfstool -lmwlog
+$(TARGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -L$(LOG_LIB_DIR) -L$(FSTOOL_LIB_DIR) -L$(STORAGE_LIB_DIR) -L$(HUTAF_LIB_DIR) -lpthread $(HIBERRY_LIBS) -lm -ldl -lstdc++ $(HUTAF_LIBS)
+endif
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f sample_storage

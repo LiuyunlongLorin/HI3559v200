@@ -1,0 +1,9 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+#comment "ADC Configuration"
+
+menuconfig ADC
+	bool "ADC support"
+        depends on (HI3559V200 || HI3556V200 || HI3518EV300)

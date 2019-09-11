@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="HDMI_FILELIST"
+    isusecommonskin="yes">
+
+    <window
+        id="HDMI_FILELIST"
+        top="0"
+        width="1920"
+        height="1080"
+        normalskin="SKIN_COMMON_BG"
+        opacity="255"
+        winlevel="0"
+        transparent="no"
+        isrelease="yes"
+        onshow="PDT_HDMI_FILELIST_OnShow"
+        ontouchaction="PDT_HDMI_FILELIST_OnTouchAction">
+
+        <!-- title -->
+        <groupbox
+            id="HDMI_FILELIST_GROUPBOX"
+            top="0"
+            left="0"
+            width="1920"
+            height="144"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_TITLE_BG">
+
+            <button
+                id="HDMI_FILELIST_BUTTON_BACK"
+                top="0"
+                left="0"
+                width="180"
+                height="144"
+                isrelease="yes"
+                normalskin="SKIN_HDMI_COMMON_BUTTON_RETURN"
+                highlightskin="SKIN_HDMI_COMMON_BUTTON_RETURN_ACTIVE"
+                activeskin="SKIN_HDMI_COMMON_BUTTON_RETURN_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_HDMI_FILELIST_OnKeyDown"/>
+
+            <label
+                id="HDMI_FILELIST_LABEL_INFO"
+                top="0"
+                left="180"
+                width="1380"
+                height="144"
+                isrelease="yes"
+                font="FONT72"
+                text="STRING_FILELIST_INFO"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <button
+                id="HDMI_FILELIST_BUTTON_SELECTALL"
+                top="0"
+                left="1560"
+                width="180"
+                height="144"
+                isrelease="yes"
+                normalskin="SKIN_HDMI_FILELIST_BUTTON_SELECTALL"
+                highlightskin="SKIN_HDMI_FILELIST_BUTTON_SELECTALL_ACTIVE"
+                activeskin="SKIN_HDMI_FILELIST_BUTTON_SELECTALL_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_HDMI_FILELIST_OnKeyDown"/>
+
+            <button
+                id="HDMI_FILELIST_BUTTON_DELETE"
+                top="0"
+                left="1740"
+                width="180"
+                height="144"
+                isrelease="yes"
+                normalskin="SKIN_HDMI_FILELIST_BUTTON_DELETE"
+                highlightskin="SKIN_HDMI_FILELIST_BUTTON_DELETE_ACTIVE"
+                activeskin="SKIN_HDMI_FILELIST_BUTTON_DELETE_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_HDMI_FILELIST_OnKeyDown"/>
+        </groupbox>
+
+        <!-- scrollbar -->
+        <scrollbar
+            id="HDMI_FILELIST_SCROLLBAR"
+            top="152"
+            left="1902"
+            width="16"
+            height="920"
+            isrelease="yes"
+            normalskin="SKIN_SET_SCORLLBAR_BG"
+            slidres="SKIN_SET_SCORLLBAR_SLIDER"
+            sliddircet="vertical"
+            downarrownormal=""
+            uparrowpress=""
+            downarrowpress=""
+            alignment="hcenter|vcenter"
+            uparrownormal=""/>
+
+        <!-- scrollgrid -->
+        <scrollgrid
+            id="HDMI_FILELIST_GRID"
+            top="152"
+            left="8"
+            width="1892"
+            height="920"
+            normalskin="SKIN_FILELIST_SCROLLGRID_FILES"
+            activeskin="SKIN_FILELIST_SCROLLGRID_FILES"
+            isrelease="yes"
+            font=""
+            widgetposmirror="no"
+            widgetinteriormirror="no"
+            transparent="no"
+            rownum="4"
+            colnum="4"
+            cellcolnum="5"
+            datamodel="DATAMODEL_HDMI_FILELIST"
+            scrollbar="HDMI_FILELIST_SCROLLBAR"
+            topmargin="0"
+            leftmargin="0"
+            rightmargin="0"
+            bottommargin="0"
+            rowspace="8"
+            colspace="8"
+            focusnormskin=""
+            focusactiveskin=""
+            itemdirection="vertical"
+            iteminterval="50"
+            itemsteps="4"
+            focusinterval="50"
+            focussteps="20"
+            isfocusatbg="no"
+            focusanchor="0"
+            imgdecindex="1"
+            isdynamicdecimg="no"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_HDMI_FILELIST_OnKeyDown">
+
+            <scrollgridcol
+                id="HDMI_FILELIST_GRID_THUMB"
+                colbinddb="yes"
+                coldbindex="0"
+                coltype="image"
+                coltop="0"
+                colleft="0"
+                colwidth="467"
+                colheight="224"/>
+
+            <scrollgridcol
+                id="HDMI_FILELIST_GRID_FOCUS"
+                colbinddb="no"
+                coltype="image"
+                coltop="0"
+                colleft="0"
+                colwidth="467"
+                colheight="224"
+                coldataconv="PDT_HDMI_FILELIST_GRID_GetFocusIcon"/>
+
+            <scrollgridcol
+                id="HDMI_FILELIST_GRID_TYPE"
+                colbinddb="yes"
+                coldbindex="1"
+                coltype="image"
+                coltop="152"
+                colleft="8"
+                colwidth="64"
+                colheight="64"
+                coldataconv="PDT_HDMI_FILELIST_GRID_GetTypeIcon"/>
+
+            <scrollgridcol
+                id="HDMI_FILELIST_GRID_FILE_COUNT"
+                colbinddb="yes"
+                coldbindex="2"
+                coltype="text"
+                colalignment="hcenter|vcenter"
+                coltop="152"
+                colleft="395"
+                colwidth="64"
+                colheight="64" />
+
+            <scrollgridcol
+                id="HDMI_FILELIST_GRID_SELECT"
+                colbinddb="yes"
+                coldbindex="3"
+                coltype="image"
+                coltop="8"
+                colleft="395"
+                colwidth="64"
+                colheight="64"
+                coldataconv="PDT_HDMI_FILELIST_GRID_GetSelIcon"/>
+
+        </scrollgrid>
+
+    </window>
+</view>

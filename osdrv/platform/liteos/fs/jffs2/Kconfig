@@ -1,0 +1,6 @@
+config LOSCFG_FS_JFFS
+    bool "Enable JFFS2"
+    default y
+    depends on LOSCFG_FS_VFS
+    help
+      Answer Y to enable LiteOS support jffs2 filesystem.

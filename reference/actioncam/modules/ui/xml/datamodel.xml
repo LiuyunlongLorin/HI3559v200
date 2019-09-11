@@ -1,0 +1,71 @@
+<datamodel
+    id="DATAMODEL_SETTINGS"
+    field="title:string:32;content:string:32;icon:resid:4;action:u32:4;paramtype:u32:4;workmode:u32:4;value:s32:4"
+    datasource="owndb"
+    getrowcount=""
+    getrowvalue=""
+    cacherows=""
+    registerdatachange=""
+    unregisterdatachange="" />
+
+<datamodel
+    id="DATAMODEL_YEAR"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+<datamodel
+    id="DATAMODEL_MONTH"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+<datamodel
+    id="DATAMODEL_DAY"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+
+<datamodel
+    id="DATAMODEL_HOUR"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+<datamodel
+    id="DATAMODEL_MIN"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+
+<datamodel
+    id="DATAMODEL_FILELIST"
+    field="thumbnail:string:64; grptype:string:12; grpfilecount:string:16; selected:u32:4"
+    cacherows="12"
+    datasource="userdb"
+    getrowcount="PDT_UI_COMM_FILELIST_GRID_GetRowCount"
+    getrowvalue="PDT_UI_COMM_FILELIST_GRID_GetRowValue"
+    registerdatachange="PDT_UI_COMM_FILELIST_GRID_Register"
+    unregisterdatachange="PDT_UI_COMM_FILELIST_GRID_Unregister"/>
+<datamodel
+    id="DATAMODEL_HDMI_FILELIST"
+    field="thumbnail:string:64; grptype:string:12; grpfilecount:string:16; selected:u32:4"
+    cacherows="48"
+    datasource="userdb"
+    getrowcount="PDT_UI_COMM_FILELIST_GRID_GetRowCount"
+    getrowvalue="PDT_UI_COMM_FILELIST_GRID_GetRowValue"
+    registerdatachange="PDT_UI_COMM_FILELIST_GRID_Register"
+    unregisterdatachange="PDT_UI_COMM_FILELIST_GRID_Unregister"/>
+

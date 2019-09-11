@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<language
+    id="language"
+    languageinfo="en:English;zh:Chinese"
+    locale="en">
+    <lanstr
+        id="STR_VIDEOS"
+        en="Videos"
+        zh="视频"/>
+    <lanstr
+        id="STR_MUSIC"
+        en="Music"
+        zh="音乐"/>
+    <lanstr
+        id="STR_PHOTOS"
+        en="Photos"
+        zh="图片"/>
+    <lanstr
+        id="STR_BASICSETTING"
+        en="Basic Settings"
+        zh="基本设置"/>
+    <lanstr
+        id="STR_SYSTEM_INFO"
+        en="System"
+        zh="系统"/>
+    <lanstr
+        id="STR_EDIT"
+        en="edit"/>
+    <lanstr
+        id="STR_DATE_TIME"
+        en="Date &amp; Time"
+        zh="日期&amp;时间"
+        />
+    <lanstr
+        id="STR_SCROLL"
+        en="scroll"/>
+    <lanstr
+        id="STR_PROGRESS"
+        en="progress"/>
+    <lanstr
+        id="STR_MESSAGEBOX"
+        en="message box"/>
+    <lanstr
+        id="STR_FACTORY_RESET"
+        en="Factory reset"
+        zh="出厂重置"
+        />
+    <lanstr
+        id="STR_LANGUAGE"
+        en="Language"
+        zh="语言"
+        />
+    <lanstr
+        id="STR_RESTORE"
+        en="Reset"
+        zh="重置"
+        />
+    <lanstr
+        id="STR_LAPOVER1"
+        en="Lap Over 1"/>
+    <lanstr
+        id="STR_LAPOVER2"
+        en="Lap Over 2"/>
+    <lanstr
+        id="STR_LAPOVER3"
+        en="Lap Over 3"/>
+
+    <lanstr
+        id="STR_ENGLISH"
+        en="English"
+        zh="英语"/>
+
+    <lanstr
+        id="STR_CHINESE"
+        en=" Chinese"
+        zh="简体中文"/>
+
+    <lanstr
+        id="STR_MASKEDIT"
+        en="Mask Edit"/>
+    <lanstr
+        id="STR_PSDEDIT"
+        en="Pass ward Edit"/>
+    <lanstr
+        id="STR_SINGLEMULTIEDIT"
+        en="Single MultiEdit"/>
+    <lanstr
+        id="STR_MULTIEDIT"
+        en="MultiEdit"/>
+    <lanstr
+        id="STR_TRACKBAR"
+        en="Horizontal TrackBar"/>
+    <lanstr
+        id="STR_PROGRESSBAR"
+        en="Horizontal ProgressBar"/>
+    <lanstr
+        id="STR_SCROLLBOX"
+        en="Horizontal ScrollBox"/>
+    <lanstr
+        id="STR_SCROLLVIEW"
+        en="ScrollView"/>
+    <lanstr
+        id="STR_SCROLLTEXT"
+        en="ScrollText"/>
+    <lanstr
+        id="STR_IMAGE"
+        en="IMAGE"/>
+    <lanstr
+        id="STR_SHOW"
+        en="Show"/>
+    <lanstr
+        id="STR_INFOMSG"
+        en="Info MessageBox"/>
+    <lanstr
+        id="STR_OKMSG"
+        en="OK MessageBox"/>
+    <lanstr
+        id="STR_OK"
+        en="OK"/>
+    <lanstr
+        id="STR_CANCEL"
+        en="Cancel"/>
+    <lanstr
+        id="STR_RETRY"
+        en="Retry"/>
+    <lanstr
+        id="STR_IGNORE"
+        en="Ignore"/>
+    <lanstr
+        id="STR_CHOICESMSG"
+        en="OK&Cancel MessageBox"/>
+    <lanstr
+        id="STR_USERMSG"
+        en="UserDef MessageBox"/>
+
+    <lanstr
+        id="STR_INFORMATION"
+        en="Information"
+        zh="信息"
+        />
+
+    <lanstr
+        id="STR_NAME"
+        en="Name:"
+        zh="名称："
+        />
+    <lanstr
+        id="STR_TYPE"
+        en="Type:"
+        zh="类型"
+        />
+    <lanstr
+        id="STR_SIZE"
+        en="Size:"
+        zh="大小："
+        />
+
+    <lanstr
+        id="STR_BACK"
+        en="Back"
+        zh="回退"/>
+
+    <lanstr
+        id="STR_HIGV_SAMPLE"
+        en="HiGV Samples"
+        zh="HiGV 示例"/>
+
+    <lanstr
+        id="STR_HIGV_LISTBOX"
+        en="ListBox"
+        zh="列表"/>
+
+    <lanstr
+        id="STR_HIGV_BUTTON"
+        en="Button"
+        zh="按钮"/>
+
+    <lanstr
+        id="STR_HIGV_SCROLLVIEW"
+        en="ScrollView"
+        zh="滚动视图"/>
+
+    <lanstr
+        id="STR_HIGV_SCROLLGRID"
+        en="ScrollGrid"
+        zh="滚动网格"/>
+
+    <lanstr
+        id="STR_HIGV_TRACKBAR"
+        en="Trackbar"
+        zh="进度条"/>
+
+    <lanstr
+        id="STR_HIGV_CLOCK"
+        en="Clock"
+        zh="时钟"/>
+
+    <lanstr
+        id="STR_HIGV_WHEELVIEW"
+        en="WheelView"
+        zh="WheelView"/>
+
+    <lanstr
+        id="STR_HIGV_IMAGE"
+        en="Image"
+        zh="图形"/>
+    <lanstr
+        id="STR_HIGV_IMAGE_IMAGEEX"
+        en="Image + ImageEx"
+        zh="Image + ImageEx"/>
+    <lanstr
+        id="STR_HIGV_PROGRESSBAR"
+        en="ProgressBar"
+        zh="进度条"/>
+
+    <lanstr
+        id="STR_HIGV_SLIDEUNLOCK"
+        en="SlideUnlock"
+        zh="滑动解锁"/>
+
+    <lanstr
+        id="STR_HIGV_ANIM"
+        en="Animation"
+        zh="动画"/>
+
+    <lanstr
+        id="STR_HIGV_SCROLLTEXT"
+        en="ScrollText"
+        zh="滚动文字"/>
+
+    <lanstr
+        id="STR_HIGV_BUTTON_SAMPLE"
+        en="Button Sample "
+        zh="按钮示例"/>
+
+    <lanstr
+        id="STR_HIGV_LISTBOX_SAMPLE"
+        en="ListBox Sample"
+        zh="列表框示例"/>
+
+    <lanstr
+        id="STR_HIGV_SCROLLVIEW_SAMPLE"
+        en="ScrollView Sample"
+        zh="滚动视图示例"/>
+
+     <lanstr
+        id="STR_HIGV_SCROLLGRID_SAMPLE"
+        en="ScrollGrid Sample"
+        zh="滚动网格示例"/>
+    <lanstr
+        id="STR_HIGV_TRACKBAR_SAMPLE"
+        en="TrackBar Sample"
+        zh="进度条示例"/>
+    <lanstr
+        id="STR_HIGV_WHEELVIEW_SAMPLE"
+        en="WheelView Sample"
+        zh="WheelView Sample"/>
+    <lanstr
+        id="STR_HIGV_IMAGE_SAMPLE"
+        en="Image Sample"
+        zh="图片示例"/>
+    <lanstr
+        id="STR_HIGV_SLIDEUNLOCK_SAMPLE"
+        en="SlideUnlock Sample"
+        zh="滑动解锁示例"/>
+    <lanstr
+        id="STR_HIGV_PROGRESSBAR_SAMPLE"
+        en="ProgressBar Sample"
+        zh="滑动解锁示例"/>
+
+    <lanstr
+        id="STR_PROGRESSBAR_FORWARD"
+        en="forward"
+        zh="滑动解锁示例"/>
+
+    <lanstr
+        id="STR_PROGRESSBAR_BACKWARD"
+        en="backward"
+        zh="滑动解锁示例"/>
+    <lanstr
+        id="STR_HIGV_ANIM_SAMPLE"
+        en="Anim Sample"
+        zh="滑动解锁示例"/>
+    <lanstr
+        id="STR_HIGV_SCROLLTEXT_SAMPLE"
+        en="ScrollText Sample"
+        zh="滚动文字示例"/>
+    <lanstr
+        id="STR_HIGV_BUTTON_CHECK_ON"
+        en="On"
+        zh="打开"/>
+
+    <lanstr
+        id="STR_HIGV_BUTTON_CHECK_OFF"
+        en="Off"
+        zh="关闭"/>
+
+    <lanstr
+        id="lanstr_off"
+        en="off"
+        zh="关闭"/>
+    <lanstr
+        id="lanstr_on"
+        en="on"
+        zh="打开"/>
+
+        <!-- Month-->
+        <lanstr
+                id="Month_1"
+                en="01"/>
+        <lanstr
+                id="Month_2"
+                en="02"/>
+        <lanstr
+                id="Month_3"
+                en="03"/>
+        <lanstr
+                id="Month_4"
+                en="04"/>
+        <lanstr
+                id="Month_5"
+                en="05"/>
+        <lanstr
+                id="Month_6"
+                en="06"/>
+        <lanstr
+                id="Month_7"
+                en="07"/>
+        <lanstr
+                id="Month_8"
+                en="08"/>
+        <lanstr
+                id="Month_9"
+                en="09"/>
+        <lanstr
+                id="Month_10"
+                en="10"/>
+        <lanstr
+                id="Month_11"
+                en="11"/>
+        <lanstr
+                id="Month_12"
+                en="12"/>
+
+         <!-- Day-->
+        <lanstr
+                id="Day_1"
+                en="01"/>
+        <lanstr
+                id="Day_2"
+                en="02"/>
+        <lanstr
+                id="Day_3"
+                en="03"/>
+        <lanstr
+                id="Day_4"
+                en="04"/>
+        <lanstr
+                id="Day_5"
+                en="05"/>
+        <lanstr
+                id="Day_6"
+                en="06"/>
+        <lanstr
+                id="Day_7"
+                en="07"/>
+        <lanstr
+                id="Day_8"
+                en="08"/>
+        <lanstr
+                id="Day_9"
+                en="09"/>
+        <lanstr
+                id="Day_10"
+                en="10"/>
+        <lanstr
+                id="Day_11"
+                en="11"/>
+        <lanstr
+                id="Day_12"
+                en="12"/>
+        <lanstr
+                id="Day_13"
+                en="13"/>
+        <lanstr
+                id="Day_14"
+                en="14"/>
+        <lanstr
+                id="Day_15"
+                en="15"/>
+        <lanstr
+                id="Day_16"
+                en="16"/>
+        <lanstr
+                id="Day_17"
+                en="17"/>
+        <lanstr
+                id="Day_18"
+                en="18"/>
+        <lanstr
+                id="Day_19"
+                en="19"/>
+        <lanstr
+                id="Day_20"
+                en="20"/>
+        <lanstr
+                id="Day_21"
+                en="21"/>
+        <lanstr
+                id="Day_22"
+                en="22"/>
+        <lanstr
+                id="Day_23"
+                en="23"/>
+        <lanstr
+                id="Day_24"
+                en="24"/>
+        <lanstr
+                id="Day_25"
+                en="25"/>
+        <lanstr
+                id="Day_26"
+                en="26"/>
+        <lanstr
+                id="Day_27"
+                en="27"/>
+        <lanstr
+                id="Day_28"
+                en="28"/>
+        <lanstr
+                id="Day_29"
+                en="29"/>
+        <lanstr
+                id="Day_30"
+                en="30"/>
+        <lanstr
+                id="Day_31"
+                en="31"/>
+
+          <!-- Year-->
+        <lanstr
+                id="Year_1"
+                en="2027"/>
+        <lanstr
+                id="Year_2"
+                en="2026"/>
+        <lanstr
+                id="Year_3"
+                en="2025"/>
+        <lanstr
+                id="Year_4"
+                en="2024"/>
+        <lanstr
+                id="Year_5"
+                en="2023"/>
+        <lanstr
+                id="Year_6"
+                en="2022"/>
+        <lanstr
+                id="Year_7"
+                en="2021"/>
+        <lanstr
+                id="Year_8"
+                en="2020"/>
+        <lanstr
+                id="Year_9"
+                en="2019"/>
+        <lanstr
+                id="Year_10"
+                en="2018"/>
+        <lanstr
+                id="Year_11"
+                en="2017"/>
+        <lanstr
+                id="Year_12"
+                en="2016"/>
+
+</language>

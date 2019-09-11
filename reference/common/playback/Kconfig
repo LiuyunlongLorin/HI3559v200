@@ -1,0 +1,11 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+menu "Player Configuration"
+config PLAY_BACK
+	bool "play back support"
+config VOICE_PLAY
+	bool "voice play support"
+endmenu

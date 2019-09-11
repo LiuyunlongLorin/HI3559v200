@@ -1,0 +1,31 @@
+menu "Lib"
+choice
+    prompt "Enable Libc"
+    default LOSCFG_LIB_LIBC
+    help
+      Enable mini libc only for litekernel.
+      Enable full libc for full code.
+config LOSCFG_LIB_LIBC
+    bool "Enable Full Libc"
+
+
+config LOSCFG_LIB_LIBCMINI
+    bool "Enable Mini Libc"
+
+endchoice
+
+config LOSCFG_LIB_LIBM
+    bool "Enable Libm"
+    default y
+    depends on  LOSCFG_LIB_LIBC
+    help
+      Answer Y to enable LiteOS support math library.
+
+config LOSCFG_LIB_ZLIB
+    bool "Enable Zlib"
+    default y
+    depends on LOSCFG_LIB_LIBC && LOSCFG_LIB_LIBM
+    help
+      Answer Y to enable LiteOS support compress file library.
+endmenu
+

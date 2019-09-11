@@ -1,0 +1,6 @@
+config LOSCFG_DRIVERS_MEM
+    bool "Enable MEM"
+    default y
+    depends on LOSCFG_DRIVERS && LOSCFG_FS_VFS
+    help
+      Answer Y to enable LiteOS support mem.

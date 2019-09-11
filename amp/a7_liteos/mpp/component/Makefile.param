@@ -1,0 +1,43 @@
+ifeq ($(PARAM_FILE), ) 
+    PARAM_FILE:=../Makefile.param
+    include $(PARAM_FILE)
+endif
+
+export ISP_ROOT ?= $(MPP_PATH)/component/isp
+
+COMM_INC := -I$(OSAL_ROOT)/include
+COMM_INC += -I$(ISP_ROOT)/ext_inc
+COMM_INC += -I$(ISP_ROOT)/user/firmware/include
+COMM_INC += -I$(REL_DIR)/include
+
+MKP_CFLAGS += -Wall -D$(HIARCH) -D$(HI_RLS_MODE) -D$(HI_FPGA)
+MKP_CFLAGS += -D_USE_LLI_
+MKP_CFLAGS += $(COMM_INC)
+MKP_CFLAGS += -Wno-date-time
+
+#*******************************************************************************
+define maco_ln
+    $(foreach file,$(1), $(shell mkdir -p "$(2)";ln -sf $(file) "$(2)/$(notdir $(file))"))
+endef
+
+define maco_rm
+    $(foreach file,$(1), $(shell rm -f $(2)/$(notdir $(file))))
+endef
+
+define maco_cp
+    $(foreach file,$(1), $(shell mkdir -p "$(2)";cp -f $(file) "$(2)/$(notdir $(file))"))
+endef
+
+define maco_cp_file
+    if [ ! -z "$(1)" ];then cp -rf $(1) "$(2)"; fi
+endef
+
+define maco_rmemptydir
+    if [ -e $(1) ];then rmdir --ignore-fail-on-non-empty "$(1)"; fi
+endef
+
+#*******************************************************************************
+
+export CBB_PARAM_FILE
+export MKP_CFLAGS
+

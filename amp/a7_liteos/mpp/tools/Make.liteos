@@ -1,0 +1,25 @@
+SRCS  += $(PWD)/$(OSTYPE)/tools_shell_cmd.c
+OBJ  += $(SRCS:%.c=%.o)
+
+LIB := libtools.a
+
+.PHONY : clean all $(SNS)
+
+all: $(LIB)
+
+$(LIB): $(OBJ) 
+	@$(AR) $(ARFLAGS) $@ $(OBJ)
+	@rm -f *.o
+
+$(OBJ):%.o:%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+
+clean:
+	@rm -f $(LIB)
+	@rm -f $(OBJ)
+ifneq ($(SNS), clean)
+$(SNS): all
+	@echo
+endif
+

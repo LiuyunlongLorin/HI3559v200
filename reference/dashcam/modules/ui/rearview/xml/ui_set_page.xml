@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="SET_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="SET_PAGE"
+        top="0"
+        width="1600"
+        height="400"
+        opacity="255"
+        winlevel="0"
+        transparent="no"
+        normalskin="SKIN_SET_WINDOW_SCROLLGRID"
+        activeskin="SKIN_SET_WINDOW_SCROLLGRID"
+        isrelease="yes"
+        onshow="PDT_UI_SET_OnShow"
+        onhide="PDT_UI_SET_OnHide"
+        onevent="PDT_UI_SET_OnEvent">
+
+        <groupbox
+            id="SET_GROUP_TITLE"
+            top="0"
+            left="0"
+            width="1600"
+            height="64"
+            isrelease="yes"
+            normalskin="SKIN_WINDOW_TITLE">
+
+            <label
+                id="SET_LABEL_DESCRIPTION"
+                top="0"
+                left="110"
+                width="300"
+                height="64"
+                font="FONT32"
+                text="STRING_SET_INFO"
+                alignment="left|vcenter"
+                transparent="yes"
+                normalskin="SKIN_WINDOW_TITLE"/>
+
+
+            <label
+                id="SET_LABEL_VALUE"
+                top="0"
+                left="500"
+                width="300"
+                height="64"
+                font="FONT32"
+                text="STRING_SET_INFO"
+                alignment="left|vcenter"
+                transparent="yes"
+                normalskin="SKIN_WINDOW_TITLE"/>
+
+        </groupbox>
+
+        <scrollgrid
+            id="SET_SCROLLGRID"
+            top="64"
+            left="100"
+            width="1396"
+            height="336"
+            isrelease="yes"
+            normalskin="SKIN_SET_WINDOW_SCROLLGRID"
+            activeskin="SKIN_SET_WINDOW_SCROLLGRID"
+            font="FONT18"
+            widgetposmirror="no"
+            widgetinteriormirror="no"
+            transparent="no"
+            rownum="2"
+            colnum="9"
+            topmargin="1"
+            leftmargin="1"
+            rightmargin="1"
+            bottommargin="1"
+            rowspace="1"
+            colspace="1"
+            hlineheight="1"
+            hlinecolor="0xFF888888"
+            vlinewidth="1"
+            vlinecolor="0xFF888888"
+            cellcolnum="3"
+            datamodel="DATAMODEL_SETTINGS"
+            focusnormskin=""
+            focusactiveskin=""
+            itemdirection="vertical"
+            iteminterval="50"
+            itemsteps="4"
+            focusinterval="50"
+            focussteps="20"
+            isfocusatbg="no"
+            focusanchor="0"
+            imgdecindex="1"
+            isdynamicdecimg="no"
+            alignment="hcenter|vcenter"
+            oncellcolselect="PDT_UI_SET_GRID_OnCellColSelect"
+            onfocusmove="PDT_UI_SET_GRID_OnFocusMove"
+            onkeydown="PDT_UI_SET_OnKeyDown">
+
+
+
+                <scrollgridcol
+                    id="SET_GRID_DESCRIPTION"
+                    colbinddb="yes"
+                    coldbindex="3"
+                    coltype="text"
+                    colalignment="vcenter|hcenter|wrap"
+                    coltop="126"
+                    colleft="2"
+                    colwidth="150"
+                    colheight="32"
+                    font="FONT10"/>
+
+                <scrollgridcol
+                    id="SET_GRID_FOCUS"
+                    colbinddb="no"
+                    coldbindex=""
+                    coltype="image"
+                    coltop="0"
+                    colleft="0"
+                    colwidth="152"
+                    colheight="165"
+                    coldataconv="PDT_UI_SET_GRID_GetFocusIcon"/>
+
+
+
+                <scrollgridcol
+                    id="SET_GRID_ICON"
+                    colbinddb="yes"
+                    coldbindex="0"
+                    coltype="image"
+                    coltop="40"
+                    colleft="38"
+                    colwidth="80"
+                    colheight="80"
+                    coldataconv="PDT_UI_SET_GRID_GetIcon"/>
+
+
+
+
+
+        </scrollgrid>
+
+    </window>
+
+</view>

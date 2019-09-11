@@ -1,0 +1,62 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+#comment "Chip Configuration"
+
+choice
+	prompt "Chip Type"
+	help
+		Select Hisilicon Chip series
+	config HI3556AV100
+		bool "Hi3556av100"
+		help
+			CPU is Dual Core Cortex A53 and Cortex A53
+	config HI3559V200
+		bool "Hi3559v200"
+		help
+			CPU is Dual Core Cortex A7 and Cortex A7
+	config HI3556V200
+		bool "Hi3556v200"
+		help
+			CPU is Dual Core Cortex A7 and Cortex A7
+	config HI3519AV100
+		bool "Hi3519av100"
+		help
+			CPU is Dual Core Cortex A53 and Cortex A53
+	config HI3518EV300
+		bool "Hi3518ev300"
+		help
+			CPU is Single Core Cortex A7
+endchoice
+
+menu "ToolChain"
+	choice
+		prompt "Linux"
+		depends on HI3556AV100 || HI3519AV100 || HI3559AV100 || HI3559V200 || HI3556V200
+		config LINUX_CROSS_ARCH64_HIMIX100
+			bool "aarch64-himix100-linux"
+			depends on HI3559AV100
+		config LINUX_CROSS_HIMIX200
+			bool "arm-himix200-linux"
+			depends on HI3556AV100 || HI3519AV100
+		config LINUX_CROSS_HIMIX100
+			bool "arm-himix100-linux"
+			depends on HI3559V200 || HI3556V200
+
+	endchoice
+	choice
+		prompt "HUAWEILITE"
+		depends on HI3556AV100 || HI3519AV100 || HI3559AV100 || HI3559V200 || HI3556V200 || HI3518EV300
+		config HUAWEILITE_CROSS_ARCH64_HIMIX100
+			bool "aarch64-himix100-linux"
+			depends on HI3559AV100
+		config HUAWEILITE_CROSS_HIMIX200
+			bool "arm-himix200-linux"
+			depends on HI3556AV100 || HI3519AV100
+		config HUAWEILITE_CROSS_HIMIX100
+			bool "arm-himix100-linux"
+			depends on HI3559V200 || HI3556V200 || HI3518EV300
+	endchoice
+endmenu

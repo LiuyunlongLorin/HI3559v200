@@ -1,0 +1,64 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+LOG_LIB_DIR := $(HIBERRY_COMMON_DIR)/log/lib
+LOG_INC_DIR := $(HIBERRY_COMMON_DIR)/log/include
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+XMP_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/xmp/lib
+XMP_INC_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/xmp/include
+TINYXML_LIB_DIR := $(MIDDLEWARE_DIR)/thirdparty/xmp-toolkit-sdk/xmp-toolkit-sdk/public/lib
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+
+#************************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+INC_FLAGS += -I$(HIBERRY_COMMON_INC) -I$(XMP_INC_DIR) -I$(TINYXML_INC_DIR) -I$(LOG_INC_DIR)
+INC_FLAGS += -I$(MEDIA_ADPT_DIR)/include
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+CFLAGS += -Wno-error
+
+COMPILE   =  $(CC) $(CFLAGS) -g -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TRAGET_LINUX := $(COMPILE_ROOT)/sample_xmp
+.PHONY : all clean
+all:$(TRAGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+HIBERRY_LIBS :=  -Wl,-Bstatic -lxmp -lxmpcore -lmwlog $(MEDIA_LIBS_LINK) -Wl,-Bdynamic
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -L$(LOG_LIB_DIR) -L$(XMP_LIB_DIR) -L$(TINYXML_LIB_DIR) $(MEDIA_LIBS_PATH_LINK) -lpthread $(HIBERRY_LIBS) $(HI_MAPI_LIBS) -lm -ldl -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic
+else
+HIBERRY_LIBS :=  -lxmp -lxmpcore  -lmwlog $(MEDIA_LIBS_LINK)
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -L$(LOG_LIB_DIR) -L$(XMP_LIB_DIR) -L$(TINYXML_LIB_DIR) $(MEDIA_LIBS_PATH_LINK) -L$(HUTAF_LIB_DIR) -lpthread -lstdc++ $(HIBERRY_LIBS)  -lm -ldl $(HUTAF_LIBS) 
+endif
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f sample_xmp

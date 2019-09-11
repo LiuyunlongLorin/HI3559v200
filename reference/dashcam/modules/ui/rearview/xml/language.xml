@@ -1,0 +1,481 @@
+﻿<language
+    id = "language"
+    languageinfo = "en:english;zh:chinese;"
+    locale = "zh">
+
+    <!-- Dialog -->
+    <lanstr
+        id="STRING_DIALOG_NOTICE"
+        en="Notice"
+        zh="提示"/>
+    <lanstr
+        id="STRING_RECORDING"
+        en="Recording"
+        zh="录像中"/>
+    <lanstr
+        id="STRING_EMR"
+        en="EMR"
+        zh="紧急录像"/>
+    <lanstr
+        id="STRING_PAUSED"
+        en="Paused"
+        zh="暂停"/>
+    <lanstr
+        id="STRING_ON"
+        en="ON"
+        zh="开"/>
+    <lanstr
+        id="STRING_OFF"
+        en="OFF"
+        zh="关"/>
+    <lanstr
+        id="STRING_H264"
+        en="H264"
+        zh="H264"/>
+    <lanstr
+        id="STRING_H265"
+        en="H265"
+        zh="H265"/>
+    <lanstr
+        id="STRING_JPEG"
+        en="JPEG"
+        zh="JPEG"/>
+    <lanstr
+        id="STRING_DNG"
+        en="DNG"
+        zh="DNG"/>
+
+    <lanstr
+        id="STRING_NO_SD_CARD"
+        en="No SD card !"
+        zh="没有存储卡!"/>
+    <lanstr
+        id="STRING_SD_ERROR"
+        en="SD error!"
+        zh="存储卡错误!"/>
+    <lanstr
+        id="STRING_SD_NEED_FORMAT"
+        en="SD card need to be formatted!"
+        zh="存储卡需要格式化!"/>
+    <lanstr
+        id="STRING_SD_PREPARING"
+        en="SD is preparing!"
+        zh="存储卡正在准备中!"/>
+    <lanstr
+        id="STRING_SD_SPEED_LOW"
+        en="SD speed is low,Pleasere place the card!"
+        zh="存储卡卡速太低,请更换存储卡"/>
+    <lanstr
+        id="STRING_SD_OUT"
+        en="SD out!"
+        zh="存储卡拔出!"/>
+
+    <lanstr
+        id="STRING_SD_ERROR_PLUG"
+        en="SD card error, Please re-plug the card!"
+        zh="存储卡错误,请重新拔插存储卡!"/>
+    <lanstr
+        id="STRING_SD_ERROR_FORMAT"
+        en="SD card need to format!"
+        zh="存储卡需要格式化!"/>
+    <lanstr
+        id="STRING_SD_ERROR_CHANGE"
+        en="SD card is damaged,Please replace the card!"
+        zh="存储卡已损坏,请更换存储卡!"/>
+
+    <lanstr
+        id="STRING_CANCEL"
+        en="Cancel"
+        zh="取消"/>
+    <lanstr
+        id="STRING_CONFIRM"
+        en="Confirm"
+        zh="确认"/>
+
+    <!-- Set Page -->
+    <lanstr
+        id="STRING_SET_INFO"
+        en="Settings"
+        zh="设置"/>
+    <lanstr
+        id="STRING_RESOLUTION"
+        en="Resolution"
+        zh="分辨率"/>
+    <lanstr
+        id="STRING_VIDEO_ENCODE"
+        en="Video Encode"
+        zh="视频编码"/>
+    <lanstr
+        id="STRING_AUDIO"
+        en="Audio"
+        zh="音频"/>
+    <lanstr
+        id="STRING_FLIP"
+        en="Flip"
+        zh="翻转"/>
+    <lanstr
+        id="STRING_LDC"
+        en="LDC"
+        zh="畸变校正"/>
+    <lanstr
+        id="STRING_OSD"
+        en="OSD"
+        zh="水印信息"/>
+    <lanstr
+        id="STRING_MIRROR"
+        en="Mirror"
+        zh="水平翻转"/>
+    <lanstr
+        id="STRING_VOLUME"
+        en="Volume"
+        zh="音量"/>
+    <lanstr
+        id="STRING_BOOTSOUND"
+        en="Boot Sound"
+        zh="开机音乐"/>
+    <lanstr
+        id="STRING_WIFI"
+        en="Wifi"
+        zh="Wifi"/>
+    <lanstr
+        id="STRING_TIME_SETTING"
+        en="Time Setting"
+        zh="时间设置"/>
+    <lanstr
+        id="STRING_RESET_FACTORY"
+        en="Reset Factory"
+        zh="恢复出厂设置"/>
+    <lanstr
+        id="STRING_FORMAT_SD"
+        en="Format SD"
+        zh="格式化存储卡"/>
+    <lanstr
+        id="STRING_FORMAT_FAILED"
+        en="Format SD failed!"
+        zh="格式化存储卡失败!"/>
+    <lanstr
+        id="STRING_PARKING"
+        en="Parking"
+        zh="停车录像"/>
+    <lanstr
+        id="STRING_DEBUG"
+        en="Debug"
+        zh="调试"/>
+    <lanstr
+        id="STRING_SENSITIVITY"
+        en="Sensitivity"
+        zh="碰撞灵敏度"/>
+    <lanstr
+        id="STRING_ABOUT"
+        en="About"
+        zh="关于"/>
+    <lanstr
+        id="STRING_BACK"
+        en="Back"
+        zh="返回"/>
+    <lanstr
+        id="STRING_DIRECTORY"
+        en="Directory"
+        zh="目录"/>
+    <lanstr
+        id="STRING_HIGH"
+        en="High"
+        zh="高"/>
+    <lanstr
+        id="STRING_MIDDLE"
+        en="Middle"
+        zh="中"/>
+    <lanstr
+        id="STRING_LOW"
+        en="Low"
+        zh="低"/>
+    <lanstr
+        id="STRING_MUTE"
+        en="Mute"
+        zh="静音"/>
+    <lanstr
+        id="STRING_BACK_REC"
+        en="Back Record"
+        zh="后路录像"/>
+
+    <lanstr
+        id="STRING_LANGUAGE"
+        en="Language"
+        zh="语言"/>
+
+    <lanstr
+        id="STRING_VOSWITCH"
+        en="VoSwitch"
+        zh="镜头切换"/>
+
+    <lanstr
+        id="STRING_WDR"
+        en="WDR"
+        zh="宽动态"/>
+
+    <lanstr
+        id="STRING_SPLITTIME"
+        en="Split Time"
+        zh="文件切分时长"/>
+
+    <lanstr
+        id="STRING_VIDEOMODE"
+        en="Video Mode"
+        zh="视频制式"/>
+
+    <lanstr
+        id="STRING_SCREEN_DORMANT"
+        en="Screen Dormant"
+        zh="屏幕休眠"/>
+
+    <lanstr
+        id="STRING_PREVIEWPIP"
+        en="Preview PIP"
+        zh="画中画"/>
+
+    <!-- Prompt -->
+    <lanstr
+        id="STRING_TIME_SET"
+        en="Time Setting"
+        zh="时间设置"/>
+    <lanstr
+        id="STRING_FORMAT_SD_AT_ONCE"
+        en="Format SD at once?"
+        zh="是否格式化存储卡?"/>
+    <lanstr
+        id="STRING_RESET_FACTORY_AT_ONCE"
+        en="Reset factory at once?"
+        zh="是否恢复出厂设置?"/>
+    <lanstr
+        id="STRING_FAST_FORMAT_SD"
+        en="Fast format"
+        zh="快速格式化"/>
+    <lanstr
+        id="STRING_KERNEL"
+        en="Kernel: "
+        zh="内核: "/>
+    <lanstr
+        id="STRING_SOFTWARE"
+        en="Software: "
+        zh="软件: "/>
+    <lanstr
+        id="STRING_MODEL"
+        en="Model: "
+        zh="型号: "/>
+    <lanstr
+        id="STRING_WIFI_SSID"
+        en="WIFI SSID: "
+        zh="WIFI名称: "/>
+    <lanstr
+        id="STRING_SELECT_USB_MODE"
+        en="USB Mode"
+        zh="USB模式"/>
+    <lanstr
+        id="STRING_USB_CHARGE"
+        en="USB Charge"
+        zh="USB充电"/>
+    <lanstr
+        id="STRING_UVC"
+        en="UVC"
+        zh="USB摄像头"/>
+    <lanstr
+        id="STRING_USB_STORAGE"
+        en="USB Storage"
+        zh="USB存储"/>
+    <lanstr
+        id="STRING_Volume"
+        en="VOL"
+        zh="音量"/>
+    <lanstr
+        id="STRING_Bright"
+        en="BRI"
+        zh="亮度"/>
+    <lanstr
+        id="STRING_Parking"
+        en="Going to parking"
+        zh="正在进入停车监控模式"/>
+    <lanstr
+        id="STRING_PLAYBACK"
+        en="Play these files at once?"
+        zh="是否立即播放这些文件?"/>
+    <lanstr
+        id="STRING_FILE_CNT_PARKING"
+        en="Parking record file count:"
+        zh="停车录像文件个数:"/>
+    <lanstr
+        id="STRING_PLAYBACK_FILE_ERR"
+        en="Parking record file is error!"
+        zh="停车录像文件错误!"/>
+    <lanstr
+        id="STRING_VO_UP"
+        en="UP"
+        zh="上"/>
+    <lanstr
+        id="STRING_VO_DOWN"
+        en="DW"
+        zh="下"/>
+    <lanstr
+        id="STRING_VO_CROP"
+        en="VoView"
+        zh="预览视角"/>
+    <!-- SD UPGRADE -->
+    <lanstr
+        id="STRING_UPGRADE_AT_ONCE"
+        en="Do you want to upgrade now?"
+        zh="是否立即升级?"/>
+    <lanstr
+        id="STRING_UPGRADE_SUCCESS"
+        en="Upgrade success!"
+        zh="升级成功!"/>
+    <lanstr
+        id="STRING_UPGRADE_FAILED"
+        en="Upgrade failed!"
+        zh="升级失败!"/>
+	<lanstr
+        id="STRING_UPGRADE_MODE"
+        en="Start firmware upgrade!"
+        zh="进入升级模式！"/>
+    <lanstr
+        id="STRING_LOW_BATTERY"
+        en="Low battery!"
+        zh="低电量!"/>
+    <lanstr
+        id="STRING_ULTRALOW_BATTERY"
+        en="Ultralow battery!"
+        zh="超低电量!"/>
+
+    <lanstr
+        id="STRING_REC_TYPE"
+        en="Rec Type"
+        zh="录像类型"/>
+    <lanstr
+        id="STRING_LAPSE_REC_TIME"
+        en="Lapse Interval"
+        zh="缩时间隔"/>
+
+    <!-- from ini -->
+    <lanstr
+        id="STRING_NORMAL_REC"
+        en="Normal Record"
+        zh="普通录像"/>
+    <lanstr
+        id="STRING_LAPSE_REC"
+        en="Lapse Record"
+        zh="缩时录像"/>
+    <lanstr
+        id="STRING_500MS"
+        en="0.5S"
+        zh="0.5秒"/>
+    <lanstr
+        id="STRING_1S"
+        en="1S"
+        zh="1秒"/>
+    <lanstr
+        id="STRING_5S"
+        en="5S"
+        zh="5秒"/>
+    <lanstr
+        id="STRING_1MIN"
+        en="1MIN"
+        zh="1分钟"/>
+    <lanstr
+        id="STRING_3MIN"
+        en="3MIN"
+        zh="3分钟"/>
+    <lanstr
+        id="STRING_5MIN"
+        en="5MIN"
+        zh="5分钟"/>
+    <lanstr
+        id="STRING_EN"
+        en="en"
+        zh="英文"/>
+    <lanstr
+        id="STRING_ZH"
+        en="zh"
+        zh="中文"/>
+    <lanstr
+        id="STRING_SELECT_CHARGE"
+        en="CHARGE"
+        zh="充电"/>
+    <lanstr
+        id="STRING_SELECT_UVC"
+        en="UVC"
+        zh="USB摄像头"/>
+    <lanstr
+        id="STRING_SELECT_STORAGE"
+        en="STORAGE"
+        zh="USB存储"/>
+    <lanstr
+        id="STRING_EMR_FRONT"
+        en="front_emr"
+        zh="前路紧急录像"/>
+    <lanstr
+        id="STRING_NORM_FRONT"
+        en="front_norm"
+        zh="前路普通录像"/>
+    <lanstr
+        id="STRING_EMR_REAR"
+        en="back_emr"
+        zh="后路紧急录像"/>
+    <lanstr
+        id="STRING_NORM_REAR"
+        en="back_norm"
+        zh="后路普通录像"/>
+    <lanstr
+        id="STRING_PHOTO_FRONT"
+        en="front_photo"
+        zh="前路照片"/>
+    <lanstr
+        id="STRING_PHOTO_BACK"
+        en="back_photo"
+        zh="后路照片"/>
+    <lanstr
+        id="STRING_SINGLE_EMR"
+        en="emr"
+        zh="单路紧急录像"/>
+    <lanstr
+        id="STRING_SINGLE_NORM"
+        en="norm"
+        zh="单路普通录像"/>
+    <lanstr
+        id="STRING_PHOTO"
+        en="photo"
+        zh="照片"/>
+    <lanstr
+        id="STRING_FRONT_CAM"
+        en="Front"
+        zh="前路"/>
+    <lanstr
+        id="STRING_BACK_CAM"
+        en="Back"
+        zh="后路"/>
+    <lanstr
+        id="STRING_PAL"
+        en="PAL"
+        zh="P制"/>
+    <lanstr
+        id="STRING_NTSC"
+        en="NTSC"
+        zh="N制"/>
+
+    <lanstr
+        id="STRING_HOME_PHOTO_MODE"
+        en="PHOTO"
+        zh="拍照模式" />
+
+     <lanstr
+         id="STRING_TAKE_PHOTO"
+         en="PHOTO"
+         zh="拍照" />
+    <lanstr
+         id="STRING_RECORD"
+         en="RECORD"
+         zh="录像"/>
+     <lanstr
+         id="STRING_WORK_MODE"
+         en="Work Mode"
+         zh="工作模式"/>
+
+
+</language>

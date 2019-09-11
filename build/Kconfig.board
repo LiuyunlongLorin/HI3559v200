@@ -1,0 +1,319 @@
+#
+# For a description of the syntax of this configuration file,
+# see build/scripts/Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Board Configuration"
+
+choice
+	prompt "Product Type"
+	default ACTIONCAM
+config ACTIONCAM
+	bool "ActionCam"
+	depends on HI3556AV100 || HI3559AV100 || HI3559V200
+config DASHCAM
+	bool "DashCam"
+	depends on HI3556AV100 || HI3519AV100 || HI3559V200 || HI3556V200 || HI3518EV300
+config PANOCAM
+	bool "PanoCam"
+	depends on HI3559AV100 || HI3556AV100
+config SAMPLECAM
+	bool "SampleCam"
+endchoice
+
+choice
+	prompt "DashCam Type"
+	depends on DASHCAM
+	default CARRECORDER
+config CARRECORDER
+	bool "CarRecorder"
+config REARVIEW
+	bool "RearView"
+config NONESCREEN
+	bool "NoneScreen"
+endchoice
+
+choice
+	prompt "Board Type"
+	default DEMB
+	help
+		Select Board Type
+	config DEMB
+		bool "DEMB"
+		help
+			Chip Demonstrate Board
+	config REFB_ACTIONCAM
+		bool "REFB"
+		depends on ACTIONCAM
+		depends on HI3556AV100 || HI3559AV100 || HI3559V200
+		help
+			ActionCam Reference Board
+	config REFB_DASHCAM
+		bool "REFB"
+		depends on DASHCAM
+		depends on HI3559V200 || HI3556V200 || HI3518EV300
+		help
+			DashCam Reference Board
+	config REFB_PANOCAM
+		bool "REFB"
+		depends on PANOCAM
+		depends on HI3559AV100
+		help
+			PanoCam Reference Board
+	config REFB_T1_ACTIONCAM
+		bool "REFB_T1"
+		depends on ACTIONCAM
+		depends on HI3559AV100
+		help
+			ActionCam BoardType1
+endchoice
+
+menu "Flash Configure"
+	choice
+		prompt "Flash Type"
+		config SPINOR
+			bool "SPI NOR"
+		config SPINAND
+			bool "SPI NAND"
+		config EMMC
+			bool "eMMC"
+	endchoice
+	choice
+		prompt "Flash PageSize"
+		config FLASH_PAGESIZE_512
+			bool "512 Bytes"
+		config FLASH_PAGESIZE_2K
+			bool "2K Bytes"
+		config FLASH_PAGESIZE_4K
+			bool "4K Bytes"
+		config FLASH_PAGESIZE_8K
+			bool "8K Bytes"
+		config FLASH_PAGESIZE_16K
+			bool "16K Bytes"
+	endchoice
+	choice
+		depends on ROOTFS_YAFFS || APPFS_YAFFS
+		prompt "Flash ECC Type"
+		config FLASH_ECCTYPE_NONE
+			bool "no ecc"
+		config FLASH_ECCTYPE_1BIT
+			bool "1bit/512 ecc"
+		config FLASH_ECCTYPE_4BIT
+			bool "4bit/512 ecc"
+		config FLASH_ECCTYPE_8BIT
+			bool "8bit/512 ecc"
+		config FLASH_ECCTYPE_24BIT
+			bool "24bit/1k ecc"
+		config FLASH_ECCTYPE_40BIT
+			bool "40bit/1k ecc"
+		config FLASH_ECCTYPE_64BIT
+			bool "64bit/1k ecc"
+	endchoice
+endmenu
+
+menu "Sensor Configure"
+	choice
+		prompt "MIPI Rx Lane Distribution Mode"
+		depends on HI3556AV100 || HI3519AV100
+		default HI3556AV100_LANE_DIVIDE_MODE_0 if ACTIONCAM
+		default HI3556AV100_LANE_DIVIDE_MODE_4 if PANOCAM
+		help
+			More information in document <MIPI User Guide.pdf>
+		config HI3556AV100_LANE_DIVIDE_MODE_0
+			bool "Mode_0[Dev0]"
+		config HI3556AV100_LANE_DIVIDE_MODE_1
+			bool "Mode_1[Dev0/Dev3]"
+		config HI3556AV100_LANE_DIVIDE_MODE_2
+			bool "Mode_2[Dev0/Dev3/Dev4]"
+		config HI3556AV100_LANE_DIVIDE_MODE_3
+			bool "Mode_3[Dev0/Dev1]"
+		config HI3556AV100_LANE_DIVIDE_MODE_4
+			bool "Mode_4[Dev0/Dev1/Dev3]"
+		config HI3556AV100_LANE_DIVIDE_MODE_5
+			bool "Mode_5[Dev0/Dev1/Dev3/Dev4]"
+		config HI3556AV100_LANE_DIVIDE_MODE_6
+			bool "Mode_6[Dev0/Dev1/Dev2/Dev3/Dev4]"
+	endchoice
+	choice
+		prompt "MIPI Rx Lane Distribution Mode"
+		depends on HI3559AV100
+		default HI3559AV100_LANE_DIVIDE_MODE_0 if ACTIONCAM
+		default HI3559AV100_LANE_DIVIDE_MODE_3 if DASHCAM
+		default HI3559AV100_LANE_DIVIDE_MODE_7 if PANOCAM
+		help
+			More information in document <MIPI User Guide.pdf>
+		config HI3559AV100_LANE_DIVIDE_MODE_0
+			bool "Mode_0[Dev0]"
+		config HI3559AV100_LANE_DIVIDE_MODE_1
+			bool "Mode_1[Dev0/Dev6]"
+		config HI3559AV100_LANE_DIVIDE_MODE_2
+			bool "Mode_2[Dev0/Dev6/Dev7]"
+		config HI3559AV100_LANE_DIVIDE_MODE_3
+			bool "Mode_3[Dev0/Dev4]"
+		config HI3559AV100_LANE_DIVIDE_MODE_4
+			bool "Mode_4[Dev0/Dev4/Dev6]"
+		config HI3559AV100_LANE_DIVIDE_MODE_5
+			bool "Mode_5[Dev0/Dev4/Dev6/Dev7]"
+		config HI3559AV100_LANE_DIVIDE_MODE_6
+			bool "Mode_6[Dev0/Dev4/Dev5/Dev6/Dev7]"
+		config HI3559AV100_LANE_DIVIDE_MODE_7
+			bool "Mode_7[Dev0/Dev2/Dev4/Dev6]"
+		config HI3559AV100_LANE_DIVIDE_MODE_8
+			bool "Mode_8[Dev0/Dev2/Dev4/Dev6/Dev7]"
+		config HI3559AV100_LANE_DIVIDE_MODE_9
+			bool "Mode_9[Dev0/Dev2/Dev4/Dev5/Dev6/Dev7]"
+		config HI3559AV100_LANE_DIVIDE_MODE_A
+			bool "Mode_A[Dev0/Dev2/Dev3/Dev4/Dev5/Dev6/Dev7]"
+		config HI3559AV100_LANE_DIVIDE_MODE_B
+			bool "Mode_B[Dev0/Dev1/Dev2/Dev3/Dev4/Dev5/Dev6/Dev7]"
+	endchoice
+	choice
+		prompt "MIPI Rx Lane Distribution Mode"
+		depends on HI3559V200 || HI3556V200
+		default HI3559V200_LANE_DIVIDE_MODE_0 if ACTIONCAM
+		default HI3559V200_LANE_DIVIDE_MODE_1 if DASHCAM
+		help
+			More information in document <MIPI User Guide.pdf>
+		config HI3559V200_LANE_DIVIDE_MODE_0
+			bool "Mode_0[Dev0]"
+		config HI3559V200_LANE_DIVIDE_MODE_0_AHD
+			bool "Mode_0[Dev0/AHD]"
+		config HI3559V200_LANE_DIVIDE_MODE_1_AHD
+			bool "Mode_1[Dev0/AHD]"
+		config HI3559V200_LANE_DIVIDE_MODE_1
+			bool "Mode_1[Dev0/Dev1]"
+	endchoice
+	choice
+		prompt "MIPI Rx Lane Distribution Mode"
+		depends on HI3518EV300
+		default HI3518EV300_LANE_DIVIDE_MODE_0 if DASHCAM
+		help
+			More information in document <MIPI User Guide.pdf>
+		config HI3518EV300_LANE_DIVIDE_MODE_0
+			bool "Mode_0[Dev0]"
+	endchoice
+	choice
+		prompt "Dev 0"
+		config SNS0_IMX277
+			bool "sony_imx277"
+			depends on HI3559AV100 && ACTIONCAM
+		config SNS0_IMX377
+			bool "sony_imx377"
+			depends on (HI3556AV100 || HI3519AV100 || HI3559V200 || HI3556V200) && ( ACTIONCAM || DASHCAM || SAMPLECAM )
+		config SNS0_IMX477
+			bool "sony_imx477"
+			depends on (HI3559AV100 || HI3556AV100 || HI3519AV100)
+		config SNS0_IMX458
+			bool "sony_imx458"
+			depends on (HI3559V200) && ( ACTIONCAM || SAMPLECAM )
+	        config SNS0_OV12870
+			bool "ov_12870"
+			depends on (HI3559V200) && ( ACTIONCAM || SAMPLECAM  )
+		config SNS0_IMX335
+			bool "sony_imx335"
+			depends on (HI3559V200 || HI3556V200) && ( DASHCAM || SAMPLECAM )
+		config SNS0_OS04B10
+			bool "omnivision_os04b10"
+			depends on (HI3559V200 || HI3556V200) && ( DASHCAM || SAMPLECAM )
+		config SNS0_OS05A
+			bool "omnivision_os05a10"
+			depends on (HI3559V200 || HI3556V200) && ( DASHCAM || SAMPLECAM )
+		config SNS0_OS08A10
+			bool "omnivision_os08a10"
+			depends on (HI3559V200) && ( DASHCAM || SAMPLECAM )
+		config SNS0_IMX307
+			bool "sony_imx307"
+			depends on (HI3556AV100 || HI3519AV100 || HI3559V200 || HI3556V200 || HI3518EV300) && ( DASHCAM || SAMPLECAM )
+		config SNS0_GC2053
+			bool "galaxycore_gc2053"
+			depends on (HI3518EV300) && ( DASHCAM || SAMPLECAM )
+		config SNS0_NONE
+			bool "UNUSED"
+			depends on !ACTIONCAM
+	endchoice
+	choice
+		prompt "Dev 1"
+		default SNS1_NONE
+		depends on (HI3556AV100_LANE_DIVIDE_MODE_3 || HI3556AV100_LANE_DIVIDE_MODE_4 || HI3556AV100_LANE_DIVIDE_MODE_5 || HI3556AV100_LANE_DIVIDE_MODE_6) \
+				|| (HI3559AV100_LANE_DIVIDE_MODE_B) \
+				|| (HI3559V200_LANE_DIVIDE_MODE_0_AHD) || (HI3559V200_LANE_DIVIDE_MODE_1)\
+				|| (HI3559V200_LANE_DIVIDE_MODE_1_AHD)
+		config SNS1_IMX477
+			bool "sony_imx477"
+			depends on (HI3556AV100 || HI3519AV100)
+		config SNS1_IMX307
+			bool "sony_imx307"
+			depends on (HI3556AV100 || HI3519AV100 || HI3559V200 || HI3556V200) && ( DASHCAM || SAMPLECAM )
+		config SNS1_BT656_1080P25
+			bool "BT656_1080P25"
+			depends on ((HI3559V200 || HI3556V200) && DASHCAM)
+		config SNS1_BT656_1080P30
+			bool "BT656_1080P30"
+			depends on ((HI3559V200 || HI3556V200) && DASHCAM)
+		config SNS1_BT656_720P30
+			bool "BT656_720P30"
+			depends on ((HI3559V200 || HI3556V200) && DASHCAM)
+		config SNS1_NONE
+			bool "UNUSED"
+	endchoice
+	choice
+		prompt "Dev 2"
+		default SNS2_NONE
+		depends on (HI3556AV100_LANE_DIVIDE_MODE_6) \
+				|| (HI3559AV100_LANE_DIVIDE_MODE_7 || HI3559AV100_LANE_DIVIDE_MODE_8 || HI3559AV100_LANE_DIVIDE_MODE_9 || HI3559AV100_LANE_DIVIDE_MODE_A || HI3559AV100_LANE_DIVIDE_MODE_B)
+		config SNS2_IMX477
+			bool "sony_imx477"
+		config SNS2_NONE
+			bool "UNUSED"
+	endchoice
+	choice
+		prompt "Dev 3"
+		default SNS3_NONE
+		depends on (HI3556AV100_LANE_DIVIDE_MODE_1 || HI3556AV100_LANE_DIVIDE_MODE_2 || HI3556AV100_LANE_DIVIDE_MODE_4 || HI3556AV100_LANE_DIVIDE_MODE_5 || HI3556AV100_LANE_DIVIDE_MODE_6) \
+				|| (HI3559AV100_LANE_DIVIDE_MODE_A || HI3559AV100_LANE_DIVIDE_MODE_B)
+		config SNS3_IMX477
+			bool "sony_imx477"
+		config SNS3_IMX307
+			bool "sony_imx307"
+			depends on (HI3556AV100 || HI3519AV100) && ( DASHCAM )
+		config SNS3_NONE
+			bool "UNUSED"
+	endchoice
+	choice
+		prompt "Dev 4"
+		default SNS4_NONE
+		depends on (HI3556AV100_LANE_DIVIDE_MODE_2 || HI3556AV100_LANE_DIVIDE_MODE_5 || HI3556AV100_LANE_DIVIDE_MODE_6) \
+				|| (HI3559AV100_LANE_DIVIDE_MODE_3 || HI3559AV100_LANE_DIVIDE_MODE_4 || HI3559AV100_LANE_DIVIDE_MODE_5 || HI3559AV100_LANE_DIVIDE_MODE_6 || HI3559AV100_LANE_DIVIDE_MODE_7 || HI3559AV100_LANE_DIVIDE_MODE_8 || HI3559AV100_LANE_DIVIDE_MODE_9 || HI3559AV100_LANE_DIVIDE_MODE_A || HI3559AV100_LANE_DIVIDE_MODE_B)
+		config SNS4_IMX477
+			bool "sony_imx477"
+		config SNS4_NONE
+			bool "UNUSED"
+	endchoice
+	choice
+		prompt "Dev 5"
+		default SNS5_NONE
+		depends on (HI3559AV100_LANE_DIVIDE_MODE_6 || HI3559AV100_LANE_DIVIDE_MODE_9 || HI3559AV100_LANE_DIVIDE_MODE_A || HI3559AV100_LANE_DIVIDE_MODE_B)
+		config SNS5_IMX477
+			bool "sony_imx477"
+		config SNS5_NONE
+			bool "UNUSED"
+	endchoice
+	choice
+		prompt "Dev 6"
+		default SNS6_NONE
+		depends on (HI3559AV100_LANE_DIVIDE_MODE_1 || HI3559AV100_LANE_DIVIDE_MODE_2 || HI3559AV100_LANE_DIVIDE_MODE_4 || HI3559AV100_LANE_DIVIDE_MODE_5 || HI3559AV100_LANE_DIVIDE_MODE_6 || HI3559AV100_LANE_DIVIDE_MODE_7 || HI3559AV100_LANE_DIVIDE_MODE_8 || HI3559AV100_LANE_DIVIDE_MODE_9 || HI3559AV100_LANE_DIVIDE_MODE_A || HI3559AV100_LANE_DIVIDE_MODE_B)
+		config SNS6_IMX477
+			bool "sony_imx477"
+		config SNS6_NONE
+			bool "UNUSED"
+	endchoice
+	choice
+		prompt "Dev 7"
+		default SNS7_NONE
+		depends on (HI3559AV100_LANE_DIVIDE_MODE_2 || HI3559AV100_LANE_DIVIDE_MODE_5 || HI3559AV100_LANE_DIVIDE_MODE_6 || HI3559AV100_LANE_DIVIDE_MODE_8 ||  HI3559AV100_LANE_DIVIDE_MODE_9 || HI3559AV100_LANE_DIVIDE_MODE_A || HI3559AV100_LANE_DIVIDE_MODE_B)
+		config SNS7_IMX477
+			bool "sony_imx477"
+		config SNS7_NONE
+			bool "UNUSED"
+	endchoice
+endmenu
+

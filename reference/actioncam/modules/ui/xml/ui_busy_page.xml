@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="BUSY_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="BUSY_PAGE"
+        top="0"
+        width="320"
+        height="240"
+        transparent="yes"
+        normalskin="SKIN_COMMON_BG"
+        opacity="255"
+        winlevel="15"
+        isrelease="yes"
+        onkeydown="PDT_UI_BUSY_OnKeyDown">
+
+        <imageex
+            id="BUSY_IMAGE_PROCESS"
+            top="70"
+            left="110"
+            width="100"
+            height="100"
+            isrelease="yes"
+            transparent="yes"
+            normalskin="SKIN_COMMON_BG"
+            image="./res/pic/busy_process.gif"
+            alignment="hcenter|vcenter"/>
+
+    </window>
+
+</view>

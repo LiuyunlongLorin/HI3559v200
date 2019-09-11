@@ -1,0 +1,38 @@
+
+<font
+    id="FONT54"
+    sbname= "./res/font/vector.ttf"
+    mbname= ""
+    size="54"
+    isbold="no"
+    isitalic="no"/>
+<font
+    id="FONT32"
+    sbname= "./res/font/vector.ttf"
+    mbname= ""
+    size="32"
+    isbold="no"
+    isitalic="no"/>
+<font
+    id="FONT22"
+    sbname= "./res/font/vector.ttf"
+    mbname= ""
+    size="22"
+    isbold="no"
+    isitalic="no"/>
+
+<font
+    id="FONT18"
+    sbname= "./res/font/vector.ttf"
+    mbname= ""
+    size="18"
+    isbold="no"
+    isitalic="no"/>
+<font
+    id="FONT10"
+    sbname= "./res/font/vector.ttf"
+    mbname= ""
+    size="18"
+    isbold="no"
+    isitalic="no"/>
+

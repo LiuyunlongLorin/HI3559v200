@@ -1,0 +1,6 @@
+config LOSCFG_FS_PROC
+    bool "Enable PROC"
+    default y
+    depends on LOSCFG_FS_VFS && LOSCFG_DEBUG_VERSION
+    help
+      Answer Y to enable LiteOS support proc filesystem.

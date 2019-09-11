@@ -1,0 +1,2 @@
+setenv bootargs 'mem=96M quiet console=ttyAMA0,115200 clk_ignore_unused rw root=/dev/mtdblock5 rootfstype=jffs2 mtdparts=hi_sfc:384K(u-boot.bin),64K(rawparam),64K(rawparambak),2688K(media_app_zip.bin),2560K(uImage),1728K(rootfs.jffs2),6400K(appfs.jffs2)'
+setenv bootcmd 'sf probe 0;sf read param_readaddr 0x60000 0x10000;sf read parambak_readaddr 0x70000 0x10000;cread param_readaddr parambak_readaddr 0x10000 param_baseaddr;go_cpu1 liteos_textbase liteos_readaddr 0x80000 0x2a0000;sf read linux_bootaddr 0x320000 0x280000;bootm linux_bootaddr'

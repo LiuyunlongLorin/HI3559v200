@@ -1,0 +1,22 @@
+include $(LITEOSTOPDIR)/config.mk
+
+
+OBJDIR = $(OUT)/obj/kernel/extended/dynload
+SRCS = $(wildcard src/*.c)
+COBJS = $(patsubst %.c,$(OBJDIR)/%.o,$(SRCS))
+
+LOCAL_INCLUDE:= -I $(LITEOSTOPDIR)/kernel/extended/include
+
+all: $(COBJS)
+	mkdir -p $(OUT)/lib
+	cp -rf $(LITEOS_CPU_TYPE)/*.a $(OUT)/lib
+
+$(COBJS): $(OBJDIR)/%.o : %.c
+	mkdir -p $(OBJDIR)/src
+	@$(CC) $(LITEOS_CFLAGS_INTERWORK) $(LOCAL_INCLUDE) -c $< -o $@
+
+
+clean:
+	rm -rf $(OUT)/lib/libdynload.a
+
+.PHONY: all clean

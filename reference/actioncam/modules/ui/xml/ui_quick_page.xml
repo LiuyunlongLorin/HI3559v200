@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="QUICK_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="QUICK_PAGE"
+        top="0"
+        width="320"
+        height="240"
+        opacity="255"
+        winlevel="0"
+        transparent="no"
+        normalskin="SKIN_COMMON_BG"
+        isrelease="yes"
+        onshow="PDT_UI_QUICK_OnShow">
+
+        <!-- title -->
+        <groupbox
+            id="QUICK_GROUPBOX_TITLE"
+            top="0"
+            left="0"
+            width="320"
+            height="48"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_TITLE_BG">
+
+            <button
+                id="QUICK_BUTTON_BACK"
+                top="0"
+                left="0"
+                width="60"
+                height="48"
+                isrelease="yes"
+                normalskin="SKIN_COMMON_BUTTON_RETURN"
+                highlightskin="SKIN_COMMON_BUTTON_RETURN_ACTIVE"
+                activeskin="SKIN_COMMON_BUTTON_RETURN_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_UI_QUICK_OnKeyDown"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"/>
+
+            <label
+                id="QUICK_LABEL_TITLE"
+                top="0"
+                left="60"
+                width="200"
+                height="48"
+                isrelease="yes"
+                font="FONT22"
+                text="STRING_QUICK_TITLE"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+        </groupbox>
+
+        <!-- scrollview -->
+        <scrollview
+            id="QUICK_SCROLLVIEW"
+            top="56"
+            left="0"
+            width="320"
+            height="176"
+            isrelease="yes"
+            leftmargin="0"
+            topmargin="0"
+            rightmargin="0"
+            bottommargin="0"
+            alwaycenter="no"
+            transparent="no"
+            normalskin="SKIN_COMMON_BG"
+            direction="vertical">
+
+            <button
+                id="QUICK_BUTTON_SETTINGS_BG"
+                top="0"
+                left="17"
+                width="86"
+                height="86"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_GRID_NORMAL"
+                highlightskin="SKIN_QUICK_GRID_ACTIVE"
+                activeskin="SKIN_QUICK_GRID_ACTIVE"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"
+                onkeydown="PDT_UI_QUICK_OnKeyDown"/>
+
+            <button
+                id="QUICK_BUTTON_SETTINGS"
+                top="0"
+                left="30"
+                width="60"
+                height="60"
+                isrelease="yes"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"
+                normalskin="SKIN_QUICK_BUTTON_SETTINGS"
+                isskinforcedraw="yes"
+                leftmargin="0"/>
+
+            <label
+                id="QUICK_LABEL_SETTINGS"
+                top="60"
+                left="17"
+                width="86"
+                height="20"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_SET_INFO"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"
+                normalskin="SKIN_QUICK_TEXT"/>
+
+            <button
+                id="QUICK_BUTTON_FILELIST_BG"
+                top="0"
+                left="117"
+                width="86"
+                height="86"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_GRID_NORMAL"
+                highlightskin="SKIN_QUICK_GRID_ACTIVE"
+                activeskin="SKIN_QUICK_GRID_ACTIVE"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"
+                onkeydown="PDT_UI_QUICK_OnKeyDown"/>
+
+            <button
+                id="QUICK_BUTTON_FILELIST"
+                top="0"
+                left="130"
+                width="60"
+                height="60"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_BUTTON_FILELIST"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"/>
+
+            <label
+                id="QUICK_LABEL_FILELIST"
+                top="60"
+                left="117"
+                width="86"
+                height="20"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_FILELIST"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"
+                normalskin="SKIN_QUICK_TEXT"/>
+
+            <button
+                id="QUICK_BUTTON_LOCK_SCREEN_BG"
+                top="0"
+                left="217"
+                width="86"
+                height="86"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_GRID_NORMAL"
+                highlightskin="SKIN_QUICK_GRID_ACTIVE"
+                activeskin="SKIN_QUICK_GRID_ACTIVE"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"
+                onkeydown="PDT_UI_QUICK_OnKeyDown"/>
+
+            <button
+                id="QUICK_BUTTON_LOCK_SCREEN"
+                top="0"
+                left="230"
+                width="60"
+                height="60"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_BUTTON_LOCK_SCREEN"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"/>
+
+            <label
+                id="QUICK_LABEL_LOCK_SCREEN"
+                top="60"
+                left="217"
+                width="86"
+                height="20"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_LOCK_SCREEN"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_QUICK_TEXT"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"/>
+
+            <button
+                id="QUICK_BUTTON_POWER_OFF_BG"
+                top="86"
+                left="17"
+                width="86"
+                height="86"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_GRID_NORMAL"
+                highlightskin="SKIN_QUICK_GRID_ACTIVE"
+                activeskin="SKIN_QUICK_GRID_ACTIVE"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"
+                onkeydown="PDT_UI_QUICK_OnKeyDown"/>
+
+            <button
+                id="QUICK_BUTTON_POWER_OFF"
+                top="86"
+                left="30"
+                width="60"
+                height="60"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_BUTTON_POWER_OFF"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"/>
+
+            <label
+                id="QUICK_LABEL_POWER_OFF"
+                top="146"
+                left="17"
+                width="86"
+                height="20"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_POWER_OFF"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_QUICK_TEXT"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"/>
+
+            <button
+                id="QUICK_BUTTON_WIFI_BG"
+                top="86"
+                left="117"
+                width="86"
+                height="86"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_GRID_NORMAL"
+                highlightskin="SKIN_QUICK_GRID_ACTIVE"
+                activeskin="SKIN_QUICK_GRID_ACTIVE"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"
+                onkeydown="PDT_UI_QUICK_OnKeyDown"/>
+
+            <button
+                id="QUICK_BUTTON_WIFI"
+                top="86"
+                left="130"
+                width="60"
+                height="60"
+                isrelease="yes"
+                normalskin="SKIN_QUICK_BUTTON_WIFI_OFF"
+                isskinforcedraw="yes"
+                leftmargin="0"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"/>
+
+            <label
+                id="QUICK_LABEL_WIFI"
+                top="146"
+                left="117"
+                width="86"
+                height="20"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_WIFI"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_QUICK_TEXT"
+                ongesturetap="PDT_UI_QUICK_OnGestureTap"/>
+
+        </scrollview>
+    </window>
+</view>
+

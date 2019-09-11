@@ -1,0 +1,268 @@
+#ifndef _HI_PDT_SCENE_SETPARAM_H_
+#define _HI_PDT_SCENE_SETPARAM_H_
+
+#include "hi_common.h"
+#include "hi_comm_dis.h"
+#include "hi_comm_isp.h"
+#include "hi_comm_vi.h"
+#include "hi_comm_vpss.h"
+#include "hi_comm_venc.h"
+#include "hi_product_scene_specparam.h"
+
+#ifdef SUPPORT_PQ_HDRMODE
+#include "mpi_hdr.h"
+#endif
+
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif
+#endif
+
+#define HI_PDT_SCENE_AE_EXPOSURE_MAX_COUNT           (8)
+#define HI_PDT_SCENE_SHADING_EXPOSURE_MAX_COUNT      (10)
+#define HI_PDT_SCENE_GAMMA_EXPOSURE_MAX_COUNT        (2)
+
+typedef struct hiPDT_SCENE_STATIC_AE_S
+{
+    HI_BOOL bAERouteExValid;
+    HI_U8 u8AERunInterval;
+    HI_U32 u32AutoISPDGainMax;
+    HI_U32 u32AutoISPDGainMin;
+    HI_U32 u32AutoDGainMax;
+    HI_U32 u32AutoDGainMin;
+    HI_U32 u32AutoSysGainMax;
+    HI_U8 u8AutoSpeed;
+    HI_U8 u8AutoTolerance;
+    HI_U8 u8ChangeFpsEnable;
+} HI_PDT_SCENE_STATIC_AE_S;
+
+typedef struct hiPDT_SCENE_STATIC_AWB_S
+{
+    HI_U16 au16AutoStaticWB[4];
+    HI_S32 as32AutoCurvePara[6];
+    HI_U16 u16AutoSpeed;
+    HI_U16 u16AutoHighColorTemp;
+    HI_U16 u16AutoLowColorTemp;
+    HI_U8 u8RGStrength;
+    HI_U8 u8BGStrength;
+    HI_U16 au16AutoCrMax[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoCrMin[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoCbMax[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoCbMin[ISP_AUTO_ISO_STRENGTH_NUM];
+    ISP_AWB_ALG_E enAlgType;
+} HI_PDT_SCENE_STATIC_AWB_S;
+
+typedef struct hiSCENE_STATIC_AEROUTEEX_S
+{
+    HI_U32 u32TotalNum;
+    HI_U32 au32IntTime[ISP_AE_ROUTE_EX_MAX_NODES];
+    HI_U32 au32Again[ISP_AE_ROUTE_EX_MAX_NODES];
+    HI_U32 au32Dgain[ISP_AE_ROUTE_EX_MAX_NODES];
+    HI_U32 au32IspDgain[ISP_AE_ROUTE_EX_MAX_NODES];
+} HI_PDT_SCENE_STATIC_AEROUTEEX_S;
+
+
+typedef struct hiPDT_SCENE_STATIC_CROSSTALK_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+} HI_PDT_SCENE_STATIC_CROSSTALK_S;
+
+typedef struct hiPDT_SCENE_STATIC_CA_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+} HI_PDT_SCENE_STATIC_CA_S;
+
+typedef struct hiPDT_SCENE_STATIC_LDCI_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+    HI_U8 u8LDCIOpType;
+    HI_U8 u8GaussLPFSigma;
+    HI_U8 au8AutoHePosWgt[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoHePosSigma[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoHePosMean[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoHeNegWgt[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoHeNegSigma[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoHeNegMean[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au16AutoBlcCtrl[ISP_AUTO_ISO_STRENGTH_NUM];
+} HI_PDT_SCENE_STATIC_LDCI_S;
+
+typedef struct hiPDT_SCENE_STATIC_DEMOSAIC_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+    HI_U8 au8NonDirStr[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8NonDirMFDetailEhcStr[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8NonDirHFDetailEhcStr[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8DetailSmoothRange[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16DetailSmoothStr[ISP_AUTO_ISO_STRENGTH_NUM];
+} HI_PDT_SCENE_STATIC_DEMOSAIC_S;
+
+typedef struct hiPDT_SCENE_STATIC_DPC_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+    HI_BOOL bSupTwinkleEn;
+    HI_S8   s8SoftThr;
+    HI_U8   u8SoftSlope;
+    HI_U16  au16Strength[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16  au16BlendRatio[ISP_AUTO_ISO_STRENGTH_NUM];
+} HI_PDT_SCENE_STATIC_DPC_S;
+
+typedef struct hiPDT_SCENE_STATIC_DE_S
+{
+    HI_BOOL bUsed;
+    HI_U16  u16Optype;
+    HI_BOOL bEnable;
+    HI_U16  au16LumaGainLut[HI_ISP_DE_LUMA_GAIN_LUT_N];
+    HI_U16  au16GlobalGain[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16  au16GainLF[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16  au16GainHF[ISP_AUTO_ISO_STRENGTH_NUM];
+} HI_PDT_SCENE_STATIC_DE_S;
+
+typedef struct hiPDT_SCENE_STATIC_CLUT_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+    HI_U32  u32GainR;
+    HI_U32  u32GainG;
+    HI_U32  u32GainB;
+} HI_PDT_SCENE_STATIC_CLUT_S;
+
+typedef struct hiPDT_SCENE_STATIC_STATISTICSCFG_S
+{
+    HI_U8 au8AEWeight[AE_ZONE_ROW][AE_ZONE_COLUMN];
+    HI_BOOL bAFEnable;
+} HI_PDT_SCENE_STATIC_STATISTICSCFG_S;
+
+typedef struct hiPDT_SCENE_STATIC_SATURATION_S
+{
+    HI_U8 au8AutoSat[ISP_AUTO_ISO_STRENGTH_NUM];
+} HI_PDT_SCENE_STATIC_SATURATION_S;
+
+typedef struct hiPDT_SCENE_STATIC_CCM_S
+{
+    HI_U32 u32TotalNum;
+    HI_U16 au16AutoColorTemp[CCM_MATRIX_NUM];
+    HI_U16 au16AutoCCM[CCM_MATRIX_NUM][CCM_MATRIX_SIZE];
+} HI_PDT_SCENE_STATIC_CCM_S;
+
+typedef struct hiPDT_SCENE_STATIC_CSC_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+    COLOR_GAMUT_E enColorGamut;
+} HI_PDT_SCENE_STATIC_CSC_S;
+
+typedef struct hiPDT_SCENE_STATIC_SHARPEN_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+    HI_U16 au16AutoTextureStr[ISP_SHARPEN_GAIN_NUM][ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoEdgeStr[ISP_SHARPEN_GAIN_NUM][ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoLumaWgt[ISP_SHARPEN_GAIN_NUM][ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoOverShoot[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoUnderShoot[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8ShootSupStr[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8ShootSupAdj[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoTextureFreq[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoEdgeFreq[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoDetailCtrl[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoDetailCtrlThr[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8EdgeFiltStr[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8RGain[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8BGain[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8SkinGain[ISP_AUTO_ISO_STRENGTH_NUM];
+} HI_PDT_SCENE_STATIC_SHARPEN_S;
+
+typedef struct hiPDT_SCENE_STATIC_POSTSHARPEN_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+    HI_U16 au16AutoTextureStr[ISP_SHARPEN_GAIN_NUM][ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoEdgeStr[ISP_SHARPEN_GAIN_NUM][ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoOverShoot[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoUnderShoot[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8ShootSupStr[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoTextureFreq[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16AutoEdgeFreq[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8AutoDetailCtrl[ISP_AUTO_ISO_STRENGTH_NUM];
+} HI_PDT_SCENE_STATIC_POSTSHARPEN_S;
+
+typedef struct hiPDT_SCENE_STATIC_NR_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+    HI_BOOL bNrLscEnable;
+    HI_U8 au8FineStr[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U8 au8ChromaStr[ISP_BAYER_CHN_NUM][ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16CoringWgt[ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16   au16CoarseStr[ISP_BAYER_CHN_NUM][ISP_AUTO_ISO_STRENGTH_NUM];
+    HI_U16 au16CoringRatio[HI_ISP_BAYERNR_LUT_LENGTH];
+} HI_PDT_SCENE_STATIC_NR_S;
+
+typedef struct hiPDT_SCENE_STATIC_SHADING_S
+{
+    HI_BOOL bUsed;
+    HI_BOOL bEnable;
+} HI_PDT_SCENE_STATIC_SHADING_S;
+
+typedef struct hiPDT_SCENE_DYNAMIC_GAMMA_S
+{
+    HI_U32 u32InterVal;
+    HI_U32 u32TotalNum;
+    HI_U64 au64ExpThreshLtoH[HI_PDT_SCENE_GAMMA_EXPOSURE_MAX_COUNT];
+    HI_U16 au16Table[HI_PDT_SCENE_GAMMA_EXPOSURE_MAX_COUNT][GAMMA_NODE_NUM];
+} HI_PDT_SCENE_DYNAMIC_GAMMA_S;
+
+typedef struct hiPDT_SCENE_DYNAMIC_AE_S
+{
+    HI_U8 u8AEExposureCnt;
+    HI_U64 au64ExpLtoHThresh[HI_PDT_SCENE_AE_EXPOSURE_MAX_COUNT];
+    HI_U8 au8AutoCompensation[HI_PDT_SCENE_AE_EXPOSURE_MAX_COUNT];
+    HI_U8 au8AutoMaxHistOffset[HI_PDT_SCENE_AE_EXPOSURE_MAX_COUNT];
+} HI_PDT_SCENE_DYNAMIC_AE_S;
+
+typedef struct hiPDT_SCENE_DYNAMIC_SHADING_S
+{
+    HI_U32 u32ExpThreshCnt;
+    HI_U64 au64ExpThreshLtoH[HI_PDT_SCENE_SHADING_EXPOSURE_MAX_COUNT];
+    HI_U16 au16ManualStrength[HI_PDT_SCENE_SHADING_EXPOSURE_MAX_COUNT];
+    HI_U16 au16BlendRatio[HI_PDT_SCENE_SHADING_EXPOSURE_MAX_COUNT];
+} HI_PDT_SCENE_DYNAMIC_SHADING_S;
+
+typedef struct hiPDT_SCENE_PIPE_PARAM_S
+{
+    HI_PDT_SCENE_STATIC_AE_S stStaticAe;
+    HI_PDT_SCENE_STATIC_AEROUTEEX_S stStaticAeRouteEx;
+    HI_PDT_SCENE_STATIC_LDCI_S stStaticLdci;
+    HI_PDT_SCENE_STATIC_STATISTICSCFG_S stStaticStatistics;
+    HI_PDT_SCENE_STATIC_3DNR_S stStatic3DNR;
+    HI_PDT_SCENE_STATIC_AWB_S stStaticAwb;
+    HI_PDT_SCENE_STATIC_CCM_S stStaticCcm;
+    HI_PDT_SCENE_STATIC_CSC_S stStaticCsc;
+    HI_PDT_SCENE_STATIC_NR_S stStaticNr;
+    HI_PDT_SCENE_STATIC_DEMOSAIC_S stStaticDemosaic;
+    HI_PDT_SCENE_STATIC_DPC_S stStaticDPC;
+    HI_PDT_SCENE_STATIC_DE_S stStaticDE;
+    HI_PDT_SCENE_STATIC_SHARPEN_S stStaticSharpen;
+    HI_PDT_SCENE_STATIC_POSTSHARPEN_S stStaticPostSharpen;
+    HI_PDT_SCENE_STATIC_SHADING_S stStaticShading;
+    HI_PDT_SCENE_STATIC_SATURATION_S stStaticSaturation;
+    HI_PDT_SCENE_STATIC_CLUT_S stStaticClut;
+    HI_PDT_SCENE_STATIC_CA_S stStaticCa;
+    HI_PDT_SCENE_STATIC_CROSSTALK_S stStaticCrossTalk;
+    HI_PDT_SCENE_DYNAMIC_AE_S stDynamicAe;
+    HI_PDT_SCENE_DYNAMIC_GAMMA_S stDynamicGamma;
+    HI_PDT_SCENE_DYNAMIC_SHADING_S stDynamicShading;
+} HI_PDT_SCENE_PIPE_PARAM_S;
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif
+#endif
+
+#endif

@@ -1,0 +1,62 @@
+####for dual begin #####
+export MPP_HEADER_LINUX?=$(SDK_ROOT)/amp/a7_linux/mpp/include
+export MPP_LIB_LINUX?=$(SDK_ROOT)/amp/a7_linux/mpp/lib
+
+export MPP_HEADER_LITEOS?=$(SDK_ROOT)/amp/a7_liteos/mpp/include
+export MPP_LIB_LITEOS?=$(SDK_ROOT)/amp/a7_liteos/mpp/lib
+
+export MOTIONSENSOR_HEADER?=$(SDK_ROOT)/amp/a7_liteos/drv/extdrv/motionsensor/include
+export MOTIONSENSOR_CHIP_HEADER?=$(SDK_ROOT)/amp/a7_liteos/drv/extdrv/motionsensor/motionsensor_chip/pub
+export MOTIONSENSOR_MNG_HEADER?=$(SDK_ROOT)/amp/a7_liteos/drv/extdrv/motionsensor/motionsensor_mng/include
+
+export DATAFIFO_HEADER_LINUX?=$(SDK_ROOT)/amp/a7_linux/hisyslink/datafifo/include
+export DATAFIFO_LIB_LINUX?=$(SDK_ROOT)/amp/a7_linux/hisyslink/datafifo/out/a7_liteos
+
+export DATAFIFO_HEADER_LITEOS?=$(SDK_ROOT)/amp/a7_liteos/hisyslink/datafifo/include
+export DATAFIFO_LIB_LITEOS?=$(SDK_ROOT)/amp/a7_liteos/hisyslink/datafifo/out/a7_liteos
+
+export IPCMSG_HEADER_LINUX?=$(SDK_ROOT)/amp/a7_linux/hisyslink/ipcmsg/include
+export IPCMSG_LIB_LINUX?=$(SDK_ROOT)/amp/a7_linux/hisyslink/ipcmsg/out/a7_liteos
+
+export IPCMSG_HEADER_LITEOS?=$(SDK_ROOT)/amp/a7_liteos/hisyslink/ipcmsg/include
+export IPCMSG_LIB_LITEOS?=$(SDK_ROOT)/amp/a7_liteos/hisyslink/ipcmsg/out/a7_liteos
+
+export OSAL_HEADER_LITEOS?=$(SDK_ROOT)/amp/a7_liteos/osal/include
+####for dual end #####
+
+SDK_LIB := -Wl,--start-group $(wildcard $(MPP_LIB_LINUX)/*.a) -Wl,--end-group
+
+ifeq ($(MAPI_CPU_TYPE), dual)
+	NDK_LIB_A := -Wl,--start-group -l$(HIARCH)_mapi_acap_client -l$(HIARCH)_mapi_aenc_client -l$(HIARCH)_mapi_ao_client \
+				 -l$(HIARCH)_vcap_client -l$(HIARCH)_venc_client  -l$(HIARCH)_disp_client  -l$(HIARCH)_log_client  \
+				 -l$(HIARCH)_sys_client -l$(HIARCH)_vproc_client -l$(HIARCH)_msg_client -Wl,--end-group
+	
+	CFLAGS += -D__DualSys__
+	#for compatible head file include
+	CFLAGS += -I$(SDK_PATH)/mpp/out/liteos/single/include
+
+	NDK_LIB_A += $(SDK_ROOT)/amp/a7_linux/hisyslink/ipcmsg/out/a7_linux/libipcmsg_a7_linux.a
+	NDK_LIB_A += $(SDK_ROOT)/amp/a7_linux/hisyslink/datafifo/out/a7_linux/libdatafifo_a7_linux.a
+    AUDIO_LIBS := -L$(MPI_OUT_PATH)/lib/
+else ifeq ($(MAPI_CPU_TYPE), linux)
+    NDK_LIB_A := -L$(REL_LIB) -l$(HIARCH)_mapi_log -l$(HIARCH)_mapi_sys  \
+              	-l$(HIARCH)_mapi_acap -l$(HIARCH)_mapi_aenc -l$(HIARCH)_mapi_ao \
+				-l$(HIARCH)_mapi_vcap  -l$(HIARCH)_mapi_vproc  -l$(HIARCH)_mapi_venc -l$(HIARCH)_mapi_disp \
+
+	NDK_LIB_A += $(wildcard $(REL_LIB)/*.a)
+	NDK_LIB_A += $(REL_LIB)/lib$(HIARCH)_mapi_log.a
+
+	#ifeq ($(CFG_SENSOR_TYPE0), imx477)
+	#	SDK_LIB += $(MPI_OUT_PATH)/lib/libsns_imx477.a
+	#	NDK_LIB_A += -L$(REL_LIB) -l$(HIARCH)adpt_vcap_inner_config  -l$(HIARCH)libsns_cfg_imx477 -l$(HIARCH)register_sensor
+	#endif
+	
+	NDK_LIB_A += $(SDK_ROOT)/amp/a7_linux/hisyslink/ipcmsg/out/a7_linux/libipcmsg_a7.a
+	NDK_LIB_A += $(SDK_ROOT)/amp/a7_linux/hisyslink/datafifo/out/a7_linux/libdatafifo_a7.a
+	
+endif
+
+
+#CFLAGS += -lstdc++
+
+#SDK_LIB += $(MPI_OUT_PATH)/lib/libaacenc.a

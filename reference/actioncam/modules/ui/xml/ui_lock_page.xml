@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="LOCK_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="LOCK_PAGE"
+        top="0"
+        width="320"
+        height="240"
+        normalskin="SKIN_COMMON_BG"
+        opacity="255"
+        winlevel="15"
+        transparent="no"
+        isrelease="yes"
+        onshow="PDT_UI_LOCK_OnShow"
+        onkeydown="PDT_UI_LOCK_OnKeyDown"
+        ontouchaction="PDT_UI_LOCK_OnTouchAction">
+
+        <button
+            id="LOCK_BORDER"
+            top="24"
+            left="64"
+            width="192"
+            height="192"
+            isrelease="yes"
+            normalskin="SKIN_LOCK_BORDER"
+            alignment="hcenter|vcenter"/>
+
+        <button
+            id="LOCK_BUTTON"
+            top="88"
+            left="128"
+            width="64"
+            height="64"
+            isrelease="yes"
+            normalskin="SKIN_LOCK_BUTTON"
+            alignment="hcenter|vcenter"/>
+
+    </window>
+
+</view>

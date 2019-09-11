@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="FILELIST_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="FILELIST_PAGE"
+        top="0"
+        width="320"
+        height="240"
+        opacity="255"
+        winlevel="0"
+        transparent="no"
+        normalskin="SKIN_COMMON_BG"
+        isrelease="yes"
+        onshow="PDT_UI_FILELIST_OnShow">
+
+        <groupbox
+            id="FILE_GROUPBOX"
+            top="0"
+            left="0"
+            width="320"
+            height="48"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_TITLE_BG">
+
+            <button
+                id="FILELIST_BUTTON_BACK"
+                top="0"
+                left="0"
+                width="60"
+                height="48"
+                isrelease="yes"
+                normalskin="SKIN_COMMON_BUTTON_RETURN"
+                highlightskin="SKIN_COMMON_BUTTON_RETURN_ACTIVE"
+                activeskin="SKIN_COMMON_BUTTON_RETURN_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_UI_FILELIST_OnKeyDown"
+                ongesturetap="PDT_UI_FILELIST_OnGestureTap"/>
+
+            <label
+                id="FILELIST_LABEL_INFO"
+                top="0"
+                left="96"
+                width="128"
+                height="48"
+                isrelease="yes"
+                font="FONT22"
+                text="STRING_FILELIST_INFO"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <button
+                id="FILELIST_BUTTON_SELECTALL"
+                top="0"
+                left="224"
+                width="48"
+                height="48"
+                isrelease="yes"
+                normalskin="SKIN_FILELIST_BUTTON_SELECTALL"
+                highlightskin="SKIN_FILELIST_BUTTON_DELETE_ACTIVE"
+                activeskin="SKIN_FILELIST_BUTTON_SELECTALL_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_UI_FILELIST_OnKeyDown"
+                ongesturetap="PDT_UI_FILELIST_OnGestureTap"/>
+
+            <button
+                id="FILELIST_BUTTON_DELETE"
+                top="0"
+                left="272"
+                width="48"
+                height="48"
+                isrelease="yes"
+                normalskin="SKIN_FILELIST_BUTTON_DELETE"
+                highlightskin="SKIN_FILELIST_BUTTON_DELETE_ACTIVE"
+                activeskin="SKIN_FILELIST_BUTTON_DELETE_ACTIVE"
+                alignment="hcenter|vcenter"
+                onkeydown="PDT_UI_FILELIST_OnKeyDown"
+                ongesturetap="PDT_UI_FILELIST_OnGestureTap"/>
+        </groupbox>
+
+        <!-- scrollbar -->
+        <scrollbar
+            id="FILELIST_SCROLLBAR"
+            top="50"
+            left="314"
+            width="4"
+            height="188"
+            isrelease="yes"
+            normalskin="SKIN_SET_SCORLLBAR_BG"
+            slidres="SKIN_SET_SCORLLBAR_SLIDER"
+            sliddircet="vertical"
+            downarrownormal=""
+            uparrowpress=""
+            downarrowpress=""
+            alignment="hcenter|vcenter"
+            uparrownormal=""/>
+
+        <scrollgrid
+            id="FILELIST_SCROLLGRID_FILES"
+            top="48"
+            left="0"
+            width="314"
+            height="192"
+            isrelease="yes"
+            normalskin="SKIN_FILELIST_SCROLLGRID_FILES"
+            activeskin="SKIN_FILELIST_SCROLLGRID_FILES"
+            font=""
+            widgetposmirror="no"
+            widgetinteriormirror="no"
+            transparent="no"
+            rownum="2"
+            colnum="2"
+            topmargin="2"
+            leftmargin="2"
+            rightmargin="2"
+            bottommargin="2"
+            rowspace="2"
+            colspace="2"
+            cellcolnum="5"
+            datamodel="DATAMODEL_FILELIST"
+            scrollbar="FILELIST_SCROLLBAR"
+            focusnormskin=""
+            focusactiveskin=""
+            itemdirection="vertical"
+            iteminterval="50"
+            itemsteps="4"
+            focusinterval="50"
+            focussteps="20"
+            isfocusatbg="no"
+            focusanchor="1"
+            imgdecindex="1"
+            isdynamicdecimg="no"
+            alignment="hcenter|vcenter"
+            reboundmax="96"
+            onkeydown="PDT_UI_FILELIST_OnKeyDown"
+            oncellcolselect="PDT_UI_FILELIST_GRID_OnCellColSelect">
+
+                <scrollgridcol
+                    id="FILELIST_GRID_THUMB"
+                    colbinddb="yes"
+                    coldbindex="0"
+                    coltype="image"
+                    coltop="0"
+                    colleft="0"
+                    colwidth="154"
+                    colheight="93"/>
+
+                <scrollgridcol
+                    id="FILELIST_GRID_FOCUS"
+                    colbinddb="no"
+                    coltype="image"
+                    coltop="0"
+                    colleft="0"
+                    colwidth="154"
+                    colheight="93"
+                    coldataconv="PDT_UI_FILELIST_GRID_GetFocusIcon"/>
+
+                <scrollgridcol
+                    id="FILELIST_GRID_TYPE"
+                    colbinddb="yes"
+                    coldbindex="1"
+                    coltype="image"
+                    coltop="57"
+                    colleft="4"
+                    colwidth="32"
+                    colheight="32"
+                    coldataconv="PDT_UI_FILELIST_GRID_GetTypeIcon"/>
+
+                <scrollgridcol
+                    id="FILELIST_GRID_FILE_COUNT"
+                    colbinddb="yes"
+                    coldbindex="2"
+                    coltype="text"
+                    colalignment="right"
+                    coltop="61"
+                    colleft="54"
+                    colwidth="90"
+                    colheight="32" />
+
+                <scrollgridcol
+                    id="FILELIST_GRID_SELECT"
+                    colbinddb="yes"
+                    coldbindex="3"
+                    coltype="image"
+                    coltop="8"
+                    colleft="114"
+                    colwidth="32"
+                    colheight="32"
+                    coldataconv="PDT_UI_FILELIST_GRID_GetSelIcon"/>
+
+        </scrollgrid>
+
+    </window>
+
+</view>

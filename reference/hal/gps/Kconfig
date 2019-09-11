@@ -1,0 +1,20 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Device Configuration"
+
+menuconfig GPS
+	bool "GPS support"
+
+	if GPS
+	choice
+		prompt "GPS Type"
+		config GPS_TYPE_M8030
+			bool "gps"
+			depends on (HI3559V200 || HI3556V200)
+		config GPS_TYPE_DUMMY
+			bool "dummy"
+			depends on (HI3559V200 || HI3556V200)
+	endchoice
+endif

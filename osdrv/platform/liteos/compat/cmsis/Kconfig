@@ -1,0 +1,6 @@
+config  LOSCFG_COMPAT_CMSIS
+    bool "Enable Cmsis"
+    default y
+
+    help
+      Answer Y to enable LiteOS support cmsis interface.

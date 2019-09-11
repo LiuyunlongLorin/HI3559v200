@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="IMAGE_WIN"
+isusecommonskin="yes">
+    <window
+    id="IMAGE_WIN"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    isrelease="yes"
+    normalskin="common_skin_gold"
+    opacity="255"
+    winlevel="0"
+    >
+        <image
+        id="IMAGE_WIN_IMAGE1"
+        top="0"
+        left="0"
+        width="40"
+        height="35"
+        isrelease="yes"
+        islanchange="no"
+        normalskin="common_skin_white"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        isnofocus="yes"
+        image="./res/pic/win_back_no.png"
+        ontouchaction="IMAGE_WIN_IMAGE1_ontouchaction"/>
+
+        <label
+        id="IMAGE_WIN_LABEL1"
+        top="0"
+        left="40"
+        width="280"
+        height="35"
+        isrelease="yes"
+        islanchange="no"
+        normalskin="win_title_skin"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        font="simhei_font_text_20"
+        alignment="hcenter|vcenter"
+        isnofocus="no"
+        text="STR_HIGV_IMAGE_SAMPLE"/>
+
+        <image
+        id="PNG_IMAGE"
+        top="40"
+        left="10"
+        width="140"
+        height="95"
+        isrelease="yes"
+        normalskin="common_skin_white"
+        transparent="yes"
+        image="./res/pic/image/IMG_PNG.png"
+        alignment="hcenter|vcenter"
+        />
+
+        <image
+        id="JPG_IMAGE"
+        top="40"
+        left="170"
+        width="140"
+        height="95"
+        isrelease="yes"
+        normalskin="common_skin_white"
+        transparent="yes"
+        image="./res/pic/image/IMG_JPG.jpg"
+        alignment="hcenter|vcenter"
+        />
+
+        <image
+        id="BMP_IMAGE"
+        top="145"
+        left="10"
+        width="140"
+        height="95"
+        isrelease="yes"
+        normalskin="common_skin_white"
+        transparent="yes"
+        image="./res/pic/image/IMG_BMP.bmp"
+        alignment="hcenter|vcenter"
+        />
+
+        <imageex
+        id="SHOW_IMAGE"
+        top="145"
+        left="170"
+        width="140"
+        height="95"
+        isrelease="yes"
+        normalskin="common_skin_white"
+        widgetposmirror="yes"
+        widgetinteriormirror="yes"
+        transparent="yes"
+        image="./res/pic/image/IMG_GIF.gif"
+        alignment="hcenter|vcenter"
+        postype="center"/>
+
+    </window>
+</view>

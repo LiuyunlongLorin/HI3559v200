@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="BUSY_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="BUSY_PAGE"
+        top="0"
+        width="320"
+        height="240"
+        transparent="yes"
+        normalskin="SKIN_WINDOW"
+        opacity="255"
+        winlevel="15"
+        isrelease="yes"
+        onshow="PDT_UI_BUSY_OnShow"
+        onhide="PDT_UI_BUSY_OnHide"
+        ontimer="PDT_UI_BUSY_OnTimer"
+        onevent="PDT_UI_BUSY_OnEvent"
+        onkeydown="PDT_UI_BUSY_OnKeyDown"
+        onkeyup="PDT_UI_BUSY_OnKeyUp">
+
+        <imageex
+            id="BUSY_IMAGE_PROCESS"
+            top="58"
+            left="98"
+            width="124"
+            height="124"
+            isrelease="yes"
+            transparent="yes"
+            normalskin="SKIN_WINDOW"
+            image="/app/bin/res/pic/busy_process.gif"
+            alignment="hcenter|vcenter"/>
+
+    </window>
+
+</view>

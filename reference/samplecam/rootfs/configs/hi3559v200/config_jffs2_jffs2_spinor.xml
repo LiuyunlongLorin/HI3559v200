@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="GB2312" ?>
+<Partition_Info>
+<Part Sel="1" PartitionName="fastboot" FlashType="spi" FileSystem="none" Start="0" Length="256K" SelectFile="u-boot.bin"/>
+<Part Sel="1" PartitionName="media_app_zip.bin" FlashType="spi" FileSystem="none" Start="320K" Length="2752K" SelectFile="media_app_zip.bin"/>
+<Part Sel="1" PartitionName="kernel" FlashType="spi" FileSystem="none" Start="3M" Length="3M" SelectFile="uImage"/>
+<Part Sel="1" PartitionName="rootfs" FlashType="spi" FileSystem="none" Start="6M" Length="2M" SelectFile="rootfs.jffs2"/>
+<Part Sel="1" PartitionName="appfs" FlashType="spi" FileSystem="none" Start="8M" Length="2M" SelectFile="appfs.jffs2"/>
+</Partition_Info>

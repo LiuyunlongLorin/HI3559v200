@@ -1,0 +1,65 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+MW_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+SAMPLE_DIR := $(MIDDLEWARE_DIR)/sample
+include $(MIDDLEWARE_DIR)/base.mak
+include $(MW_ADPT_DIR)/medialibs.mak
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+LOG_LIB_DIR := $(HIBERRY_COMMON_DIR)/log/lib
+LOG_INC_DIR := $(HIBERRY_COMMON_DIR)/log/include
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+DCF_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/dcf/lib
+DCF_INC_DIR := $(HIBERRY_COMPONENT_DIR)/dcf/include
+
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+APP_INIT_DIR := $(MEDIA_ADPT_ROOT)/$(CFG_CHIP_TYPE)/HuaweiLite
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -maxdepth 1  -name '*.c' -print)
+SRCS                +=  $(shell find $(APP_INIT_DIR) -maxdepth 1  -name '*.c' -print)
+SRCS                :=  $(sort $(SRCS))
+OBJS                :=  $(patsubst %.c,%.o,$(SRCS))
+
+INC_FLAGS += -I$(DCF_INC_DIR) -I$(HIBERRY_COMMON_INC)
+INC_FLAGS += $(MEDIA_INCLUDE_PATH)
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+TARGET :=sample_dcf
+BIN := $(TARGET).bin
+MAP := $(TARGET).map
+
+HIBERRY_LIBS := -L$(LOG_LIB_DIR) -L$(DCF_LIB_DIR) \
+--start-group -ldcf_wrapper -ldcf_impl -ldcf_core -lmwlog --end-group
+SDK_LIB := $(MEDIA_LIBS_PATH_LINK) --start-group $(MEDIA_LIBS_LINK) --end-group
+LDFLAGS := $(LITEOS_LDFLAGS) --gc-sections
+LIBDEP = --start-group $(LITEOS_LIBS) --end-group
+CFLAGS += $(INC_FLAGS)
+CFLAGS += -DHI_ACODEC_TYPE_INNER
+.PHONY : clean all
+
+all: $(BIN)
+
+$(BIN):$(TARGET)
+	@$(OBJCOPY) -O binary $(TARGET) $(BIN)
+
+$(TARGET):$(OBJS)
+	@$(LD) $(LDFLAGS) -Map=$(MAP) -o $(TARGET) $(OBJS) $(HIBERRY_LIBS) $(SDK_LIB) $(LIBDEP)
+
+$(OBJS):%.o:%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	@rm -f $(TARGET) $(BIN) $(MAP) *.asm
+	@rm -f $(OBJS)

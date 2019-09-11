@@ -1,0 +1,23 @@
+<font
+    id="simhei_font_text_10"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="10"
+    isbold="no"
+    isitalic=""/>
+
+<font
+    id="simhei_font_text_20"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="20"
+    isbold="no"
+    isitalic=""/>
+
+<font
+    id="simhei_font_text_40"
+    sbname="./res/font/ttf/simhei.ttf"
+    mbname=""
+    size="40"
+    isbold="no"
+    isitalic=""/>

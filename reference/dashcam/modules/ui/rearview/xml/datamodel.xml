@@ -1,0 +1,68 @@
+<datamodel
+    id="DATAMODEL_SETTINGS"
+    field="item:s32:4; param_type:s32:4; icon:string:64; description:string:32; value:string:32"
+    cacherows="18"
+    datasource="userdb"
+    getrowcount="PDT_UI_SET_GRID_GetRowCount"
+    getrowvalue="PDT_UI_SET_GRID_GetRowValue"
+    registerdatachange="PDT_UI_SET_GRID_Register"
+    unregisterdatachange="PDT_UI_SET_GRID_Unregister"/>
+<datamodel
+    id="DATAMODEL_FILELIST"
+    field="thumbnail:string:64;selected:u32:4"
+    cacherows="12"
+    datasource="userdb"
+    getrowcount="PDT_UI_FILELIST_GRID_GetRowCount"
+    getrowvalue="PDT_UI_FILELIST_GRID_GetRowValue"
+    registerdatachange="PDT_UI_FILELIST_GRID_Register"
+    unregisterdatachange="PDT_UI_FILELIST_GRID_Unregister"/>
+<datamodel
+    id="DATAMODEL_FILE_DIRECTORY"
+    field="dir_enum:s32:4;dir_name:string:64;"
+    cacherows="8"
+    datasource="userdb"
+    getrowcount="PDT_UI_FILE_DIRECTORY_GetRowCount"
+    getrowvalue="PDT_UI_FILE_DIRECTORY_GetRowValue"
+    registerdatachange="PDT_UI_FILE_DIRECTORY_Register"
+    unregisterdatachange="PDT_UI_FILE_DIRECTORY_Unregister"/>
+<datamodel
+    id="DATAMODEL_YEAR"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+<datamodel
+    id="DATAMODEL_MONTH"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+<datamodel
+    id="DATAMODEL_DAY"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+
+<datamodel
+    id="DATAMODEL_HOUR"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />
+<datamodel
+    id="DATAMODEL_MIN"
+    field="u32StringID:string:8;"
+    datasource="userdb"
+    getrowcount="PDT_UI_WHEELVIEW_GetRowCount"
+    getrowvalue="PDT_UI_WHEELVIEW_GetRowValue"
+    registerdatachange="PDT_UI_WHEELVIEW_Register"
+    unregisterdatachange="PDT_UI_WHEELVIEW_Unregister" />

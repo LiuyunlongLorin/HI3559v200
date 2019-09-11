@@ -1,0 +1,68 @@
+#
+# For a description of the syntax of this configuration file,
+# see build/scripts/Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Memory Configuration"
+
+choice
+	prompt "DDR BITWIDTH"
+	depends on HI3559V200 && ACTIONCAM
+	default 32bit
+config DDR_BITWIDTH_32
+	bool "32bit"
+config DDR_BITWIDTH_16
+	bool "16bit"
+endchoice
+
+menu "Memory"
+
+config MEM_TOTAL_SIZE
+	string "total memory size(M)"
+
+config MEM_IPCM_BASE
+	depends on HI3559V200 || HI3556V200
+	string "ipcm base memory"
+config MEM_IPCM_SIZE
+	depends on HI3559V200 || HI3556V200
+	string "ipcm memory size"
+	default "0x00100000"
+
+config MEM_PARAM_BASE
+	string "parameter base memory"
+config MEM_PARAM_SIZE
+	string "parameter memory size"
+
+config MEM_HUAWEILITE_SYS_BASE
+	string "HuaweiLite system base memory"
+config MEM_HUAWEILITE_SYS_SIZE
+	string "HuaweiLite system memory size"
+config MEM_HUAWEILITE_MMZ_BASE
+	string "HuaweiLite mmz base memory"
+config MEM_HUAWEILITE_MMZ_SIZE
+	string "HuaweiLite mmz memory size"
+
+config MEM_LINUX_SYS_BASE
+	string "Linux system base memory"
+config MEM_LINUX_SYS_SIZE
+	string "Linux system memory size"
+config MEM_LINUX_MMZ_BASE
+	string "Linux mmz base memory"
+config MEM_LINUX_MMZ_ANONYMOUS_SIZE
+	string "Linux anonymous mmz memory size"
+config MEM_LINUX_MMZ_HIGO_SIZE
+	string "Linux higo mmz memory size"
+
+config MEM_LINUX_MMZ_HDMI_RELOAD
+	bool "reload linux mmz in hdmi"
+config MEM_LINUX_MMZ_HDMI_BASE
+	depends on MEM_LINUX_MMZ_HDMI_RELOAD
+	string "Linux hdmi mmz base memory"
+config MEM_LINUX_MMZ_HDMI_ANONYMOUS_SIZE
+	depends on MEM_LINUX_MMZ_HDMI_RELOAD
+	string "Linux hdmi anonymous mmz memory size"
+config MEM_LINUX_MMZ_HDMI_HIGO_SIZE
+	depends on MEM_LINUX_MMZ_HDMI_RELOAD
+	string "Linux hdmi higo mmz memory size"
+
+endmenu
+

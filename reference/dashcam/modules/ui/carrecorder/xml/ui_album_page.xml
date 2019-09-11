@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="ALBUM_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="ALBUM_PAGE"
+        top="0"
+        left="0"
+        width="320"
+        height="240"
+        normalskin=""
+        transparent="yes"
+        opacity="255"
+        winlevel="0"
+        isrelease="yes"
+        onshow="PDT_UI_ALBUM_OnShow"
+        onhide="PDT_UI_ALBUM_OnHide"
+        ontimer="PDT_UI_ALBUM_OnTimer"
+        onevent="PDT_UI_ALBUM_OnEvent"
+        onkeydown=""
+        onkeyup="">
+
+        <groupbox
+            id="ALBUM_GROUPBOX_TITLE"
+            top="0"
+            left="0"
+            width="320"
+            height="48"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_TITLE_BG">
+
+            <label
+                id="ALBUM_LABEL_INFO"
+                top="0"
+                left="48"
+                width="224"
+                height="48"
+                isrelease="yes"
+                font="FONT22"
+                text="STRING_ALBUM"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+        </groupbox>
+
+        <scrollbar
+            id="ALBUM_SCROLLBAR"
+            top="50"
+            left="315"
+            width="3"
+            height="160"
+            isrelease="yes"
+            normalskin="SKIN_SET_SCORLLBAR_BG"
+            slidres="SKIN_SET_SCORLLBAR_SLIDER"
+            sliddircet="vertical"
+            downarrownormal=""
+            uparrowpress=""
+            downarrowpress=""
+            alignment="hcenter|vcenter"
+            uparrownormal=""/>
+	    <label
+	        id="ALBUM_LABEL_TOP"
+	        top="48"
+	        left="315"
+	        width="3"
+	        height="2"
+	        isrelease="yes"
+	        normalskin="SKIN_COMMON_BG"/>
+	    <label
+	        id="ALBUM_LABEL_RIGHT"
+	        top="48"
+	        left="318"
+	        width="2"
+	        height="160"
+	        isrelease="yes"
+	        normalskin="SKIN_COMMON_BG"/>
+	    <label
+	        id="ALBUM_LABEL_BOTTOM"
+	        top="206"
+	        left="315"
+	        width="3"
+	        height="2"
+	        isrelease="yes"
+	        normalskin="SKIN_COMMON_BG"/>
+	    <label
+	        id="ALBUM_LABEL_LEFT"
+	        top="48"
+	        left="313"
+	        width="2"
+	        height="160"
+	        isrelease="yes"
+	        normalskin="SKIN_COMMON_BG"/>
+
+        <listbox
+            id="ALBUM_LISTBOX"
+            top="48"
+            left="0"
+            width="313"
+            height="160"
+            isrelease="yes"
+            font="FONT18"
+            normalskin="SKIN_SET_LISTBOX_ROW_NORMAL"
+            activeskin="SKIN_SET_LISTBOX_ROW_NORMAL"
+            rownormalskin="SKIN_SET_LISTBOX_ROW_NORMAL"
+            rowselectskin="SKIN_SET_LISTBOX_ROW_ACTIVE"
+            noframe="no"
+            hlineheight="1"
+            hlinecolor="0xFFC1C1BB"
+            alignment="hcenter|vcenter"
+            rownum="3"
+            colnum="2"
+            datamodel="DATAMODEL_ALBUM"
+            scrollbar="ALBUM_SCROLLBAR"
+            oncellselect="PDT_UI_ALBUM_OnCellSelect"
+            onkeydown="PDT_UI_ALBUM_OnKeyDown">
+
+            <listcol
+                id="ALBUM_LISTBOX_COL_LEFT"
+                colwidth="6"
+                colbinddb="no"/>
+            <listcol
+                id="ALBUM_LISTBOX_COL_TITLE"
+                coltype="text"
+                colwidth="160"
+                colbinddb="yes"
+                coldbindex="0"
+                colalignment="left|vcenter"
+                fgidx="0"
+                font="FONT18"/>
+        </listbox>
+
+        <groupbox
+            id="ALBUM_GROUPBOX_TITLE_BELOW"
+            top="208"
+            left="0"
+            width="320"
+            height="32"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_TITLE_BG">
+
+            <label
+                id="ALBUM_LABEL_BACK"
+                top="0"
+                left="5"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_BACK"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <label
+                id="ALBUM_LABEL_MENU"
+                top="0"
+                left="110"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_MENU"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <label
+                id="ALBUM_LABEL_OK"
+                top="0"
+                left="220"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18"
+                text="STRING_OK"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+        </groupbox>
+
+    </window>
+
+</view>
+

@@ -1,0 +1,15 @@
+#
+# For a description of the syntax of this configuration file,
+# see build/scripts/Documentation/kbuild/kconfig-language.txt.
+#
+
+comment "AppComm Modules Configuration"
+
+source reference/common/filemng/Kconfig
+source reference/common/recordmng/Kconfig
+source reference/common/photomng/Kconfig
+source reference/common/playback/Kconfig
+source reference/common/rawcap/Kconfig
+source reference/common/system/Kconfig
+source reference/common/videodetect/Kconfig
+source reference/common/pm/Kconfig

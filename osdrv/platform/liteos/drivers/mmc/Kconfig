@@ -1,0 +1,32 @@
+config LOSCFG_DRIVERS_MMC
+    depends on LOSCFG_DRIVERS
+    bool "Enable MMC"
+    default y
+    depends on LOSCFG_DRIVERS && LOSCFG_FS_VFS
+    help
+      Answer Y to enable LiteOS support MMC driver.
+choice
+    depends on LOSCFG_DRIVERS_MMC && LOSCFG_PLATFORM_HI3518EV200
+    prompt " MMC0 support device type"
+    default LOSCFG_DRIVERS_SD
+    help
+      Enable LiteOS MMC driver support SD card.
+      Enable LiteOS MMC driver support eMMC.
+
+config LOSCFG_DRIVERS_SD
+    bool "Enable MMC0 support SD card type"
+
+config LOSCFG_DRIVERS_EMMC
+    bool "Enable MMC0 support eMMC type"
+
+endchoice
+
+config LOSCFG_DRIVERS_MMC_SPEEDUP
+    depends on LOSCFG_DRIVERS_MMC && (LOSCFG_PLATFORM_HI3519 || LOSCFG_PLATFORM_HI3519V101 || LOSCFG_PLATFORM_HI3559)
+    bool "Enable MMC support speedup"
+    default n
+    help
+      Answer Y to enable LiteOS support speedup.
+
+
+

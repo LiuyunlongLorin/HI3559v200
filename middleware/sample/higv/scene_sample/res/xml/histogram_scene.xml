@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="HISTOGRAM_SCENE_WIN"
+isusecommonskin="yes">
+    <window
+    id="HISTOGRAM_SCENE_WIN"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    normalskin="common_skin_white"
+    onshow="HISTOGRAM_SCENE_WIN_onshow"
+    onrefresh="HISTOGRAM_SCENE_WIN_onrefresh"
+    opacity="255"
+    winlevel="0"
+    ontouchaction=""
+    >
+        <image
+        id="HISTOGRAM_SCENE_WIN_IMAGE1"
+        top="0"
+        left="0"
+        width="40"
+        height="35"
+        isrelease="no"
+        islanchange="no"
+        normalskin="common_skin_white"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        isnofocus="yes"
+        image="./res/pic/win_back_no.png"
+        ongesturetap="HISTOGRAM_SCENE_WIN_IMAGE1_ongesturetap"/>
+
+        <label
+        id="HISTOGRAM_SCENE_WIN_LABEL1"
+        top="0"
+        left="40"
+        width="280"
+        height="35"
+        isrelease="no"
+        islanchange="no"
+        normalskin="win_title_skin"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        font="simhei_font_text_20"
+        alignment="hcenter|vcenter"
+        isnofocus="no"
+        text="STR_HISTOGRAM_SCENE"/>
+
+        <groupbox
+        id="HISTOGRAM_SCENE_WIN_GROUPBOX"
+        top="45"
+        left="20"
+        width="200"
+        height="100"
+        isrelease="no"
+        islanchange="no"
+        normalskin="histogram_skin"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        transparent="no"
+        isskinforcedraw="no"
+        isnofocus="no"
+        ontouchaction="">
+       </groupbox>
+
+    </window>
+</view>

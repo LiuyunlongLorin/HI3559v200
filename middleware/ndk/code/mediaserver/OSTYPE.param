@@ -1,0 +1,9 @@
+
+ifeq ($(MAPI_CPU_TYPE), dual)
+	export OSTYPE=liteos
+else ifeq ($(MAPI_CPU_TYPE), liteos)
+	export OSTYPE=liteos
+else
+    export OSTYPE=linux
+endif
+

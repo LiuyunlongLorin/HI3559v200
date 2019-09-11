@@ -1,0 +1,110 @@
+ifeq ($(MAPI_PARAM_FILE), )
+     MAPI_PARAM_FILE:=../../../Makefile.param
+     include $(MAPI_PARAM_FILE)
+endif
+
+include ../Makefile.param
+CFLAGS += -I$(NDK_PATH)/code/include/inner
+CFLAGS += -I$(NDK_PATH)/code/mediaserver/utils
+CFLAGS += -I$(NDK_PATH)/code/mediaserver/configs/sensor/include/
+CFLAGS += -I$(NDK_PATH)/code/mediaserver/vcap/arch/include/
+CFLAGS += -I$(NDK_PATH)/code/include
+
+##############  include ndk static lib ####################
+NDK_LIB_A := -L$(REL_LIB)
+NDK_LIB_A += -l$(HIARCH)_mapi_log  -l$(HIARCH)_mapi_sys \
+             -l$(HIARCH)_mapi_vcap_inner_cfg -l$(HIARCH)_mapi_register_sensor \
+			 -l$(HIARCH)_mapi_comm_sensor_cfg -l$(HIARCH)_mapi_vcap -l$(HIARCH)_mapi_venc \
+             -l$(HIARCH)_mapi_disp -l$(HIARCH)_mapi_vproc -l$(HIARCH)_mapi_acap \
+			 -l$(HIARCH)_mapi_aenc  -l$(HIARCH)_mapi_ao  \
+			 -l$(HIARCH)load_sdk
+
+
+##############  include sdk lib ####################
+SDK_LIB_PATH := -L$(MPP_LIB_LITEOS) -L$(MPP_LIB_LITEOS)/extdrv
+SHARED_PATH=$(shell pwd)/so
+
+NDK_LIB_A += -l$(HIARCH)_media_server
+SDK_LIB := $(SDK_LIB_PATH) --start-group -lhi_osal -lmpi -l$(HIARCH)_base -l$(HIARCH)_sys -lhi_user -lhdmi -l$(HIARCH)_isp -l$(HIARCH)_vi \
+							-l$(HIARCH)_vo -l$(HIARCH)_vpss -l$(HIARCH)_vgs -l$(HIARCH)_gdc -lhi_mipi_rx   \
+							-l$(HIARCH)_chnl -l$(HIARCH)_rc -l$(HIARCH)_rgn -l$(HIARCH)_vedu \
+							-l$(HIARCH)_venc -l$(HIARCH)_h265e -l$(HIARCH)_jpege -l$(HIARCH)_h264e  \
+							-l$(HIARCH)_dis  -l$(HIARCH)_hdmi -lhi_mipi_tx  \
+							-l_hidehaze -l_hidrc -l_hildci -l_hiawb -l_hiae -lisp  -lhi_sensor_i2c\
+							-laacdec -laacenc -lupvqe -ldnvqe -lVoiceEngine -l$(HIARCH)_ai -l$(HIARCH)_ao -l$(HIARCH)_aio -l$(HIARCH)_aenc -l$(HIARCH)_adec -l$(HIARCH)_acodec  -laaccomm  \
+							-l$(HIARCH)_vdec -l$(HIARCH)_jpegd  -l$(HIARCH)_vfmw  \
+							-lhi_ssp_sony -lhi_sensor_spi -lhi_pwm   -lhi_ssp_st7789 \
+							--end-group
+SDK_LIB += $(IPCMSG_LIB_LITEOS)/libipcmsg_a7_liteos.a
+SDK_LIB += $(DATAFIFO_LIB_LITEOS)/libdatafifo_a7_liteos.a
+ifeq ($(CFG_SUPPORT_GYRO), y)
+	SDK_LIB += -lmotionfusion -lmotionsensor_chip -lmotionsensor_mng -l$(HIARCH)_gyrodis -l$(HIARCH)_motionfusion
+endif
+
+prepare:
+	@if [ ! -d so ];then \
+		mkdir so;cp $(MPP_LIB_LITEOS)/libhive_record.so so/; \
+		cp $(MPP_LIB_LITEOS)/libhive_RES* so/; \
+		pushd $(NDK_PATH)/sample/arch/$(HIARCH)/HuaweiLite; \
+		cd $(LITEOSTOPDIR)/tools/scripts/dynload_tools;./sym.sh $(SHARED_PATH); \
+		popd; \
+		cp $(LITEOSTOPDIR)/kernel/extended/dynload/src/los_dynload_gsymbol.c . ; \
+	fi;
+
+prepare_clean:
+	if [ -d so ]; then rm -r so; fi
+	if [ -f los_dynload_gsymbol.c ]; then rm los_dynload_gsymbol.c; fi
+
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_TLV320AIC31)
+	SDK_LIB += $(MPI_OUT_PATH)/lib/extdrv/libhi_tlv320aic31.a
+endif
+
+##############  include sensor lib ####################
+SENSOR_LIBS =
+SENSOR_TYPE0 = $(shell echo $(CFG_SENSOR_TYPE0) | tr A-Z a-z)
+SENSOR_TYPE1 = $(shell echo $(CFG_SENSOR_TYPE1) | tr A-Z a-z)
+
+##  SENSOR_TYPE0 ##
+ifneq ($(SENSOR_TYPE0), unused)
+ifeq ($(SENSOR_TYPE0), imx307)
+
+ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_0)
+SENSOR_LIBS := $(MPP_LIB_LITEOS)/libsns_$(SENSOR_TYPE0).a
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_1)
+SENSOR_LIBS := $(MPP_LIB_LITEOS)/libsns_imx307_2l.a
+endif
+
+else ifeq ($(SENSOR_TYPE0), imx335)
+SENSOR_LIBS := $(MPP_LIB_LITEOS)/libsns_$(SENSOR_TYPE0)_forcar.a
+else
+SENSOR_LIBS := $(MPP_LIB_LITEOS)/libsns_$(SENSOR_TYPE0).a
+endif
+
+SENSOR_LIBS += $(REL_LIB)/lib$(HIARCH)_mapi_cfg_$(SENSOR_TYPE0).a
+endif
+
+##  SENSOR_TYPE1 ##
+ifneq ($(SENSOR_TYPE1), unused)
+ifneq ($(SENSOR_TYPE1), bt656)
+ifeq ($(SENSOR_TYPE1), imx307)
+
+ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_0)
+SENSOR_LIBS := $(MPP_LIB_LITEOS)/libsns_$(SENSOR_TYPE1).a
+else ifeq ($(SENSOR_CABLE_TYPE), LANE_DIVIDE_MODE_1)
+SENSOR_LIBS := $(MPP_LIB_LITEOS)/libsns_imx307_2l.a
+endif
+
+else ifeq ($(SENSOR_TYPE1), imx335)
+SENSOR_LIBS := $(MPP_LIB_LITEOS)/libsns_$(SENSOR_TYPE1)_forcar.a
+else
+SENSOR_LIBS := $(MPP_LIB_LITEOS)/libsns_$(SENSOR_TYPE1).a
+endif
+endif
+
+SENSOR_LIBS += $(REL_LIB)/lib$(HIARCH)_mapi_cfg_$(SENSOR_TYPE1).a
+endif
+
+SDK_LIB += $(SENSOR_LIBS)
+SDK_LIB += $(VCAP_CFG_LIB)
+#SDK_LIB += -lsharefs
+SDK_LIB += $(DIS_CFG_LIB)

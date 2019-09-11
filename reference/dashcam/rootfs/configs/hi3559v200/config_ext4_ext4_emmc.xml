@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="GB2312" ?>
+<Partition_Info ProgrammerFile="">
+<Part Sel="1" PartitionName="fastboot" FlashType="emmc" FileSystem="none" Start="0" Length="1M" SelectFile="u-boot.bin"/>
+<Part Sel="1" PartitionName="rawparam" FlashType="emmc" FileSystem="none" Start="1M" Length="1M" SelectFile="rawparam"/>
+<Part Sel="1" PartitionName="rawparambak" FlashType="emmc" FileSystem="none" Start="2M" Length="1M" SelectFile="rawparambak"/>
+<Part Sel="1" PartitionName="media_app" FlashType="emmc" FileSystem="none" Start="3M" Length="8M" SelectFile="media_app.bin"/>
+<Part Sel="1" PartitionName="kernel" FlashType="emmc" FileSystem="none" Start="11M" Length="5M" SelectFile="uImage"/>
+<Part Sel="1" PartitionName="rootfs" FlashType="emmc" FileSystem="ext3/4" Start="16M" Length="rootfs_ext4size" SelectFile="rootfs.ext4"/>
+<Part Sel="1" PartitionName="appfs" FlashType="emmc" FileSystem="ext3/4" Start="appfs_ext4start" Length="appfs_ext4size" SelectFile="appfs.ext4"/>
+</Partition_Info>

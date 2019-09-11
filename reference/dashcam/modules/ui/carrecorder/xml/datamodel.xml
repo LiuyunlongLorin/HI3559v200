@@ -1,0 +1,30 @@
+<datamodel
+    id="DATAMODEL_SETTINGS"
+    field="title:string:32;content:string:32;icon:resid:4;action:u32:4;paramtype:u32:4;camid:s32:4;value:s32:4"
+    datasource="owndb"
+    getrowcount=""
+    getrowvalue=""
+    cacherows=""
+    registerdatachange=""
+    unregisterdatachange="" />
+
+<datamodel
+    id="DATAMODEL_ALBUM"
+    field="title:string:64;dirtype:u32:4"
+    datasource="owndb"
+    getrowcount=""
+    getrowvalue=""
+    cacherows=""
+    registerdatachange=""
+    unregisterdatachange="" />
+
+<datamodel
+    id="DATAMODEL_FILELIST"
+    field="thumbnail:string:64;selected:u32:4"
+    cacherows="12"
+    datasource="userdb"
+    getrowcount="PDT_UI_FILELIST_GRID_GetRowCount"
+    getrowvalue="PDT_UI_FILELIST_GRID_GetRowValue"
+    registerdatachange="PDT_UI_FILELIST_GRID_Register"
+    unregisterdatachange="PDT_UI_FILELIST_GRID_Unregister"/>
+

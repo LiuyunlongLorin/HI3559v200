@@ -1,0 +1,28 @@
+config LOSCFG_SHELL
+    bool "Enable Shell"
+    default y
+    depends on LOSCFG_DEBUG_VERSION
+    help
+      Answer Y to enable LiteOS support shell cmd.
+
+config LOSCFG_SHELL_LK
+    bool "Enable Shell lk"
+    default y
+    depends on LOSCFG_DEBUG_VERSION && LOSCFG_SHELL
+    help
+      Answer Y to enable LiteOS support shell lk.
+
+config LOSCFG_SHELL_DMESG
+    bool "Enable Shell dmesg"
+    default n
+    depends on LOSCFG_DEBUG_VERSION && LOSCFG_SHELL
+    help
+      Answer Y to enable LiteOS support shell dmesg.
+
+config LOSCFG_SHELL_EXCINFO
+    bool "Enable Shell excInfo"
+    default n
+    depends on LOSCFG_DEBUG_VERSION && LOSCFG_SHELL
+    help
+      Answer Y to enable LiteOS support shell excInfo.
+

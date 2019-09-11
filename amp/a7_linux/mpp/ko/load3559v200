@@ -1,0 +1,102 @@
+#!/bin/sh
+# Useage: ./load3559v200 [ -r|-i|-a ]
+#         -r : rmmod all modules
+#         -i : insmod all modules
+#         -a : rmmod all moules and then insmod them
+# e.g: ./load3559v200 -i
+
+
+####################Variables Definition##########################
+# kernel start:0x82000000,  OS(96M); MMZ start:0x9D000000
+mmz_start=0x9D000000;         # mmz start addr
+mmz_size=48M;               # 48M, mmz size
+
+##################################################################
+
+report_error()
+{
+	echo "******* Error: There's something wrong, please check! *****"
+	exit 1
+}
+
+insert_ko()
+{
+	# driver load
+	insmod hi_osal.ko anony=1 mmz_allocator=hisi mmz=anonymous,0,$mmz_start,$mmz_size map_mmz=0x88000000,336M || report_error
+	insmod hi3559v200_base.ko
+	insmod hi3559v200_sys.ko
+	#insmod hi_cipher.ko
+	insmod hi3559v200_tde.ko
+	insmod hi3559v200_adc.ko
+	insmod hifb.ko video="hifb:vram0_size:3600"     # default fb0:720p
+	insmod hi3559v200_ive.ko save_power=0
+	#nnie_max_tskbuf_num=64
+	insmod hi3559v200_nnie.ko nnie_save_power=1 nnie_max_tskbuf_num=32
+}
+
+remove_ko()
+{
+	rmmod hi3559v200_nnie
+	rmmod hi3559v200_ive
+	rmmod hifb
+	rmmod hi3559v200_adc.ko
+	rmmod hi3559v200_tde
+	#rmmod hi_cipher
+	rmmod hi3559v200_sys
+	rmmod hi3559v200_base
+	rmmod hi_osal
+}
+
+load_usage()
+{
+	echo "Usage:  ./load3559v200 [-option]"
+	echo "options:"
+	echo "    -i                       insert modules"
+	echo "    -r                       remove modules"
+	echo "    -a                       remove modules first, then insert modules"
+	echo "    -h                       help information"
+	echo -e "for example: ./load3559v200 -i\n"
+}
+
+
+######################parse arg###################################
+b_arg_insmod=0
+b_arg_remove=0
+b_arg_restore=0
+
+for arg in $@
+do
+	case $arg in
+		"-i")
+			b_arg_insmod=1;
+			;;
+		"-r")
+			b_arg_remove=1;
+			;;
+		"-a")
+			b_arg_insmod=1;
+			b_arg_remove=1;
+			;;
+		"-h")
+			load_usage;
+			;;
+	esac
+done
+#######################parse arg end########################
+
+
+#######################Action###############################
+
+if [ $# -lt 1 ]; then
+    load_usage;
+    exit 0;
+fi
+
+
+if [ $b_arg_remove -eq 1 ]; then
+	remove_ko;
+fi
+
+if [ $b_arg_insmod -eq 1 ]; then
+	insert_ko;
+fi

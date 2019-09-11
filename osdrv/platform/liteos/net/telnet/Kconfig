@@ -1,0 +1,6 @@
+config LOSCFG_NET_TELNET
+    bool "Enable Telnet"
+    default y
+    depends on LOSCFG_NET_LWIP_SACK && LOSCFG_SHELL && LOSCFG_DEBUG_VERSION
+    help
+      Answer Y to enable LiteOS support telnet tool.

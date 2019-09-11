@@ -1,0 +1,19 @@
+config LOSCFG_DRIVERS_I2C
+    bool "Enable I2C"
+    default y
+    depends on LOSCFG_DRIVERS
+    help
+      Answer Y to enable LiteOS support i2c.
+config LOSCFG_I2C_ADAPTER_COUNT
+    int "Number of i2c adapter count"
+    depends on LOSCFG_DRIVERS_I2C
+    range 0 128
+    default 4
+    help
+      I2c adatper count, range from 0 to 128.
+config LOSCFG_HOST_TYPE_HIBVT
+    bool "i2c host type is hibvt"
+    default y
+    depends on LOSCFG_DRIVERS && (LOSCFG_PLATFORM_HI3559AV100ES || LOSCFG_PLATFORM_HI3516CV300 || LOSCFG_PLATFORM_HI3559AV100 || LOSCFG_PLATFORM_HI3556AV100 || LOSCFG_PLATFORM_HI3519AV100 || LOSCFG_PLATFORM_HI3516CV500 || LOSCFG_PLATFORM_HI3516DV300 || LOSCFG_PLATFORM_HI3556V200  || LOSCFG_PLATFORM_HI3559V200 || LOSCFG_PLATFORM_HI3516EV200)
+    help
+      i2c host type is hibvt.

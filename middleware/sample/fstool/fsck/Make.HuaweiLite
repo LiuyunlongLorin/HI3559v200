@@ -1,0 +1,57 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../../..
+MW_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+SAMPLE_DIR := $(MIDDLEWARE_DIR)/sample
+include $(MIDDLEWARE_DIR)/base.mak
+include $(MW_ADPT_DIR)/medialibs.mak
+OSTYPE:=HuaweiLite
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+FSTOOL_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fstool/lib
+FSTOOL_INC_DIR := $(HIBERRY_COMPONENT_DIR)/fstool/include
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+APP_INIT_DIR := $(MEDIA_ADPT_ROOT)/$(CFG_CHIP_TYPE)/HuaweiLite
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -maxdepth 1  -name '*.c' -print)
+SRCS                +=  $(shell find $(APP_INIT_DIR) -maxdepth 1  -name '*.c' -print)
+SRCS                :=  $(sort $(SRCS))
+OBJS                :=  $(patsubst %.c,%.o,$(SRCS))
+
+INC_FLAGS += -I$(FSTOOL_INC_DIR)
+INC_FLAGS += $(MEDIA_INCLUDE_PATH)
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+TARGET :=hifsck.vfat
+BIN := $(TARGET).bin
+MAP := $(TARGET).map
+
+HIBERRY_LIBS := -L$(FSTOOL_LIB_DIR) --start-group -lfstool --end-group
+SDK_LIB := $(MEDIA_LIBS_PATH_LINK) --start-group $(MEDIA_LIBS_LINK) --end-group
+LDFLAGS := $(LITEOS_LDFLAGS) --gc-sections
+LIBDEP = --start-group $(LITEOS_LIBS) --end-group
+CFLAGS += $(INC_FLAGS)
+CFLAGS += -DHI_ACODEC_TYPE_INNER
+.PHONY : clean all
+
+all: $(BIN)
+
+$(BIN):$(TARGET)
+	@$(OBJCOPY) -O binary $(TARGET) $(BIN)
+
+$(TARGET):$(OBJS)
+	@$(LD) $(LDFLAGS) -Map=$(MAP) -o $(TARGET) $(OBJS) $(HIBERRY_LIBS) $(SDK_LIB) $(LIBDEP)
+
+$(OBJS):%.o:%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	@rm -f $(TARGET) $(BIN) $(MAP) *.asm
+	@rm -f $(OBJS)

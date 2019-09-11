@@ -1,0 +1,30 @@
+#*******************************************************************************
+#The rule of make linux
+#*******************************************************************************
+
+CFLAGS += $(MKP_CFLAGS)
+
+OBJS = $(SRCS:%.c=%.o)
+
+LIB := lib$(TARGET).a
+
+.PHONY: all clean
+
+all: $(OBJS) $(LIB)
+	@echo -e "\e[0;32;1m--Compiling '$(TARGET)'...\e[0;36;1m"
+	@echo -e "\e[0m"
+	@mkdir -p $(REL_LIB) && cp -rf $(LIB) $(REL_LIB)
+	@mkdir -p $(REL_INC) && cp ../include/*.h $(REL_INC)
+	#@$(call maco_cp_file,$(INC_FILE),$(REL_INC))
+	@mkdir -p $(REL_KO) && cp -rf *.a $(REL_KO)
+	#@cp $(CBB_ROOT)/init/$(HIARCH)/$(OSTYPE)/hi_module_param.h $(REL_INC) -fr
+$(OBJS): %.o : %.c
+	@echo "$@"
+	@$(CC) $(CFLAGS) -c -fPIC -shared $< -o $@
+$(LIB): $(OBJS)
+	@$(AR) $(ARFLAGS) $@ $(OBJS)
+clean:
+	@rm -f $(OBJS) $(LIB)
+	@rm -f $(REL_LIB)/$(LIB)
+	@rm -f $(REL_INC)/mpi_pm.h
+	@rm -f $(REL_INC)/hi_comm_pm.h

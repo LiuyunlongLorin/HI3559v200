@@ -1,0 +1,6 @@
+config LOSCFG_DRIVERS_BASE
+    bool "Enable Driver Base"
+    default y
+    depends on LOSCFG_DRIVERS
+    help
+      Answer Y to enable LiteOS to support driver base

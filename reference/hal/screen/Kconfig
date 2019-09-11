@@ -1,0 +1,44 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+#comment "Screen Select"
+
+menuconfig SCREEN
+	bool "SCREEN support"
+	depends on !(DASHCAM && NONESCREEN)
+
+	if SCREEN
+	choice
+		prompt "SCREEN Type"
+		config SCREEN_ST7789
+			bool "ST7789"
+			depends on (HI3556AV100 || HI3519AV100 || HI3559V200 || HI3556V200) && DEMB
+			help
+				A Small Screen use RGB Parallel Transmission
+		config SCREEN_OTA5182
+			bool "OTA5182"
+			depends on (HI3559AV100 && DEMB)
+			help
+				A Small Screen use RGB Parallel Transmission
+		config SCREEN_ST7796S_RGB16BIT
+			bool "ST7796S_RGB16BIT"
+			depends on (HI3556AV100 && REFB_ACTIONCAM) || (HI3559V200 || HI3556V200)
+			help
+				A Small Screen use RGB Parallel Transmission
+		config SCREEN_ILI8961
+			bool "ILI8961"
+			depends on HI3518EV300 && REFB_DASHCAM
+			help
+				A Small Screen use RGB Parallel Transmission
+	    config SCREEN_OTA7290B
+			bool "OTA7290B"
+			depends on (HI3556AV100 || HI3559V200 || HI3556V200) && (DASHCAM || SAMPLECAM)
+			help
+				A Small Screen usemipi Transmission
+	endchoice
+	config VERTICAL_SCREEN
+			bool "Vertical Screen"
+endif
+

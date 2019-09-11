@@ -1,0 +1,17 @@
+
+CUR_PATH:= $(shell pwd)
+SUBDIRS := gpio touchpad wifi screen gauge accelerometer ahd userproc motionsensor
+SUBDIRS_CLEAN := $(addsuffix _clean,$(SUBDIRS))
+
+.PHONY: all $(SUBDIRS) clean
+all:$(SUBDIRS)
+
+clean:$(SUBDIRS_CLEAN)
+
+$(SUBDIRS):
+	@if [ -d $@ ];then SDK_PATH=`./getsdkpath.sh $(CUR_PATH)`;\
+	make -C $@ SDK_ROOT=$$SDK_PATH OSTYPE=$$OSTYPE||exit $?;fi
+
+$(SUBDIRS_CLEAN):
+	@if [ -d $(patsubst %_clean,%,$@) ];then SDK_PATH=`./getsdkpath.sh $(CUR_PATH)`;\
+	make clean -C $(patsubst %_clean,%,$@) SDK_ROOT=$$SDK_PATH OSTYPE=$$OSTYPE||exit $?;fi

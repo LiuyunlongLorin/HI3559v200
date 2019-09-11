@@ -1,0 +1,13 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+menu "Photo Manager Configuration"
+config POST_PROCESS
+	bool "POST_PROCESS support"
+config EXIF
+	bool "EXIF support"
+config DNG
+	bool "DNG support"
+endmenu

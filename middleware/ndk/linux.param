@@ -1,0 +1,66 @@
+##############################################################################
+#Linux Compile
+include $(NDK_PATH)/../cfg.mak
+
+ifeq ($(HIARCH), $(filter $(HIARCH), hi3559av100))
+    KERNEL_NAME="linux-4.9.y"
+endif
+
+# Allocated the kernel position
+ifeq ($(MAPI_BUILD), y)
+#    ifneq ($(shell ls $(HIWORK_PATH)/dualos$(HIARCH)$(CVER)/opensource/linux), )
+#        export KERNEL_ROOT?=$(HIWORK_PATH)/dualos$(HIARCH)$(CVER)/opensource/linux/$(KERNEL_NAME)
+#    else
+        export KERNEL_ROOT?=$(OSDRV_ROOT)/opensource/kernel/$(KERNEL_NAME)
+#    endif
+else
+    export KERNEL_ROOT?=$(OSDRV_ROOT)/opensource/kernel/$(KERNEL_NAME)
+endif
+
+# Define cross compiler
+ifeq ($(LIBC),glibc)
+    ifeq ($(HIARCH), hi3559av100)
+        export CROSS_COMPILE?= aarch64-himix100-linux-
+        export CROSS?= aarch64-himix100-linux-
+    else ifeq ($(HIARCH), hi3556av100)
+        export CROSS_COMPILE?= arm-himix200-linux-
+        export CROSS?= arm-himix200-linux-
+    else ifeq ($(HIARCH), hi3519av100)
+        export CROSS_COMPILE?= arm-himix200-linux-
+        export CROSS?= arm-himix200-linux-
+    else
+        export CROSS_COMPILE?= arm-himix100-linux-
+        export CROSS?= arm-himix100-linux-
+    endif
+else
+    export CROSS_COMPILE?=arm-hisiv500-linux-
+    export CROSS?=arm-hisiv500-linux-
+endif
+
+ifeq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+    export HUTAF_LLT_WRAPPER := lltwrapper
+    export CC := $(HUTAF_LLT_WRAPPER) $(CROSS)gcc
+    export AR:=$(CROSS)ar
+else
+    export CC:=$(CROSS)gcc
+    export AR:=$(CROSS)ar
+endif
+
+#LIBS_CFLAGS += -mcpu=cortex-a53
+LIBS_CFLAGS += -fstack-protector
+
+CFLAGS += $(LIBS_CFLAGS)
+
+##############################################################################
+
+ifeq ($(MAPI_CPU_TYPE), dual)
+    export MPI_OUT_PATH := $(MPP_OUT_PATH)/linux/big-little
+else ifeq ($(MAPI_CPU_TYPE), linux)
+    export MPI_OUT_PATH := $(MPP_OUT_PATH)/linux/multi-core
+endif
+
+export REL_INC  := $(REL_PATH)/host/include
+export REL_LIB  := $(REL_PATH)/host/lib
+export REL_KO   := $(REL_PATH)/host/ko
+export REL_OBJ  := $(REL_PATH)/host/obj
+export REL_INIT := $(REL_PATH)/host/init

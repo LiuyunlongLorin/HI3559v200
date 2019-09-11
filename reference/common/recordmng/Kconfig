@@ -1,0 +1,16 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+menu "Record Manager Configuration"
+choice
+	prompt "Record Format"
+	config MP4
+		bool "MP4"
+	config TS
+		bool "TS"
+endchoice
+config SUPPORT_ASYNC_STOP
+		bool "Support Async Stop"
+endmenu

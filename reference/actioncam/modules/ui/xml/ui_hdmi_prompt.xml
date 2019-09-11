@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="HDMI_ALARM_WINDOW"
+    isusecommonskin="yes">
+
+    <!-- HDMI Alarm Window -->
+    <window
+        id="HDMI_ALARM_WINDOW"
+        top="0"
+        left="0"
+        width="1920"
+        height="1080"
+        opacity="255"
+        winlevel="15"
+        isrelease="yes"
+        normalskin="SKIN_ALARM_WINDOW"
+        onkeydown="PDT_UI_HDMI_ALARM_OnKeyDown"
+        ongesturetap="PDT_UI_HDMI_ALARM_OnGestureTap">
+
+        <groupbox
+            id="HDMI_ALARM_WINDOW_GROUPBOX"
+            top="360"
+            left="360"
+            width="1200"
+            height="360"
+            isrelease="yes"
+            normalskin="SKIN_ALARM_WINDOW_GROUPBOX">
+
+            <label
+                id="HDMI_ALARM_WINDOW_LABEL_ICON"
+                top="48"
+                left="48"
+                width="144"
+                height="144"
+                isrelease="yes"
+                normalskin="SKIN_HDMI_ALARM_WINDOW_LABEL_ICON"
+                alignment="hcenter|vcenter"/>
+
+            <label
+                id="HDMI_ALARM_WINDOW_LABEL_INFO"
+                top="192"
+                left="48"
+                width="684"
+                height="168"
+                isrelease="yes"
+                normalskin="SKIN_ALARM_WINDOW_LABEL_INFO"
+                font="FONT72"
+                text="STRING_NO_SD_CARD"
+                alignment="left|vcenter|wrap"/>
+
+        </groupbox>
+
+    </window>
+
+    <!-- HDMI DIALOG Window -->
+    <window
+        id="HDMI_DIALOG_WINDOW"
+        top="0"
+        left="0"
+        width="1920"
+        height="1080"
+        opacity="255"
+        winlevel="15"
+        isrelease="yes"
+        normalskin="SKIN_ALARM_WINDOW"
+        ongesturefling="PDT_HDMI_DIALOG_WinOnGestureFling">
+
+        <groupbox
+            id="HDMI_DIALOG_WINDOW_GROUPBOX"
+            top="320"
+            left="600"
+            width="720"
+            height="440"
+            isrelease="yes"
+            normalskin="SKIN_HDMI_DIALOG_BG">
+
+        <label
+            id="HDMI_DIALOG_WINDOW_LABEL_TITLE"
+            top="3"
+            left="120"
+            width="597"
+            height="157"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_DIALOG_TITLE"
+            font="FONT54"
+            text="STRING_DIALOG_NOTICE"
+            alignment="left|vcenter|wrap"/>
+        <label
+            id="HDMI_DIALOG_WINDOW_LABEL_SPLIT_LINE"
+            top="160"
+            left="3"
+            width="714"
+            height="3"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_DIALOG_SPLIT_LINE"/>
+        <label
+            id="HDMI_DIALOG_WINDOW_LABEL_ASK"
+            top="163"
+            left="120"
+            width="597"
+            height="177"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_DIALOG_CONTENT"
+            font="FONT30"
+            text="STRING_DIALOG_ASK"
+            alignment="left|vcenter|wrap"/>
+        <label
+            id="HDMI_DIALOG_WINDOW_LABEL_SPLIT_LINE1"
+            top="340"
+            left="3"
+            width="714"
+            height="2"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_LABEL_NORMAL"/>
+        <label
+            id="HDMI_DIALOG_WINDOW_LABEL_SPLIT_LINE2"
+            top="342"
+            left="359"
+            width="2"
+            height="95"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_LABEL_NORMAL"/>
+        <button
+            id="HDMI_DIALOG_WINDOW_BUTTON_CANCEL"
+            top="342"
+            left="3"
+            width="356"
+            height="95"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_DIALOG_BUTTON_NORMAL"
+            activeskin="SKIN_COMMON_DIALOG_BUTTON_ACTIVE"
+            font="FONT22"
+            text="STRING_CANCEL"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_UI_HDMI_DIALOG_OnKeyDown"/>
+        <button
+            id="HDMI_DIALOG_WINDOW_BUTTON_CONFIRM"
+            top="342"
+            left="361"
+            width="356"
+            height="95"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_DIALOG_BUTTON_NORMAL"
+            activeskin="SKIN_COMMON_DIALOG_BUTTON_ACTIVE"
+            font="FONT22"
+            text="STRING_CONFIRM"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_UI_HDMI_DIALOG_OnKeyDown"/>
+        </groupbox>
+    </window>
+</view>

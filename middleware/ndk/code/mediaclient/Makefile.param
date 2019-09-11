@@ -1,0 +1,33 @@
+MAPI_PARAM_FILE:=$(NDK_PATH)/Makefile.param
+include $(NDK_PATH)/code/mediaclient/OSTYPE.param
+include $(MAPI_PARAM_FILE)
+
+#*******************************************************************************
+#Set the source code and include path
+export MEDIASERVER_PATH:=$(NDK_PATH)/code/mediaserver
+export MEDIACLIENT_PATH:=$(NDK_PATH)/code/mediaclient
+
+#*******************************************************************************
+
+
+#*******************************************************************************
+#Include bvt all modules subdir INC.
+COMM_INC := -I$(MPP_HEADER_LINUX)
+COMM_INC += -I$(NDK_PATH)/code/include
+COMM_INC += -I$(NDK_PATH)/code/include/inner
+COMM_INC += -I$(IPCMSG_HEADER_LINUX)
+COMM_INC += -I$(DATAFIFO_HEADER_LINUX)
+COMM_INC += -I$(MEDIASERVER_PATH)/msg/include
+COMM_INC += -I$(MEDIASERVER_PATH)/comm/arch/$(HIARCH)
+COMM_INC += -I$(MEDIASERVER_PATH)/acap/arch/$(HIARCH)/
+COMM_INC += -I$(MEDIASERVER_PATH)/ao/arch/$(HIARCH)/
+COMM_INC += -I$(MEDIASERVER_PATH)/disp/arch/$(HIARCH)/
+COMM_INC += -I$(MEDIASERVER_PATH)/venc/arch/$(HIARCH)/
+COMM_INC += -I$(MEDIASERVER_PATH)/vcap/arch/include
+#for compatible head file include
+COMM_INC += -I$(MPP_HEADER_LITEOS)
+
+MC_CFLAGS := $(COMM_INC)
+#*******************************************************************************
+#used to mediaclient build flags.
+export MC_CFLAGS

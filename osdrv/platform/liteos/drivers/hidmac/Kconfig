@@ -1,0 +1,6 @@
+config LOSCFG_DRIVERS_HIDMAC
+    bool "Enable HIDMAC"
+    default y
+    depends on LOSCFG_DRIVERS
+    help
+      Answer Y to enable LiteOS support hidmac.

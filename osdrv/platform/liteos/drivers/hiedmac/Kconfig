@@ -1,0 +1,6 @@
+config LOSCFG_DRIVERS_HIEDMAC
+    bool "Enable HIEDMAC"
+    default n
+    depends on LOSCFG_DRIVERS && LOSCFG_PLATFORM_HI3559AV100
+    help
+      Answer Y to enable LiteOS support hiedmac.

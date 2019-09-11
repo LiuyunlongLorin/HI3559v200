@@ -1,0 +1,23 @@
+config LOSCFG_DRIVERS_MTD_SPI_NOR
+    bool "Enable MTD spi_nor flash"
+    default y
+    depends on LOSCFG_DRIVERS_MTD
+    help
+      Answer Y to support spi_nor flash.
+choice
+    depends on  LOSCFG_DRIVERS_MTD_SPI_NOR
+    prompt "SpiNorFlash Chips"
+    default LOSCFG_DRIVERS_MTD_SPI_NOR_HISFC350
+
+config LOSCFG_DRIVERS_MTD_SPI_NOR_HISFC350
+    depends on LOSCFG_PLATFORM_HI3516A || LOSCFG_PLATFORM_HI3731
+    bool "Enable hisfc350"
+    help
+      Answer Y to support hisfc350.
+
+config LOSCFG_DRIVERS_MTD_SPI_NOR_HIFMC100
+    depends on LOSCFG_PLATFORM_HI3518EV200 || LOSCFG_PLATFORM_HI3519 || LOSCFG_PLATFORM_HI3519V101 || LOSCFG_PLATFORM_HI3559  || LOSCFG_PLATFORM_HI3516CV300 || LOSCFG_PLATFORM_HI3559AV100ES || LOSCFG_PLATFORM_HI3559AV100 || LOSCFG_PLATFORM_HI3516CV500 || LOSCFG_PLATFORM_HI3516DV300 || LOSCFG_PLATFORM_HI3516EV200
+    bool "Enable hifmc100"
+    help
+      Answer Y to support hifmc100.
+endchoice

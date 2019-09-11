@@ -1,0 +1,66 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+
+HIBERRY_COMMON_INCLUDE := $(MIDDLEWARE_DIR)/common/include
+HIBERRY_OSCSVR_INCLUDE := $(MIDDLEWARE_DIR)/sample/hioscserver/include
+HIBERRY_OSCSVR_LIB := $(MIDDLEWARE_DIR)/sample/hioscserver/lib
+HIBERRY_SECURE_LIB := $(MIDDLEWARE_DIR)/common/securec/lib
+HIBERRY_SECURE_INCLUDE := $(MIDDLEWARE_DIR)/common/securec/include
+
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+
+HIBERRY_INC_DIR += $(HIBERRY_SECURE_INCLUDE) -I$(HIBERRY_COMMON_INCLUDE)  -I$(HIBERRY_OSCSVR_INCLUDE)  -I$(MEDIA_ADPT_DIR)/include
+SAMPLE_INCLUDE_DIR := $(MIDDLEWARE_DIR)/sample/oscserver/include
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+CFLAGS +=  -I$(HIBERRY_INC_DIR) -I$(SAMPLE_INCLUDE_DIR)-I$(MPP_HEADER_PATH) -I$(NDK_HEADER_PATH) -I$(NDK_HEADER_PATH)/inner -g
+
+OSCSVR_LIBS := -loscserver -lsecurec
+#MBUFFER_LIBS := -lmbuf
+
+
+CFLAGS += -L$(HIBERRY_SECURE_LIB) -L$(HIBERRY_OSCSVR_LIB)  -L$(NDK_LIB_PATH) \
+          -L$(NDK_MAPI_PATH)/component/ipcmsg/out/host \
+          -L$(NDK_MAPI_PATH)/component/datafifo/out/host -Wno-error
+TARGET_DIR := $(COMPILE_ROOT)
+
+
+COMPILE   =  $(CC) $(CFLAGS) -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TRAGET_LINUX := $(COMPILE_ROOT)/sample_oscserver
+
+.PHONY : all clean
+all:$(TRAGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^  -Wl,-Bstatic $(OSCSVR_LIBS) -Wl,-Bdynamic -lsupc++ -lpthread
+else
+CFLAGS += -L$(HUTAF_LIB_DIR)
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^  -lpthread $(OSCSVR_LIBS) $(MBUFFER_LIBS) $(HUTAF_LIBS)
+endif
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f sample_oscserver
+
+info:
+	@echo  $(OBJS)

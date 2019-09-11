@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="FILE_DIRECTORY_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="FILE_DIRECTORY_PAGE"
+        top="0"
+        left="0"
+        width="1600"
+        height="400"
+        transparent="no"
+        normalskin="SKIN_HOME_TITLE"
+        activeskin="SKIN_HOME_TITLE"
+        opacity="255"
+        winlevel="0"
+        isrelease="yes"
+        onshow="PDT_UI_FILE_DIRECTORY_OnShow"
+        onhide="PDT_UI_FILE_DIRECTORY_OnHide"
+        ontimer="PDT_UI_FILE_DIRECTORY_OnTimer"
+        onkeydown="PDT_UI_FILE_DIRECTORY_OnKeyDown"
+        ontouchaction="PDT_UI_FILE_DIRECTORY_OnTouchAction">
+
+        <listbox
+            id="FILE_DIRECTORY_LISTBOX"
+            top="64"
+            left="300"
+            width="200"
+            height="300"
+            font="FONT32"
+            isrelease="yes"
+            transparent="no"
+            normalskin="SKIN_FILE_DIRECTORY_ROW_NORMAL"
+            activeskin="SKIN_FILE_DIRECTORY_ROW_NORMAL"
+            rownormalskin="SKIN_FILE_DIRECTORY_ROW_NORMAL"
+            rowselectskin="SKIN_FILE_DIRECTORY_ROW_ACTIVE"
+            noframe="no"
+            hlineheight="1"
+            hlinecolor="0x80808080"
+            alignment="hcenter|vcenter"
+            rownum="5"
+            colnum="1"
+            datamodel="DATAMODEL_FILE_DIRECTORY"
+            scrollbar="FILE_DIRECTORY_SCROLLBAR"
+            oncellselect="PDT_UI_FILE_DIRECTORY_OnCellSelect">
+
+            <listcol
+                id="FILE_DIRECTORY_LISTBOX_ITEM"
+                coltype="text"
+                colwidth="200"
+                colbinddb="yes"
+                coldbindex="1"
+                colalignment="hcenter|vcenter"
+                fgidx="0xFFFFFFFF"
+                font="FONT32"/>
+        </listbox>
+
+    </window>
+
+</view>

@@ -1,0 +1,51 @@
+#ostype.param should be defined in sub directory for dual system
+MAPI_PARAM_FILE:=$(NDK_PATH)/Makefile.param
+include $(NDK_PATH)/code/mediaserver/OSTYPE.param
+include $(MAPI_PARAM_FILE)
+
+
+#*******************************************************************************
+#Set the source code and include path
+export MEDIASERVER_PATH:=$(NDK_PATH)/code/mediaserver
+export ARCH_PATH:=$(MEDIASERVER_PATH)/arch
+export ARCH_CHIP:=$(MEDIASERVER_PATH)/arch/$(HIARCH)
+
+#*******************************************************************************
+
+
+#*******************************************************************************
+#Include all modules subdir INC.
+COMM_INC := -I$(MPP_HEADER_LITEOS)
+COMM_INC += -I$(NDK_PATH)/code/include
+COMM_INC += -I$(NDK_PATH)/code/include/inner
+COMM_INC += -I$(ARCH_PATH)/include
+COMM_INC += -I$(OSAL_HEADER_LITEOS)
+COMM_INC += -I$(SENSOR_CFG_PATH)/include
+COMM_INC += -I$(IPCMSG_HEADER_LITEOS)
+COMM_INC += -I$(DATAFIFO_HEADER_LITEOS)
+COMM_INC += -I$(MEDIASERVER_PATH)/msg/include
+COMM_INC += -I$(MEDIASERVER_PATH)/comm/arch/$(HIARCH)
+COMM_INC += -I$(MEDIASERVER_PATH)/utils
+COMM_INC += -I$(MEDIASERVER_PATH)/configs/sensor/include
+COMM_INC += -I$(MEDIASERVER_PATH)/acap/arch/$(HIARCH)
+COMM_INC += -I$(MEDIASERVER_PATH)/ao/arch/$(HIARCH)
+COMM_INC += -I$(MEDIASERVER_PATH)/disp/arch/$(HIARCH)
+COMM_INC += -I$(MEDIASERVER_PATH)/venc/arch/$(HIARCH)
+COMM_INC += -I$(MEDIASERVER_PATH)/configs/sensor/$(HIARCH)/include
+COMM_INC += -I$(MEDIASERVER_PATH)/vcap/arch/include
+COMM_INC += -I$(NDK_PATH)/code/mediaserver/adapt/gyro/include
+COMM_INC += -I$(DIS_CFG_PATH)/include
+
+ifeq ($(CFG_SUPPORT_GYRO), y)
+COMM_INC += -I$(MOTIONSENSOR_CHIP_HEADER)
+COMM_INC += -I$(MOTIONSENSOR_MNG_HEADER)
+COMM_INC += -I$(MOTIONSENSOR_HEADER)
+endif
+
+
+
+MS_CFLAGS := $(COMM_INC)
+
+#*******************************************************************************
+#used to mediaserver build flags.
+export MS_CFLAGS

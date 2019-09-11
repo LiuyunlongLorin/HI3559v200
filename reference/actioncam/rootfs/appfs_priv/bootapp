@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# set lib path
+LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:/app/lib"
+export LD_LIBRARY_PATH
+
+#set core dump parameter
+ulimit -c unlimited
+#echo "/app/sd/core.%e-%p-%t"> /proc/sys/kernel/core_pattern
+
+#load ko
+cd /app/komod
+./load_module
+
+#start application
+cd /app/bin
+./main_app &

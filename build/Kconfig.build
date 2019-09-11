@@ -1,0 +1,89 @@
+#
+# For a description of the syntax of this configuration file,
+# see build/scripts/Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Build Configuration"
+
+menu "Build Configure"
+	config SOFT_VERSION
+		string "software verison"
+	config DEVICE_MODEL
+		string "device model"
+	choice
+		prompt "Build Type"
+		default DEBUG
+		config DEBUG
+			bool "debug"
+		config RELEASE
+			bool "release"
+	endchoice
+	choice
+		prompt "Log Level"
+		depends on DEBUG
+		default LOG_LEVEL_DEBUG
+		config LOG_LEVEL_ERR
+			bool "ERROR"
+		config LOG_LEVEL_DEBUG
+			bool "DEBUG"
+	endchoice
+	config TIMESTAMP_ON
+		bool "Time Measure"
+	config PQT_SUPPORT_ON
+		bool "PQTool Support(Reference)"
+		depends on DEBUG
+		config PQT_STREAM_SUPPORT_ON
+			bool "PQTool Support(pq_stream)"
+			depends on PQT_SUPPORT_ON
+	config ISP_OSD_SUPPORT_ON
+		bool "ISP Info in OSD Support"
+		depends on DEBUG
+	config COREDUMP_ON
+		bool "Coredump"
+		depends on DEBUG
+	choice
+		prompt "Rootfs Type"
+		config ROOTFS_JFFS2
+			depends on !EMMC
+			bool "jffs2"
+		config ROOTFS_SQUASHFS
+			depends on SPINOR
+			bool "squashfs"
+		config ROOTFS_UBIFS
+			depends on !EMMC
+			bool "ubi"
+		config ROOTFS_YAFFS
+			depends on !EMMC
+			bool "yaffs"
+		config ROOTFS_EXT4
+			depends on EMMC
+			bool "ext4"
+	endchoice
+	config ROOTFS_EXT4_PARTSIZE
+		depends on ROOTFS_EXT4
+		string "rootfs ext4 partition size(M)"
+	choice
+		prompt "Appfs Type"
+		config APPFS_JFFS2
+			depends on !EMMC
+			bool "jffs2"
+		config APPFS_UBIFS
+			depends on !EMMC
+			bool "ubi"
+		config APPFS_YAFFS
+			depends on !EMMC
+			bool "yaffs"
+		config APPFS_EXT4
+			depends on EMMC
+			bool "ext4"
+	endchoice
+	config APPFS_EXT4_PARTSIZE
+		depends on APPFS_EXT4
+		string "appfs ext4 partition size(M)"
+	config EMMC_STORAGE_BLK_NO
+		depends on EMMC
+		string "emmc storage device block no(0,...)"
+	config EMMC_STORAGE_PART_NO
+		depends on EMMC
+		string "emmc storage partition no(1,...)"
+endmenu
+

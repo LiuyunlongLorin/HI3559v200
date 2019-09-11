@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+id="MAIN_WIN"
+isusecommonskin="yes">
+    <window
+    id="MAIN_WIN"
+    top="0"
+    left="0"
+    width="320"
+    height="240"
+    normalskin="group_skin"
+    isrelease="yes"
+    opacity="255"
+    winlevel="0"
+    >
+
+        <label
+        id="MAIN_WIN_LABEL1"
+        top="0"
+        left="0"
+        width="320"
+        height="35"
+        isrelease="yes"
+        islanchange="no"
+        normalskin="win_title_skin"
+        focusmode="auto"
+        widgetposmirror="no"
+        widgetinteriormirror="no"
+        leftmargin="0"
+        topmargin="0"
+        rightmargin="0"
+        bottommargin="0"
+        transparent="no"
+        isskinforcedraw="no"
+        font="simhei_font_text_20"
+        alignment="hcenter|vcenter"
+        isnofocus="no"
+        text="STR_HIGV_SAMPLE"/>
+
+        <scrollbar
+        id="MAIN_WIN_LISTBOX1_ITEM_SCEOLLBAR"
+        top="35"
+        left="310"
+        width="10"
+        height="205"
+        isrelease="yes"
+        normalskin="common_skin"
+        slidres="scorllbar_res_skin"
+        sliddircet="vertical"
+        downarrownormal=""
+        uparrowpress=""
+        downarrowpress=""
+        alignment="hcenter|vcenter"
+        uparrownormal=""
+        />
+
+        <listbox
+            id="MAIN_WIN_LISTBOX1"
+            top="35"
+            left="0"
+            width="310"
+            height="205"
+            isrelease="yes"
+            islanchange="no"
+            scrollbar="MAIN_WIN_LISTBOX1_ITEM_SCEOLLBAR"
+            normalskin="list_normal_skin"
+            activeskin="list_active_skin"
+            font="simhei_font_text_20"
+            widgetposmirror="no"
+            widgetinteriormirror="no"
+            leftmargin="0"
+            topmargin="0"
+            rightmargin="0"
+            bottommargin="0"
+            transparent="no"
+            isskinforcedraw="no"
+            alignment="hcenter|vcenter"
+            isnofocus="no"
+            rownum="4"
+            colnum="1"
+            datamodel="ADM_SET_STRINGID"
+            hlineheight="1"
+            vlinewidth="0"
+            hlinecolor="0xFF000000"
+            ismousehighlight="no"
+            iscellactive="no"
+            scroll="yes"
+            timeinterval="0"
+            fromleft="no"
+            noframe="no"
+            rowselectskin="mainwin_listbox_select_skin"
+            rownormalskin="mainwin_listbox_row_normal"
+            onselect="Main_Win_Listbox1_OnSelect"
+            oncellselect="Main_Win_Listbox1_OnCellSelect">
+            <listcol
+                id="MAIN_WIN_LISTBOX1_LISTCOL1"
+                coltype="text"
+                colwidth="310"
+                colbinddb="yes"
+                coldbindex="0"
+                colalignment="hcenter|vcenter"
+                fgidx="0"
+                />
+
+            </listbox>
+    </window>
+</view>

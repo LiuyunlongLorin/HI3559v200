@@ -1,0 +1,487 @@
+<language
+    id = "language"
+    languageinfo = "en:english;zh:chinese;"
+    locale = "zh">
+
+    <!-- Mode Page -->
+    <lanstr
+        id="STRING_WORK_MODE"
+        en="Work Mode"
+        zh="工作模式"/>
+    <lanstr
+        id="STRING_PHOTO_NORMAL"
+        en="Photo"
+        zh="单拍"/>
+    <lanstr
+        id="STRING_PHOTO_DELAY"
+        en="Delay"
+        zh="延时拍照"/>
+    <lanstr
+        id="STRING_MULTI_BURST"
+        en="Burst"
+        zh="多拍"/>
+    <lanstr
+        id="STRING_MULTI_LAPSE"
+        en="Lapse"
+        zh="缩时拍照"/>
+    <lanstr
+        id="STRING_RECORD_NORMAL"
+        en="Normal"
+        zh="普通录像"/>
+    <lanstr
+        id="STRING_RECORD_LOOP"
+        en="Loop"
+        zh="循环录像"/>
+    <lanstr
+        id="STRING_RECORD_LAPSE"
+        en="RecLpse"
+        zh="缩时录像"/>
+    <lanstr
+        id="STRING_RECORD_SLOW"
+        en="Slow"
+        zh="慢速录像"/>
+    <lanstr
+        id="STRING_RECORD_SNAP"
+        en="RecSnap"
+        zh="录中拍"/>
+
+    <!-- Quick Page -->
+    <lanstr
+        id="STRING_QUICK_TITLE"
+        en="Quick Page"
+        zh="快捷界面"/>
+    <lanstr
+        id="STRING_FILELIST"
+        en="Filelist"
+        zh="相册"/>
+    <lanstr
+        id="STRING_WIFI"
+        en="WiFi"
+        zh="WiFi"/>
+    <lanstr
+        id="STRING_POWER_OFF"
+        en="ShutDown"
+        zh="关机"/>
+    <lanstr
+        id="STRING_LOCK_SCREEN"
+        en="Lock"
+        zh="锁屏"/>
+
+    <!-- Filelist Page -->
+    <lanstr
+        id="STRING_FILELIST_INFO"
+        en="File List"
+        zh="相册"/>
+
+    <!-- Dialog -->
+    <lanstr
+        id="STRING_DIALOG_NOTICE"
+        en="Notice"
+        zh="注意"/>
+    <lanstr
+        id="STRING_DIALOG_ASK"
+        en="Are you sure?"
+        zh="确定吗?"/>
+    <lanstr
+        id="STRING_DIALOG_Delete_ASK"
+        en="Are you sure delete files?"
+        zh="确定要删除文件吗?"/>
+    <lanstr
+        id="STRING_CANCEL"
+        en="Cancel"
+        zh="取消"/>
+    <lanstr
+        id="STRING_CONFIRM"
+        en="Confirm"
+        zh="确定"/>
+
+    <!-- Playback Page -->
+    <lanstr
+        id="STRING_PLAYBACK_SPEED"
+        en="x1"
+        zh="x1"/>
+
+    <!-- Set Page -->
+    <lanstr
+        id="STRING_MODE_SINGLE_PHOTO"
+        en="SingSnap"
+        zh="单拍"/>
+    <lanstr
+        id="STRING_MODE_DELAY_PHOTO"
+        en="DlaySnap"
+        zh="延时拍照"/>
+    <lanstr
+        id="STRING_MODE_LAPSE_PHOTO"
+        en="LpseSnap"
+        zh="缩时拍照"/>
+    <lanstr
+        id="STRING_MODE_BURST"
+        en="BurstSnap"
+        zh="多拍"/>
+    <lanstr
+        id="STRING_MODE_NORM_REC"
+        en="NormRec"
+        zh="普通录像"/>
+    <lanstr
+        id="STRING_MODE_LOOP_REC"
+        en="LoopRec"
+        zh="循环录像"/>
+    <lanstr
+        id="STRING_MODE_LAPSE_REC"
+        en="LpseRec"
+        zh="缩时录像"/>
+    <lanstr
+        id="STRING_MODE_SLOW_REC"
+        en="SlowRec"
+        zh="慢速录像"/>
+    <lanstr
+        id="STRING_MODE_RECSNAP"
+        en="RecSnap"
+        zh="录中拍"/>
+
+    <lanstr
+        id="STRING_SET_INFO"
+        en="Settings"
+        zh="设置"/>
+    <lanstr
+        id="STRING_MEDIA"
+        en="Media"
+        zh="媒体"/>
+    <lanstr
+        id="STRING_POWERON_ACTIONS"
+        en="Power On Actions"
+        zh="开机行为"/>
+    <lanstr
+        id="STRING_SYSTEM_DORMANT"
+        en="System Dormant"
+        zh="系统休眠"/>
+    <lanstr
+        id="STRING_SCREEN_DORMANT"
+        en="Screen Dormant"
+        zh="屏幕休眠"/>
+    <lanstr
+        id="STRING_FORMAT_SD"
+        en="Format SD"
+        zh="格式化存储卡"/>
+    <lanstr
+        id="STRING_RESET_SYSTEM"
+        en="Reset System"
+        zh="恢复出厂设置"/>
+    <lanstr
+        id="STRING_DEBUG"
+        en="Debug"
+        zh="Debug"/>
+    <lanstr
+        id="STRING_LANGUAGE"
+        en="Language"
+        zh="语言"/>
+    <lanstr
+        id="STRING_ABOUT"
+        en="About"
+        zh="关于"/>
+
+    <lanstr
+        id="STRING_RESOLUTION"
+        en="Resolution"
+        zh="分辨率"/>
+    <lanstr
+        id="STRING_SCENE"
+        en="Scene"
+        zh="场景"/>
+
+    <lanstr
+        id="STRING_OUTPUT_FORMAT"
+        en="Output Format"
+        zh="输出格式"/>
+    <lanstr
+        id="STRING_DELAY_TIME"
+        en="Delay Time"
+        zh="倒计时"/>
+    <lanstr
+        id="STRING_LAPSE_INTERVAL"
+        en="Lapse Interval"
+        zh="缩时间隔"/>
+    <lanstr
+        id="STRING_BUTST_TYPE"
+        en="Burst Type"
+        zh="多拍类型"/>
+    <lanstr
+        id="STRING_AUDIO"
+        en="Audio"
+        zh="录像音频"/>
+    <lanstr
+        id="STRING_VIDEO_ENCODE"
+        en="Video Encode"
+        zh="编码类型"/>
+    <lanstr
+        id="STRING_LOOP_TIME"
+        en="Loop Time"
+        zh="循环时长"/>
+    <lanstr
+        id="STRING_EXPOSURE_EV"
+        en="Exposure EV"
+        zh="曝光补偿"/>
+    <lanstr
+        id="STRING_EXPOSURE_TIME"
+        en="Exposure Time"
+        zh="曝光时间"/>
+    <lanstr
+        id="STRING_ISO"
+        en="ISO"
+        zh="感光度"/>
+    <lanstr
+        id="STRING_WB"
+        en="WB"
+        zh="白平衡"/>
+    <lanstr
+        id="STRING_METER"
+        en="Meter"
+        zh="测光模式"/>
+    <lanstr
+        id="STRING_OSD"
+        en="OSD"
+        zh="水印信息"/>
+    <lanstr
+        id="STRING_DIS"
+        en="DIS"
+        zh="数码防抖"/>
+    <lanstr
+        id="STRING_LDC"
+        en="LDC"
+        zh="畸变校正"/>
+    <lanstr
+        id="STRING_VOLUME"
+        en="Volume"
+        zh="音量"/>
+    <lanstr
+        id="STRING_KEYTONE"
+        en="Key Tone"
+        zh="按键音"/>
+    <lanstr
+        id="STRING_ON"
+        en="ON"
+        zh="开"/>
+    <lanstr
+        id="STRING_OFF"
+        en="OFF"
+        zh="关"/>
+    <lanstr
+        id="STRING_H264"
+        en="H264"
+        zh="H264" />
+    <lanstr
+        id="STRING_H265"
+        en="H265"
+        zh="H265" />
+
+    <!-- Set Page, from ini -->
+    <lanstr
+        id="STRING_AUTO"
+        en="AUTO"
+        zh="自动"/>
+    <lanstr
+        id="STRING_LL"
+        en="LL"
+        zh="超级夜景"/>
+    <lanstr
+        id="STRING_CENTER"
+        en="Center"
+        zh="中心测光"/>
+    <lanstr
+        id="STRING_AVERAGE"
+        en="Average"
+        zh="平均测光"/>
+    <lanstr
+        id="STRING_SPOT"
+        en="Spot"
+        zh="点测光"/>
+    <lanstr
+        id="STRING_EN"
+        en="English"
+        zh="English"/>
+    <lanstr
+        id="STRING_ZH"
+        en="中文"
+        zh="中文"/>
+    <lanstr
+        id="STRING_IDLE"
+        en="IDLE"
+        zh="预览"/>
+    <lanstr
+        id="STRING_1MIN"
+        en="1Min"
+        zh="1分钟"/>
+    <lanstr
+        id="STRING_3MIN"
+        en="3Min"
+        zh="3分钟"/>
+    <lanstr
+        id="STRING_5MIN"
+        en="5Min"
+        zh="5分钟"/>
+    <lanstr
+        id="STRING_10MIN"
+        en="10Min"
+        zh="10分钟"/>
+    <lanstr
+        id="STRING_500MS"
+        en="0.5S"
+        zh="0.5秒"/>
+    <lanstr
+        id="STRING_1S"
+        en="1S"
+        zh="1秒"/>
+    <lanstr
+        id="STRING_2S"
+        en="2S"
+        zh="2秒"/>
+    <lanstr
+        id="STRING_3S"
+        en="3S"
+        zh="3秒"/>
+    <lanstr
+        id="STRING_5S"
+        en="5S"
+        zh="5秒"/>
+    <lanstr
+        id="STRING_10S"
+        en="10S"
+        zh="10秒"/>
+    <lanstr
+        id="STRING_20S"
+        en="20S"
+        zh="20秒"/>
+    <lanstr
+        id="STRING_30S"
+        en="30S"
+        zh="30秒"/>
+    <lanstr
+        id="STRING_60S"
+        en="60S"
+        zh="60秒"/>
+    <lanstr
+        id="STRING_3000K"
+        en="3000K"
+        zh="3000K"/>
+    <lanstr
+        id="STRING_6500K"
+        en="6500K"
+        zh="6500K"/>
+    <!-- Prompt -->
+    <lanstr
+        id="STRING_NO_SD_CARD"
+        en="No SD Card!"
+        zh="没有存储卡!"/>
+    <lanstr
+        id="STRING_SD_ERROR"
+        en="SD Error!"
+        zh="存储卡错误!"/>
+    <lanstr
+        id="STRING_SD_ERROR_FORMAT"
+        en="Please format SD card!"
+        zh="请格式化存储卡!"/>
+    <lanstr
+        id="STRING_SD_ERROR_PLUG"
+        en="Please plug SD card!"
+        zh="请插拔存储卡!"/>
+    <lanstr
+        id="STRING_SD_CHANGE"
+        en="Please change another SD card!"
+        zh="请更换存储卡!"/>
+    <lanstr
+        id="STRING_SD_PREPARING"
+        en="SD is preparing!"
+        zh="正在准备存储卡中!"/>
+    <lanstr
+        id="STRING_SD_FULL"
+        en="SD Full!"
+        zh="存储卡满!"/>
+    <lanstr
+        id="STRING_LOW_BATTERY"
+        en="Low Battery!"
+        zh="低电量!"/>
+    <lanstr
+        id="STRING_ULTRALOW_BATTERY"
+        en="Ultralow Battery!"
+        zh="超低电量!"/>
+    <lanstr
+        id="STRING_VOLUME_MINUS"
+        en="-"
+        zh="-"/>
+    <lanstr
+        id="STRING_VOLUME_PLUS"
+        en="+"
+        zh="+"/>
+
+    <!-- Format sd -->
+    <lanstr
+        id="STRING_FORMAT_SD_AT_ONCE"
+        en="Format SD at once?"
+        zh="确定要格式化存储卡吗?"/>
+
+    <lanstr
+        id="STRING_QUICK_FORMAT_SD"
+        en="Quick format?"
+        zh="快速格式化?"/>
+
+    <lanstr
+        id="STRING_QUICK_FORMATING"
+        en="Formating,Don't power off!"
+        zh="正在格式化..."/>
+
+    <!-- Upgrade -->
+    <lanstr
+        id="STRING_UPGRADE_AT_ONCE"
+        en="Do you want to upgrade now?"
+        zh="确定要升级系统吗?"/>
+
+    <lanstr
+        id="STRING_UPGRADE_SUCCESS"
+        en="Upgrade success!"
+        zh="升级成功!"/>
+
+    <lanstr
+        id="STRING_UPGRADE_FAILURE"
+        en="Upgrade failed!"
+        zh="升级失败!"/>
+
+    <lanstr
+        id="STRING_UPGRADE_MODE"
+        en="Start firmware upgrade!"
+        zh="进入升级模式！"/>
+
+    <!-- Reset Factory -->
+    <lanstr
+        id="STRING_RESET_FACTORY_AT_ONCE"
+        en="Reset factory at once?"
+        zh="确定要恢复出厂设置吗?"/>
+    <lanstr
+        id="STRING_SET_DATE"
+        en="Set Date"
+        zh="日期"/>
+    <lanstr
+        id="STRING_SET_TIME"
+        en="Set Time"
+        zh="时间"/>
+    <lanstr
+        id="STRING_USB_MODE"
+        en="USB Mode"
+        zh="USB模式"/>
+    <lanstr
+        id="STRING_USB_CHARGE"
+        en="CHARGE"
+        zh="仅充电"/>
+    <lanstr
+        id="STRING_USB_UVC"
+        en="USB Video"
+        zh="USB摄像头"/>
+    <lanstr
+        id="STRING_USB_SRORAGE"
+        en="USB Storage"
+        zh="USB存储"/>
+    <!-- Hdmi home -->
+    <lanstr
+        id="STRING_HDMI_HOME_NOTIC"
+        en="Press 'Enter' key to enter filelist."
+        zh="按“确认”键进入相册。"/>
+</language>

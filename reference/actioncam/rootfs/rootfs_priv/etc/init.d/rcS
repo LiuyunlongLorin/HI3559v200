@@ -1,0 +1,11 @@
+#! /bin/sh
+
+/bin/mount -a
+for initscript in /etc/init.d/S[0-9][0-9]*
+do
+	if [ -x $initscript ] ;
+	then
+		$initscript
+	fi
+done
+

@@ -1,0 +1,21 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+#comment "File Manager Configuration"
+
+choice
+	prompt "File Management Rule"
+	help
+		Select File Management Rule
+
+	config DCF
+		bool "DCF"
+		help
+			Design rule for Camera File system
+	config DTCF
+		bool "DTCF"
+		help
+			Date-Time rule for Camera File system
+endchoice

@@ -1,0 +1,19 @@
+ifeq ($(EXTDRV_PARAM_FILE), ) 
+    EXTDRV_PARAM_FILE:=../Makefile.param
+    include $(EXTDRV_PARAM_FILE)
+endif
+
+# Sensor Type: BMI160/ICM20690
+SENSOR0_TYPE ?= BMI160
+
+# Transfer Type: I2C
+export TRANSFER_TYPE := I2C
+
+MAIN_DIR := $(PWD)/Main
+DEV_DIR  := $(PWD)/SensorDev
+PUB_DIR  := $(PWD)/pub
+PROC_DIR := $(PWD)/proc
+TRANSFER_DIR := $(PWD)/TransferType
+TEST_DIR := $($(PWD))/test
+
+

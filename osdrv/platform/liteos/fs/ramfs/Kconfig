@@ -1,0 +1,6 @@
+config LOSCFG_FS_RAMFS
+    bool "Enable RAMFS"
+    default y
+    depends on LOSCFG_FS_VFS && LOSCFG_DEBUG_VERSION
+    help
+      Answer Y to enable LiteOS support ramfs filesystem.

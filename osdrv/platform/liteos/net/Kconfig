@@ -1,0 +1,34 @@
+menu "Net"
+#config LOSCFG_NET_LWIP
+#   bool "Enable Lwip"
+#   default y
+
+#   help
+#     extend kernel include runstop, dynload, scatter and cppsupport.
+#     It can support all or some.
+
+config LOSCFG_NET_LWIP_SACK
+    bool "Enable Lwipsack"
+    default y
+
+    help
+      Answer Y to enable LiteOS support lwip.
+
+#config LOSCFG_NET_MAC
+#   bool "Enable Mac"
+#   default y
+
+#   help
+#     If you wish to build LiteOS with support for dynamic load.
+
+config LOSCFG_NET_WPA
+    bool "Enable Wpa"
+    default y
+    depends on LOSCFG_NET_LWIP_SACK
+    help
+      Answer Y to enable LiteOS support wpa.
+
+endmenu
+
+
+

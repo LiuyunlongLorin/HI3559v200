@@ -1,0 +1,18 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Device Configuration"
+
+menuconfig GSENSOR
+	bool "GSENSOR support"
+
+if GSENSOR
+	choice
+		prompt "GSENSOR Type"
+		config GSENSOR_MC3416
+			bool "MC3416"
+			depends on !HI3559AV100
+	endchoice
+endif
+

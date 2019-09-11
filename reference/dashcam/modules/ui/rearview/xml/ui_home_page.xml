@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="HOME_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="HOME_PAGE"
+        top="0"
+        left="0"
+        width="1600"
+        height="400"
+        transparent="yes"
+        opacity="255"
+        winlevel="0"
+        isrelease="yes"
+        onshow="PDT_UI_HOME_OnShow"
+        onhide="PDT_UI_HOME_OnHide"
+        ontimer="PDT_UI_HOME_OnTimer"
+        onevent="PDT_UI_HOME_OnEvent"
+        onkeydown="PDT_UI_HOME_OnKeyDown"
+        onkeyup="PDT_UI_HOME_OnKeyUp"
+        ongesturefling="PDT_UI_HOME_OnGestureFling"
+        ongesturetap="PDT_UI_HOME_OnGestureTap"
+        ongesturelongtap="PDT_UI_HOME_OnGestureLongTap"
+        ongesturescroll="PDT_UI_HOME_OnGestureScroll"
+        ontouchaction="PDT_UI_HOME_OnTouchAction">
+
+
+        <button
+            id="HOME_BUTTON_RECORD_FLAG"
+            top="0"
+            left="100"
+            width="64"
+            height="64"
+            isrelease="yes"
+            normalskin="SKIN_HOME_RECORD_NORMAL"
+            alignment="hcenter|vcenter"/>
+
+
+        <groupbox
+            id="HOME_GROUP_TITLE"
+            top="0"
+            left="164"
+            width="1336"
+            height="64"
+            isrelease="yes"
+            normalskin="SKIN_HOME_PAGE_TITLE">
+
+            <label
+                id="HOME_LABEL_RECORD_STATE"
+                top="0"
+                left="0"
+                width="240"
+                height="64"
+                font="FONT32"
+                isrelease="yes"
+                transparent="yes"
+                alignment="left|vcenter"
+                normalskin="SKIN_WINDOW_TITLE"/>
+
+            <label
+                id="HOME_LABEL_TIME"
+                top="0"
+                left="440"
+                width="560"
+                height="64"
+                font="FONT32"
+                isrelease="yes"
+                transparent="yes"
+                alignment="hcenter|vcenter"
+                normalskin="SKIN_WINDOW_TITLE"/>
+
+            <button
+                id="HOME_BUTTON_PHONE"
+                top="0"
+                left="1020"
+                width="64"
+                height="64"
+                isrelease="yes"
+                normalskin="SKIN_HOME_PHONE"
+                alignment="hcenter|vcenter"/>
+
+            <button
+                id="HOME_BUTTON_WIFI"
+                top="0"
+                left="1094"
+                width="64"
+                height="64"
+                isrelease="yes"
+                normalskin="SKIN_HOME_WIFI_OFF"
+                alignment="hcenter|vcenter"/>
+
+            <button
+                id="HOME_BUTTON_MIC"
+                top="0"
+                left="1178"
+                width="64"
+                height="64"
+                isrelease="yes"
+                normalskin="SKIN_HOME_MIC_ON"
+                alignment="hcenter|vcenter"/>
+
+            <button
+                id="HOME_BUTTON_BATTERY"
+                top="0"
+                left="1252"
+                width="64"
+                height="64"
+                isrelease="yes"
+                normalskin="SKIN_HOME_BUTTON_BATTERY"
+                alignment="hcenter|vcenter"/>
+
+            <progressbar
+                id="HOME_PROGRESSBAR_BATTERY"
+                top="20"
+                left="1261"
+                width="42"
+                height="24"
+                isrelease="yes"
+                rangemax="100"
+                rangemin="0"
+                normalskin="SKIN_HOME_PROGRESSBAR_BATTERY"
+                activeskin="SKIN_HOME_PROGRESSBAR_BATTERY"
+                fillskin="SKIN_HOME_PROGRESSBAR_BATTERY_FILL" />
+
+
+            <button
+                id="HOME_BUTTON_BATTERY_CHARGE"
+                top="20"
+                left="1262"
+                width="42"
+                height="22"
+                isrelease="yes"
+                normalskin="SKIN_HOME_BUTTON_BATTERY_CHARGE"
+                alignment="hcenter|vcenter"/>
+
+        </groupbox>
+
+        <button
+            id="HOME_BUTTON_PHOTO_TAKE"
+            top="300"
+            left="770"
+            width="64"
+            height="64"
+            isrelease="yes"
+            normalskin="SKIN_HOME_TAKE_PHOTO"
+            font="FONT32"
+            alignment="hcenter|vcenter"/>
+
+        <progressbar
+            id="HOME_EMR_PROGRESS"
+            top="380"
+            left="0"
+            width="1600"
+            height="20"
+            normalskin="SKIN_WINDOW"
+            activeskin="SKIN_WINDOW"
+            isrelease="yes"
+            step="1"
+            rangemax="100"
+            rangemin="0"
+            fillskin="SKIN_WINDOW_YELLOW"/>
+
+    </window>
+</view>

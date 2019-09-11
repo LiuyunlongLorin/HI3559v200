@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="HOME_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="HOME_PAGE"
+        top="0"
+        width="320"
+        height="240"
+        normalskin="SKIN_WINDOW"
+        opacity="255"
+        winlevel="0"
+        transparent="yes"
+        isrelease="yes"
+        onshow="PDT_UI_HOME_OnShow"
+        onhide="PDT_UI_HOME_OnHide"
+        ontimer="PDT_UI_HOME_OnTimer"
+        onevent="PDT_UI_HOME_OnEvent"
+        onkeydown="PDT_UI_HOME_OnKeyDown"
+        onkeyup="PDT_UI_HOME_OnKeyUp"
+        ongesturefling="PDT_UI_HOME_OnGestureFling"
+        ongesturetap="PDT_UI_HOME_OnGestureTap"
+        ongesturelongtap="PDT_UI_HOME_OnGestureLongTap"
+        ongesturescroll="PDT_UI_HOME_OnGestureScroll"
+        ontouchaction="PDT_UI_HOME_OnTouchAction">
+
+        <groupbox
+            id="HOME_GROUPBOX_TITLE_ABOVE"
+            top="0"
+            left="0"
+            width="320"
+            height="32"
+            isrelease="yes"
+            normalskin="SKIN_HOME_GROUPBOX_TITLE">
+
+            <button
+                id="HOME_BUTTON_VIDEO"
+                top="0"
+                left="0"
+                width="32"
+                height="32"
+                isrelease="yes"
+                normalskin="SKIN_HOME_BUTTON_VIDEO"
+                alignment="hcenter|vcenter"/>
+
+            <label
+                id="HOME_LABEL_VIDEO"
+                top="0"
+                left="34"
+                width="78"
+                height="32"
+                isrelease="yes"
+                font="FONT18B"
+                text="STRING_HOME_VIDEO_OFF"
+                alignment="left|vcenter"
+                transparent="yes"
+                normalskin="SKIN_HOME_GROUPBOX_TITLE"/>
+
+            <label
+                id="HOME_LABEL_SYS_TIME"
+                top="0"
+                left="112"
+                width="76"
+                height="32"
+                isrelease="yes"
+                font="FONT18B"
+                text=""
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_HOME_GROUPBOX_TITLE"/>
+
+            <button
+                id="HOME_BUTTON_PHONE"
+                top="0"
+                left="190"
+                width="32"
+                height="32"
+                isrelease="yes"
+                normalskin="SKIN_HOME_PHONE"
+                alignment="hcenter|vcenter"/>
+
+            <button
+                id="HOME_BUTTON_AUDIO"
+                top="0"
+                left="222"
+                width="32"
+                height="32"
+                isrelease="yes"
+                normalskin="SKIN_HOME_BUTTON_AUDIO_OFF"
+                alignment="hcenter|vcenter"/>
+
+            <button
+                id="HOME_BUTTON_WIFI"
+                top="0"
+                left="254"
+                width="32"
+                height="32"
+                isrelease="yes"
+                normalskin="SKIN_HOME_BUTTON_WIFI_OFF"
+                alignment="hcenter|vcenter"/>
+
+            <button
+                id="HOME_BUTTON_BATTERY"
+                top="0"
+                left="286"
+                width="32"
+                height="32"
+                isrelease="yes"
+                normalskin="SKIN_HOME_BUTTON_BATTERY"
+                alignment="hcenter|vcenter"/>
+
+            <progressbar
+                id="HOME_PROGRESSBAR_BATTERY"
+                top="11"
+                left="292"
+                width="19"
+                height="10"
+                isrelease="yes"
+                rangemax="100"
+                rangemin="0"
+                normalskin="SKIN_HOME_PROGRESSBAR_BATTERY"
+                activeskin="SKIN_HOME_PROGRESSBAR_BATTERY"
+                fillskin="SKIN_HOME_PROGRESSBAR_BATTERY_FILL" />
+
+            <button
+                id="HOME_BUTTON_BATTERY_CHARGE"
+                top="10"
+                left="291"
+                width="21"
+                height="11"
+                isrelease="yes"
+                normalskin="SKIN_HOME_BUTTON_BATTERY_CHARGE"
+                alignment="hcenter|vcenter"/>
+
+
+        </groupbox>
+
+        <groupbox
+            id="HOME_GROUPBOX_TITLE_BELOW"
+            top="208"
+            left="0"
+            width="320"
+            height="32"
+            isrelease="yes"
+            normalskin="SKIN_HOME_GROUPBOX_TITLE">
+
+            <label
+                id="HOME_LABEL_EMR"
+                top="0"
+                left="5"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18B"
+                text="STRING_HOME_EMR"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_HOME_GROUPBOX_TITLE"/>
+
+            <label
+                id="HOME_LABEL_ALBUM"
+                top="0"
+                left="110"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18B"
+                text="STRING_ALBUM"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_HOME_GROUPBOX_TITLE"/>
+
+            <label
+                id="HOME_LABEL_SETTINGS"
+                top="0"
+                left="220"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18B"
+                text="STRING_SET_INFO"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_HOME_GROUPBOX_TITLE"/>
+
+        </groupbox>
+
+        <progressbar
+            id="HOME_EMR_PROGRESS"
+            top="188"
+            left="0"
+            width="320"
+            height="20"
+            normalskin="SKIN_HOME_GROUPBOX_TITLE"
+            activeskin="SKIN_HOME_GROUPBOX_TITLE"
+            isrelease="yes"
+            step="1"
+            rangemax="100"
+            rangemin="0"
+            fillskin="SKIN_WINDOW_YELLOW"/>
+
+    </window>
+</view>

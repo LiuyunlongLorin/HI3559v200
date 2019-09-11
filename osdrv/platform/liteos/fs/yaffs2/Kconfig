@@ -1,0 +1,13 @@
+config LOSCFG_FS_YAFFS
+    bool "Enable YAFFS2"
+    default y
+    depends on LOSCFG_FS_VFS
+    help
+      Answer Y to enable LiteOS support yaffs2 filesystem.
+
+#config LOSCFG_FS_YAFFS_CACHE
+#   bool "Enable YAFFS2 Cache"
+#   default y
+#   depends on LOSCFG_FS_YAFFS
+#   help
+#     Answer y to support for yaffs2 cache.

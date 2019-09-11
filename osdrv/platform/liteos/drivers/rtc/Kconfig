@@ -1,0 +1,6 @@
+config LOSCFG_DRIVERS_RTC
+    bool "Enable RTC"
+    default y
+    depends on LOSCFG_DRIVERS && LOSCFG_FS_VFS
+    help
+      Answer Y to enable LiteOS support rtc.

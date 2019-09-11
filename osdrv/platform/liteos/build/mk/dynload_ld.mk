@@ -1,0 +1,3 @@
+LITEOS_DYNLDFLAGS += $(OUT)/obj/kernel/extended/dynload/src/los_dynload_gsymbol.o
+LITEOS_DYNLOADOPTS := \
+-uAACDecodeFindSyncHeader_symbol -uAACDecodeFrame_symbol -uAACFreeDecoder_symbol -uAACGetLastFrameInfo_symbol -uAACInitDecoder_symbol -uLOS_FindSymByName_symbol -uLOS_ModuleUnload_symbol -uLOS_SoLoad_symbol -u__aeabi_idivmod_symbol -u__aeabi_lasr_symbol -u__aeabi_ldivmod_symbol -u__aeabi_memclr4_symbol -u__aeabi_unwind_cpp_pr0_symbol -u__stack_chk_fail_symbol -u__stack_chk_guard_symbol -ucalloc_symbol -uclose_symbol -ufprintf_symbol -ufree_symbol -umalloc_symbol -umemcpy_s_symbol -umemmove_s_symbol -umemset_symbol -umemset_s_symbol -ummap_symbol -umunmap_symbol -uopen_symbol -uprintf_symbol -upthread_mutex_lock_symbol -upthread_mutex_unlock_symbol -ustderr_symbol

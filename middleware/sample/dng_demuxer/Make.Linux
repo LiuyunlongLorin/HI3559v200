@@ -1,0 +1,68 @@
+#===============================================================================
+# export variable
+#===============================================================================
+COMPILE_ROOT := $(shell pwd)
+MIDDLEWARE_DIR := $(COMPILE_ROOT)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+include $(MEDIA_ADPT_DIR)/medialibs.mak
+#===============================================================================
+# common deps
+#===============================================================================
+HIBERRY_COMMON_DIR := $(MIDDLEWARE_DIR)/common
+HIBERRY_COMMON_INC := $(HIBERRY_COMMON_DIR)/include
+
+LOG_LIB_DIR := $(HIBERRY_COMMON_DIR)/log/lib
+LOG_INC_DIR := $(HIBERRY_COMMON_DIR)/log/include
+MBUF_INC_DIR := $(HIBERRY_COMMON_DIR)/mbuffer/include
+MBUF_LIB_DIR := $(HIBERRY_COMMON_DIR)/mbuffer/lib
+
+
+#===============================================================================
+# component deps
+#===============================================================================
+HIBERRY_COMPONENT_DIR := $(MIDDLEWARE_DIR)/component
+DNG_LIB_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/dng/lib
+DNG_INC_DIR := $(HIBERRY_COMPONENT_DIR)/fileformat/dng/include
+TIFF_INC_DIR := $(THIRDPARTY_DIR)/tiff/tiff/_install/include
+TIFF_LIB_DIR := $(THIRDPARTY_DIR)/tiff/tiff/_install/lib
+SRC_ROOT :=   $(COMPILE_ROOT)
+OBJ_ROOT :=   $(COMPILE_ROOT)
+
+#****Ô´´úÂëÂ·¾¶********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+
+INC_FLAGS += -I$(DNG_INC_DIR) -I$(TIFF_INC_DIR) -I$(HIBERRY_COMMON_INC)  $(MEDIA_INCLUDE_PATH) -I$(LOG_INC_DIR) -I$(MBUF_INC_DIR)
+
+TARGET_DIR := $(COMPILE_ROOT)
+
+CFLAGS += -Wno-error
+COMPILE   =  $(CC) $(CFLAGS) -g -c "$<" -o "$@" $(INC_FLAGS) -fPIC
+TRAGET_LINUX := $(COMPILE_ROOT)/sample_dngdemuxer
+.PHONY : all clean
+all:$(TRAGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+HIBERRY_LIBS :=  -Wl,-Bstatic  -ldng -ltiff -lmwlog  $(MEDIA_LIBS_LINK) -Wl,-Bdynamic
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -L$(DNG_LIB_DIR) -L$(TIFF_LIB_DIR) -L$(LOG_LIB_DIR) -L$(MBUF_LIB_DIR) $(HIBERRY_LIBS) $(MEDIA_LIBS_PATH_LINK) -pthread -lm -ldl
+else
+HIBERRY_LIBS :=  -ldng -ltiff  -lmwlog  -lmbuf $(MEDIA_LIBS_LINK)
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ -L$(DNG_LIB_DIR) -L$(TIFF_LIB_DIR)  -L$(PROC_LIB_DIR)  -L$(LOG_LIB_DIR) -L$(MBUF_LIB_DIR) -L$(HUTAF_LIB_DIR) -pthread $(HIBERRY_LIBS) $(MEDIA_LIBS_PATH_LINK) -lm -ldl $(HUTAF_LIBS)
+endif
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f sample_dngdemuxer

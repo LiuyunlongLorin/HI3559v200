@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datamodel
+    id="ADM_SET_STRINGID"
+    field="u32StringID:strid:4;"
+    datasource="owndb"
+    getrowcount=""
+    getrowvalue=""
+    registerdatachange=""
+    unregisterdatachange="" />
+<datamodel
+    id="ADM_SET_STRINGID2"
+    field="u32StringID:strid:4;u32StringID:strid:4"
+    datasource="owndb"
+    getrowcount=""
+    getrowvalue=""
+    registerdatachange=""
+    unregisterdatachange="" />
+<datamodel
+    id="ADM_IMAGE"
+    field="Imgid:string:128"
+    cacherows="12"
+    datasource="userdb"
+    getrowcount="GridGetCount"
+    getrowvalue="GridGetValue"
+    registerdatachange="ADM_IMAGE_Register"
+    unregisterdatachange="ADM_IMAGE_unRegister"
+    />

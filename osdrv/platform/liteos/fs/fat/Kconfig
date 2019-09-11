@@ -1,0 +1,36 @@
+config LOSCFG_FS_FAT
+    bool "Enable FAT"
+    default y
+    depends on LOSCFG_FS_VFS
+    help
+      Answer Y to enable LiteOS support fat filesystem.
+
+config LOSCFG_FS_FAT_CACHE
+    bool "Enable FAT Cache"
+    default y
+    depends on LOSCFG_FS_FAT
+    help
+      Answer Y to enable LiteOS fat filesystem support cache.
+
+config LOSCFG_FS_FAT_CHINESE
+    bool "Enable Chinese"
+    default y
+    depends on LOSCFG_FS_FAT
+    help
+      Answer Y to enable LiteOS fat filesystem support Chinese.
+
+config LOSCFG_FS_FAT_VIRTUAL_PARTITION
+    bool "Enabel Virtual Partition"
+    default n
+    depends on LOSCFG_FS_FAT
+
+config LOSCFG_FS_FAT_FSCK
+    bool "Enabel FAT FSCK"
+    default y
+    depends on LOSCFG_FS_FAT
+
+config LOSCFG_FS_FAT_VOLUMES
+    int
+    depends on LOSCFG_FS_FAT
+    default 32 if LOSCFG_PLATFORM_HI3731
+    default 16

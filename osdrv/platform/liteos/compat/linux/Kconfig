@@ -1,0 +1,6 @@
+config  LOSCFG_COMPAT_LINUX
+    bool "Enable Linux"
+    default y
+
+    help
+      Answer Y to enable LiteOS support linux interface.

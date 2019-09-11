@@ -1,0 +1,156 @@
+#!/bin/sh -f
+ERROR="\e[31;1m"
+INFO="\e[32;1m"
+NOTE="\e[33;1m\033[5m"
+DONE="\033[0m"
+
+if [ ! $# == 2 ] ; then
+echo -e ${ERROR}"example:"${DONE}
+echo -e ${ERROR}"osdrv_mem_cfg.sh uboot hi3559v200"${DONE}
+echo -e ${ERROR}"osdrv_mem_cfg.sh liteos hi3559v200"${DONE}
+echo -e ${ERROR}"osdrv_mem_cfg.sh linux hi3559v200"${DONE}
+echo -e ${ERROR}"osdrv_mem_cfg.sh ipcm hi3559v200"${DONE}
+exit 1
+fi
+CHIP=$2
+
+#memory config#
+####################################################################################################
+
+# IPCM's memory must be set to 4KBytes aligned!!
+IPCM_SHM_PHYS_1TO0=0x80000000
+IPCM_SHM_SIZE_1TO0=0x80000
+IPCM_SHM_SIZE_0TO1=0x7c000
+IPCM_VIRT_TTY_SIZE=${MEM_IPCM_VIRT_TTY_SIZE:=0x4000}
+
+declare -i IPCM_SHM_PHYS_1TO0_TMP=${IPCM_SHM_PHYS_1TO0}
+declare -i IPCM_SHM_SIZE_1TO0_TMP=${IPCM_SHM_SIZE_1TO0}
+IPCM_SHM_PHYS_0TO1_TMP=`expr $IPCM_SHM_PHYS_1TO0_TMP + $IPCM_SHM_SIZE_1TO0_TMP`
+IPCM_SHM_PHYS_0TO1=$(awk 'BEGIN{printf("%#x",'$IPCM_SHM_PHYS_0TO1_TMP')}')
+declare -i IPCM_SHM_PHYS_0TO1_TMP=${IPCM_SHM_PHYS_0TO1}
+declare -i IPCM_SHM_SIZE_0TO1_TMP=${IPCM_SHM_SIZE_0TO1}
+IPCM_VIRT_TTY_PHYS_TMP=`expr $IPCM_SHM_PHYS_0TO1_TMP + $IPCM_SHM_SIZE_0TO1_TMP`
+IPCM_VIRT_TTY_PHYS=$(awk 'BEGIN{printf("%#x",'$IPCM_VIRT_TTY_PHYS_TMP')}')
+echo IPCM_SHM_PHYS_1TO0:$IPCM_SHM_PHYS_1TO0
+echo IPCM_SHM_SIZE_1TO0:$IPCM_SHM_SIZE_1TO0
+echo IPCM_SHM_PHYS_0TO1:$IPCM_SHM_PHYS_0TO1
+echo IPCM_SHM_SIZE_0TO1:$IPCM_SHM_SIZE_0TO1
+echo IPCM_VIRT_TTY_PHYS:$IPCM_VIRT_TTY_PHYS
+echo IPCM_VIRT_TTY_SIZE:$IPCM_VIRT_TTY_SIZE
+
+# u-boot's TEXT_BASE should be set to linux's mem region
+UBOOT_TEXT_BASE=0x82800000
+echo UBOOT_TEXT_BASE:${UBOOT_TEXT_BASE}
+
+RAWPARAM_MEM_BASE=${MEM_PARAM_BASE}
+
+# Huawei LiteOS's SYS_MEM_BASE must be 0x81000000 at least
+# LITEOS_MMZ_MEM_SIZE must be smaller than (LITEOS_TEXT_OFFSET-16K)*1K
+LITEOS_SYS_MEM_BASE=0x80200000
+echo LITEOS_SYS_MEM_BASE:${LITEOS_SYS_MEM_BASE}
+LITEOS_SYS_MEM_SIZE=0x01e00000
+echo MEM_HUAWEILITE_SYS_SIZE:${LITEOS_SYS_MEM_SIZE}
+LITEOS_MMZ_MEM_BASE=0x88000000
+echo LITEOS_MMZ_MEM_BASE:${LITEOS_MMZ_MEM_BASE}
+LITEOS_MMZ_MEM_SIZE=0x15000000
+echo LITEOS_MMZ_MEM_SIZE:${LITEOS_MMZ_MEM_SIZE}
+LITEOS_TEXT_OFFSET=0x00000000
+echo LITEOS_TEXT_OFFSET:${LITEOS_TEXT_OFFSET}
+LITEOS_DDR_MEM_SIZE=${MEM_HUAWEILITE_DDR_MEM_SIZE:=0x20000000}
+echo LITEOS_DDR_MEM_SIZE:${LITEOS_DDR_MEM_SIZE}
+
+
+# (LINUX_ENTRY-0x8000) must be 16M aligned
+# Linux image's size must be smaller than (UBOOT_TEXT_BASE - LINUX_ENTRY - 0x100)
+LINUX_SYS_BASE_T=${MEM_LINUX_SYS_BASE:1:10}
+declare -i LINUX_SYS_BASE=0x82000000
+declare -i LINUX_SYS_OFST=0x8000
+LINUX_ENTRY=`expr $LINUX_SYS_BASE + $LINUX_SYS_OFST`
+LINUX_ENTRY_T=$(awk 'BEGIN{printf("%#x",'$LINUX_ENTRY')}')
+LINUX_SYS_BASE_T=$(awk 'BEGIN{printf("%#x",'$LINUX_SYS_BASE')}')
+echo LINUX_ENTRY_T:${LINUX_ENTRY_T}
+echo LINUX_SYS_BASE_T=:${LINUX_SYS_BASE_T}
+####################################################################################################
+
+# u-boot memory configuration
+UBOOT_TEXT_BASE_NEW="CONFIG_SYS_TEXT_BASE =                 $UBOOT_TEXT_BASE"
+UBOOT_CFG_BOOT_PARAMS_NEW="#define CFG_BOOT_PARAMS          ($UBOOT_TEXT_BASE - 0x100)"
+
+UBOOT_TEXT_BASE_MATCH="^CONFIG_SYS_TEXT_BASE.*$"
+UBOOT_CFG_BOOT_PARAMS_MATCH="#define.*CFG_BOOT_PARAMS.*$"
+
+# Huawei LiteOS memory configuration
+LITEOS_SYS_MEM_BASE_NEW="#define SYS_MEM_BASE            $LITEOS_SYS_MEM_BASE"
+LITEOS_SYS_MEM_SIZE_NEW="#define SYS_MEM_SIZE_DEFAULT    $LITEOS_SYS_MEM_SIZE"
+LITEOS_MMZ_MEM_BASE_NEW="#define MMZ_MEM_BASE            $LITEOS_MMZ_MEM_BASE"
+LITEOS_MMZ_MEM_SIZE_NEW="#define MMZ_MEM_LEN             $LITEOS_MMZ_MEM_SIZE"
+LITEOS_TEXT_OFFSET_NEW="#define TEXT_OFFSET              $LITEOS_TEXT_OFFSET"
+LITEOS_DDR_MEM_SIZE_NEW="#define DDR_MEM_SIZE            ${LITEOS_DDR_MEM_SIZE}ull"
+
+LITEOS_SYS_MEM_BASE_MATCH="#define.*SYS_MEM_BASE.*$"
+LITEOS_SYS_MEM_SIZE_MATCH="#define.*SYS_MEM_SIZE_DEFAULT.*$"
+LITEOS_MMZ_MEM_BASE_MATCH="#define.*MMZ_MEM_BASE.*$"
+LITEOS_MMZ_MEM_SIZE_MATCH="#define.*MMZ_MEM_LEN.*$"
+LITEOS_TEXT_OFFSET_MATCH="#define.*TEXT_OFFSET.*$"
+LITEOS_DDR_MEM_SIZE_MATCH="#define.*DDR_MEM_SIZE.*$"
+
+# linux memory configuration
+LINUX_ZRELADDR_BASE_NEW="CONFIG_AMP_ZRELADDR=$LINUX_ENTRY_T"
+
+LINUX_ZRELADDR_BASE_MATCH="CONFIG_AMP_ZRELADDR=.*$"
+
+# linux system memory configuration
+LINUX_SYS_MEM_BASE_NEW="reg = <$LINUX_SYS_BASE_T 0x80000000>; \/\* system memory base \*\/"
+
+LINUX_SYS_MEM_BASE_MATCH="reg.*system memory base.*$"
+
+
+# ipcm memory configuration
+IPCM_SHM_PHYS_1TO0_MATCH="shm_phys_1to0=.*$"
+IPCM_SHM_SIZE_1TO0_MATCH="shm_size_1to0=.*$"
+IPCM_SHM_PHYS_0TO1_MATCH="shm_phys_0to1=.*$"
+IPCM_SHM_SIZE_0TO1_MATCH="shm_size_0to1=.*$"
+IPCM_VIRT_TTY_PHYS_MATCH="virt_tty_phys=.*$"
+IPCM_VIRT_TTY_SIZE_MATCH="virt_tty_size=.*$"
+
+IPCM_SHM_PHYS_1TO0_NEW="shm_phys_1to0=$IPCM_SHM_PHYS_1TO0"
+IPCM_SHM_SIZE_1TO0_NEW="shm_size_1to0=$IPCM_SHM_SIZE_1TO0"
+IPCM_SHM_PHYS_0TO1_NEW="shm_phys_0to1=$IPCM_SHM_PHYS_0TO1"
+IPCM_SHM_SIZE_0TO1_NEW="shm_size_0to1=$IPCM_SHM_SIZE_0TO1"
+IPCM_VIRT_TTY_PHYS_NEW="virt_tty_phys=$IPCM_VIRT_TTY_PHYS"
+IPCM_VIRT_TTY_SIZE_NEW="virt_tty_size=$IPCM_VIRT_TTY_SIZE"
+
+####################################################################################################
+
+echo -e ${INFO}"config $1..."${DONE}
+if [ $1 == "uboot" ];then
+sed -i "s/$UBOOT_TEXT_BASE_MATCH/$UBOOT_TEXT_BASE_NEW/g"                    ./opensource/uboot/u-boot-2016.11/include/configs/${CHIP}.h
+sed -i "s/$UBOOT_CFG_BOOT_PARAMS_MATCH/$UBOOT_CFG_BOOT_PARAMS_NEW/g"        ./opensource/uboot/u-boot-2016.11/include/configs/${CHIP}.h
+elif [ $1 == "miniboot" ];then
+sed -i "s/$UBOOT_TEXT_BASE_MATCH/$UBOOT_TEXT_BASE_NEW/g"                    ./opensource/uboot/mini-boot-2016.11/include/configs/${CHIP}.h
+sed -i "s/$UBOOT_CFG_BOOT_PARAMS_MATCH/$UBOOT_CFG_BOOT_PARAMS_NEW/g"        ./opensource/uboot/mini-boot-2016.11/include/configs/${CHIP}.h
+elif [ $1 == "liteos" ];then
+sed -i "s/$LITEOS_SYS_MEM_SIZE_MATCH/$LITEOS_SYS_MEM_SIZE_NEW/g"            ./platform/liteos/platform/bsp/board/${CHIP}/include/board.h
+sed -i "s/$LITEOS_SYS_MEM_BASE_MATCH/$LITEOS_SYS_MEM_BASE_NEW/g"            ./platform/liteos/platform/bsp/board/${CHIP}/include/board.h
+sed -i "s/$LITEOS_MMZ_MEM_BASE_MATCH/$LITEOS_MMZ_MEM_BASE_NEW/g"            ./platform/liteos/platform/bsp/board/${CHIP}/include/board.h
+sed -i "s/$LITEOS_MMZ_MEM_SIZE_MATCH/$LITEOS_MMZ_MEM_SIZE_NEW/g"            ./platform/liteos/platform/bsp/board/${CHIP}/include/board.h
+sed -i "s/$LITEOS_TEXT_OFFSET_MATCH/$LITEOS_TEXT_OFFSET_NEW/g"              ./platform/liteos/platform/bsp/board/${CHIP}/include/board.h
+sed -i "s/$LITEOS_DDR_MEM_SIZE_MATCH/$LITEOS_DDR_MEM_SIZE_NEW/g"            ./platform/liteos/platform/bsp/board/${CHIP}/include/board.h
+
+elif [ $1 == "linux" ];then
+sed -i "s/$LINUX_ZRELADDR_BASE_MATCH/$LINUX_ZRELADDR_BASE_NEW/"            ./opensource/kernel/linux-4.9.y/arch/arm/configs/${CHIP}_amp_defconfig
+sed -i "s/$LINUX_ZRELADDR_BASE_MATCH/$LINUX_ZRELADDR_BASE_NEW/"            ./opensource/kernel/linux-4.9.y/arch/arm/configs/${CHIP}_amp_spinand_defconfig
+sed -i "s/$LINUX_ZRELADDR_BASE_MATCH/$LINUX_ZRELADDR_BASE_NEW/"            ./opensource/kernel/linux-4.9.y/arch/arm/configs/${CHIP}_amp_emmc_defconfig
+sed -i "s/$LINUX_SYS_MEM_BASE_MATCH/$LINUX_SYS_MEM_BASE_NEW/"              ./opensource/kernel/linux-4.9.y/arch/arm/boot/dts/${CHIP}-demb.dts
+elif [ $1 == "ipcm" ];then
+sed -i "s/$IPCM_SHM_PHYS_1TO0_MATCH/$IPCM_SHM_PHYS_1TO0_NEW/"              ./components/ipcm/ipcm/arch/${CHIP}/configs/${CHIP}_a7_liteos_config
+sed -i "s/$IPCM_SHM_SIZE_1TO0_MATCH/$IPCM_SHM_SIZE_1TO0_NEW/"              ./components/ipcm/ipcm/arch/${CHIP}/configs/${CHIP}_a7_liteos_config
+sed -i "s/$IPCM_SHM_PHYS_0TO1_MATCH/$IPCM_SHM_PHYS_0TO1_NEW/"              ./components/ipcm/ipcm/arch/${CHIP}/configs/${CHIP}_a7_liteos_config
+sed -i "s/$IPCM_SHM_SIZE_0TO1_MATCH/$IPCM_SHM_SIZE_0TO1_NEW/"              ./components/ipcm/ipcm/arch/${CHIP}/configs/${CHIP}_a7_liteos_config
+sed -i "s/$IPCM_VIRT_TTY_PHYS_MATCH/$IPCM_VIRT_TTY_PHYS_NEW/"              ./components/ipcm/ipcm/arch/${CHIP}/configs/${CHIP}_a7_liteos_config
+sed -i "s/$IPCM_VIRT_TTY_SIZE_MATCH/$IPCM_VIRT_TTY_SIZE_NEW/"              ./components/ipcm/ipcm/arch/${CHIP}/configs/${CHIP}_a7_liteos_config
+else
+echo -e ${ERROR}"PARAM IS INVALID!"${DONE}
+exit 1
+fi
+

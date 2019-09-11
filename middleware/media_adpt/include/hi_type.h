@@ -1,0 +1,1 @@
+/home/lorin/lorin/Hi3559V200_MobileCam_SDK_V1.0.1.2/amp/a7_linux/mpp/include/hi_type.h

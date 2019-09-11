@@ -1,0 +1,24 @@
+<font
+    id="FONT18"
+    sbname= "/app/bin/res/font/vector.ttf"
+    mbname= ""
+    size="18"
+    isbold="no"
+    isitalic="no"/>
+
+
+<font
+    id="FONT18B"
+    sbname= "/app/bin/res/font/vector.ttf"
+    mbname= ""
+    size="18"
+    isbold="yes"
+    isitalic="no"/>
+
+<font
+    id="FONT22"
+    sbname= "/app/bin/res/font/vector.ttf"
+    mbname= ""
+    size="22"
+    isbold="yes"
+    isitalic="no"/>

@@ -1,0 +1,12 @@
+*.o
+*.a
+*.so
+*.ko
+*.map
+/reference/out
+/si
+/.vscode
+/amp/a7_linux/mpp/sample
+/amp/a7_liteos/mpp/sample
+/osdrv/opensource/kernel/linux-4.9.37.tar.gz
+/osdrv/tools/pc/uboot_tools/hiregbin-v5.0.1.tgz

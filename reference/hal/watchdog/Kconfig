@@ -1,0 +1,10 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+#comment "Device Configuration"
+
+menuconfig WATCHDOG
+	bool "WATCHDOG support"
+	depends on (HI3559V200)
+

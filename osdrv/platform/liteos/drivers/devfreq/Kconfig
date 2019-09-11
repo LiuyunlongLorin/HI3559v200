@@ -1,0 +1,6 @@
+config LOSCFG_DRIVERS_DEVFREQ
+    bool "Enable DevFreq"
+    default y
+    depends on LOSCFG_DRIVERS
+    help
+      Answer Y to enable LiteOS to support DevFreq

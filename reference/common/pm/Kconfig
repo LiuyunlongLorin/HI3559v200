@@ -1,0 +1,10 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/kconfig-language.txt.
+#
+
+menu "PowerManage Configuration"
+config TEMPRATURE_CYCLE
+	bool "TEMPRATURE_CYCLE support"
+	depends on DASHCAM
+endmenu

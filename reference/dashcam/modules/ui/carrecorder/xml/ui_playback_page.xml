@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="PLAYBACK_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="PLAYBACK_PAGE"
+        top="0"
+        width="320"
+        height="240"
+        opacity="255"
+        winlevel="0"
+        transparent="yes"
+        normalskin="SKIN_COMMON_BG"
+        isrelease="yes"
+        onshow="PDT_UI_PLAYBACK_OnShow"
+        onhide="PDT_UI_PLAYBACK_OnHide"
+        ontimer="PDT_UI_PLAYBACK_OnTimer"
+        onevent="PDT_UI_PLAYBACK_OnEvent"
+        onkeydown="PDT_UI_PLAYBACK_OnKeyDown">
+        <button
+            id="PLAYBACK_BUTTON_INFO"
+            top="0"
+            left="52"
+            width="150"
+            height="32"
+            isrelease="yes"
+            font="FONT22"
+            text="STRING_PLAYBACK_INFO"
+            alignment="hcenter|vcenter"
+            transparent="yes"
+            normalskin="SKIN_COMMON_TITLE_TEXT"
+            highlightskin="SKIN_COMMON_TITLE_TEXT"
+            activeskin="SKIN_COMMON_TITLE_TEXT"/>
+
+        <button
+            id="PLAYBACK_BUTTON_SPEED"
+            top="0"
+            left="204"
+            width="60"
+            height="32"
+            isrelease="yes"
+            font="FONT22"
+            text="STRING_PLAYBACK_INFO"
+            alignment="hcenter|vcenter"
+            transparent="yes"
+            normalskin="SKIN_PLAY_SPEED"
+            highlightskin="SKIN_PLAY_SPEED_ACTIVE"
+            activeskin="SKIN_PLAY_SPEED_ACTIVE"
+            onkeydown="PDT_UI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="PLAYBACK_BUTTON_DELETE"
+            top="0"
+            left="270"
+            width="48"
+            height="32"
+            isrelease="yes"
+            normalskin="SKIN_BUTTON_DELETE"
+            highlightskin="SKIN_BUTTON_DELETE_ACTIVE"
+            activeskin="SKIN_BUTTON_DELETE_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_UI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="PLAYBACK_BUTTON_PREV"
+            top="96"
+            left="0"
+            width="48"
+            height="48"
+            isrelease="yes"
+            normalskin="SKIN_BUTTON_PREV"
+            highlightskin="SKIN_BUTTON_PREV_ACTIVE"
+            activeskin="SKIN_BUTTON_PREV_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_UI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="PLAYBACK_BUTTON_PLAY"
+            top="96"
+            left="136"
+            width="48"
+            height="48"
+            isrelease="yes"
+            normalskin="SKIN_BUTTON_PLAY"
+            highlightskin="SKIN_BUTTON_PLAY_ACTIVE"
+            activeskin="SKIN_BUTTON_PLAY_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_UI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="PLAYBACK_BUTTON_NEXT"
+            top="96"
+            left="272"
+            width="48"
+            height="48"
+            isrelease="yes"
+            normalskin="SKIN_BUTTON_NEXT"
+            highlightskin="SKIN_BUTTON_NEXT_ACTIVE"
+            activeskin="SKIN_BUTTON_NEXT_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_UI_PLAYBACK_OnKeyDown"/>
+
+        <groupbox
+            id="PLAYBACK_GROUPBOX_TITLE_BELOW"
+            top="208"
+            left="0"
+            width="320"
+            height="32"
+            isrelease="yes"
+            normalskin="SKIN_COMMON_TITLE_TEXT">
+
+            <label
+                id="PLAYBACK_LABEL_BACK"
+                top="0"
+                left="5"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18B"
+                text="STRING_BACK"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <label
+                id="PLAYBACK_LABEL_MENU"
+                top="0"
+                left="110"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18B"
+                text="STRING_MENU"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+            <label
+                id="PLAYBACK_LABEL_OK"
+                top="0"
+                left="220"
+                width="100"
+                height="32"
+                isrelease="yes"
+                font="FONT18B"
+                text="STRING_OK"
+                alignment="hcenter|vcenter"
+                transparent="yes"
+                normalskin="SKIN_COMMON_TITLE_TEXT"/>
+
+        </groupbox>
+
+    </window>
+
+</view>

@@ -1,0 +1,51 @@
+#===============================================================================
+# export variable
+#===============================================================================
+LOCAL_DIR := $(shell pwd)
+MIDDLEWARE_DIR := $(LOCAL_DIR)/../..
+include $(MIDDLEWARE_DIR)/base.mak
+MEDIA_ADPT_DIR := $(MIDDLEWARE_DIR)/media_adpt
+
+HIBERRY_LIB_DIR := $(COMPONENT_DIR)/fileformat/exif/lib
+HIBERRY_INCLUDE_DIR := -I$(COMPONENT_DIR)/fileformat/exif/include
+HIBERRY_INCLUDE_DIR += -I$(COMMON_DIR)/include
+
+SRC_ROOT :=   $(LOCAL_DIR)
+OBJ_ROOT :=   $(LOCAL_DIR)
+
+#****源代码路径********************
+SRC_DIR             :=  $(SRC_ROOT)
+SRCS                :=  $(shell find $(SRC_DIR) -name '*.c')
+SRCS                :=  $(sort $(SRCS))
+
+OBJS                :=  $(SRCS:$(SRC_ROOT)%.c=$(OBJ_ROOT)%.o)
+OBJ_DIR             :=  $(sort $(dir $(OBJS)))
+
+SRC_DEP_DIR         :=  $(OBJ_DIR)
+SRC_DEPS            :=  $(OBJS:%.o=%.d)
+HIBERRY_INCLUDE_DIR += -I$(CFG_HIMPP_PATH)/include
+
+INC_FLAGS += $(HIBERRY_INCLUDE_DIR)
+INC_FLAGS += -I$(MEDIA_ADPT_DIR)/include
+HIBERRY_LIBS :=  -Wl,-Bstatic  -L$(HIBERRY_LIB_DIR)  -lexif  -L$(THIRDPARTY_DIR)/openexif/lib  -lopenexif   -L$(COMMON_DIR)/log/lib  -lmwlog -L$(COMMON_DIR)/securec/lib  -lsecurec   -Wl,-Bdynamic  -lm  -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic
+TARGET_DIR := $(LOCAL_DIR)
+
+
+COMPILE   =  $(CC) $(CFLAGS) -c "$<" -o "$@" $(INC_FLAGS)
+TRAGET_LINUX := $(LOCAL_DIR)/sample_exif
+.PHONY : all clean
+all:$(TRAGET_LINUX)
+$(OBJS) :$(OBJ_ROOT)/%.o :$(SRC_ROOT)/%.c
+	@echo "compling $@ ...."
+	$(COMPILE)
+ifneq ($(CFG_ENABLE_HUTAF_LLT_WRAPPER),y)
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^  $(HIBERRY_LIBS)
+else
+$(TRAGET_LINUX):$(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^  -L$(HUTAF_LIB_DIR)  $(HUTAF_LIBS) $(HIBERRY_LIBS)
+endif
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f $(TRAGET_LINUX)

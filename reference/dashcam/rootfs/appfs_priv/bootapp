@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# set lib path
+LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:/app/lib"
+export LD_LIBRARY_PATH
+
+#set core dump parameter
+ulimit -c unlimited
+
+#load ko
+cd /app/komod
+./load_module
+
+#set fflush data level
+echo 20 > /proc/sys/vm/dirty_background_ratio
+echo 40 > /proc/sys/vm/dirty_ratio
+echo 1024 > /proc/sys/vm/user_reserve_kbytes
+echo 30 > /proc/sys/vm/overcommit_ratio
+
+#start application
+cd /app/bin
+./main_app &
+/app/debug_coredump &

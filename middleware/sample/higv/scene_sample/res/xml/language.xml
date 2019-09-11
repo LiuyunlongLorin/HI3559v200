@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<language
+    id="language"
+    languageinfo="en:English;fr:France;es:Spain;pt:Portugal;de:Germany;it:Itlay;zh:Chinese;zh_TW:Chinese;ru:Russia;ja:Japanese;po:Polski;ar:Arabic"
+    locale="en">
+
+    <lanstr
+        id="STR_SCENE_SAMPLE"
+        en="Scene Samples"
+        zh="场景示例"/>
+
+        <lanstr
+        id="STR_BUTTON_SCENE"
+        en="Button Scene"
+        zh="按钮场景"/>
+
+        <lanstr
+        id="STR_FLING_SCENE"
+        en="Fling Scene"
+        zh="轻扫手势场景"/>
+
+        <lanstr
+        id="STR_SCROLLBAR_SKIN_SCENE"
+        en="Scrollbar Skin Scene"
+        zh="滑块皮肤场景"/>
+
+        <lanstr
+        id="STR_SCROLLBAR_SUSPEND_SCENE"
+        en="Scrollbar Suspend Scene"
+        zh="滑块悬浮场景"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_SCENE"
+        en="Multi Language Scene"
+        zh="多国语言场景"/>
+
+        <lanstr
+        id="STR_ASY_MSG_SCENE"
+        en="Asy Msg Scene"
+        zh="异步消息场景"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON1"
+        en="en"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON2"
+        en="fr"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON3"
+        en="es"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON4"
+        en="pt"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON5"
+        en="de"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON6"
+        en="it"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON7"
+        en="zh"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON8"
+        en="zh_TW"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON9"
+        en="ru"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON10"
+        en="ja"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON11"
+        en="po"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_BUTTON12"
+        en="ar"/>
+
+        <lanstr
+        id="STR_MULTI_LANGUAGE_LABEL"
+        en="hello world"
+        fr="Bonjour, le monde."
+        es="Hola, mundo."
+        pt="Olá Mundo"
+        de="Hallo Welt"
+        it="Ciao Mondo"
+        zh="你好世界"
+        zh_TW="中華民國"
+        ru="Здравствуй мир"
+        ja="こんにちは世界"
+        po="witaj w świecie"
+        ar="العالم مرحبا"/>
+
+       <lanstr
+        id="STR_HISTOGRAM_SCENE"
+        en="Histogram Scene"
+        zh="直方图绘制场景"/>
+
+       <lanstr
+        id="STR_SCROLLVIEW_SCENE1"
+        en="Scrollview Scene1"
+        zh="Scrollview场景1"/>
+
+    <lanstr
+        id="STR_SCROLLVIEW_SCENE2"
+        en="Scrollview Scene2"
+        zh="Scrollview场景2"/>
+
+    <lanstr
+        id="STR_IMAGEEX_SCENE"
+        en="ImageEx Scene"
+        zh="ImageEx场景"/>
+
+    <lanstr
+        id="STR_ANIM_INOUT"
+        en="Animation in out"
+        zh="动画场景飞入飞出"/>
+
+    <lanstr
+        id="STR_ANIM_WIN_MOVE"
+        en="Animation Widget in out "
+        zh="视窗飞入飞出"/>
+
+    <lanstr
+        id="STR_WIN_MENU_ROLL"
+        en="Menu Roll Scene"
+        zh="卷帘菜单场景"/>
+
+    <lanstr
+        id="STR_WIN_CLOCK"
+        en="The Clock Scene"
+        zh="Clock 场景示例"/>
+
+    <lanstr
+        id="STR_FOCUS_CHANGE"
+        en="Focus Change Scene"
+        zh="焦点切换场景示例"/>
+
+       <lanstr
+        id="STR_1080"
+        en="1080P"
+        zh="1080P"/>
+
+       <lanstr
+        id="STR_720"
+        en="720P"
+        zh="720P"/>
+
+       <lanstr
+        id="STR_540"
+        en="540P"
+        zh="540P"/>
+
+       <lanstr
+        id="STR_4K"
+        en="4K"
+        zh="4K"/>
+
+       <lanstr
+        id="STR_8K"
+        en="8K"
+        zh="8K"/>
+
+       <lanstr
+        id="STR_TEST"
+        en="test"
+        zh="测"/>
+
+        <lanstr
+        id="STR_12K"
+        en="12K"
+        zh="12K"/>
+
+        <lanstr
+        id="STR_OK"
+        en="OK"
+        zh="对"/>
+
+        <lanstr
+        id="STR_CANCEL"
+        en="NO"
+        zh="错"/>
+
+        <lanstr
+        id="STR_EXIT"
+        en="Exit"
+        zh="退出"/>
+
+        <lanstr
+        id="STR_CHANGE"
+        en="change"
+        zh="切换"/>
+
+        <lanstr
+        id="STR_ANIM_TAB_INOUT"
+        en="Animation Tab in out "
+        zh="Tab飞入飞出"/>
+
+        <lanstr
+        id="STR_ANIM_TEST"
+        en="Animation Test "
+        zh="动画测试"/>
+
+        <lanstr
+        id="STR_TAB1_TITLE"
+        en="This is tab 1,is test "
+        zh="当前是TAb1标签，正在测试"/>
+
+        <lanstr
+        id="STR_TAB2_TITLE"
+        en="This is tab 22,is test "
+        zh="当前是TAb22标签，正在测试"/>
+
+        <lanstr
+        id="STR_TAB3_TITLE"
+        en="This is tab 333,is test "
+        zh="当前是TAb333标签，正在测试"/>
+
+        <lanstr
+        id="STR_TAB1"
+        en="Tab 1"
+        zh="Tab 1"/>
+
+        <lanstr
+        id="STR_TAB2"
+        en="Tab 2"
+        zh="Tab 2"/>
+
+        <lanstr
+        id="STR_TAB3"
+        en="Tab 3"
+        zh="Tab 3"/>
+
+       <lanstr
+        id = "STRID_WEEK_SUN"
+        en = "sunday"
+        zh = "星期天"
+        />
+
+        <lanstr
+                id = "STRID_WEEK_MON"
+                en = "monday"
+                zh = "星期一"
+                />
+
+        <lanstr
+                id = "STRID_WEEK_TUE"
+                en = "Tuesday"
+                zh = "星期二"
+                />
+
+        <lanstr
+                id = "STRID_WEEK_WED"
+                en = "wednesday"
+                zh = "星期三"
+                />
+
+        <lanstr
+                id = "STRID_WEEK_THUR"
+                en = "thursday"
+                zh = "星期四"
+                />
+
+        <lanstr
+                id = "STRID_WEEK_FRI"
+                en = "friday"
+                zh = "星期五"
+                />
+
+        <lanstr
+                id = "STRID_WEEK_SAT"
+                en = "saturday"
+                zh = "星期六"
+                />
+
+        <lanstr
+                id = "STRID_WEEK_SHORT_SUN"
+                en = "sun."
+                zh = "周天"
+                />
+
+                <lanstr
+                id = "STRID_MM_JAN"
+                en = "January"
+                zh = "一月"
+                />
+
+        <lanstr
+                id = "STRID_MM_FEB"
+                en = "February"
+                zh = "二月"
+                />
+
+        <lanstr
+                id = "STRID_MM_MAR"
+                en = "March"
+                zh = "三月"
+                />
+
+        <lanstr
+                id = "STRID_MM_APR"
+                en = "April"
+                zh = "四月"
+                />
+        <lanstr
+                id = "STRID_MM_MAY"
+                en = "May"
+                zh = "五月"
+                />
+
+        <lanstr
+                id = "STRID_MM_JUN"
+                en = "June"
+                zh = "六月"
+                />
+
+        <lanstr
+                id = "STRID_MM_JUL"
+                en = "July"
+                zh = "七月"
+                />
+
+        <lanstr
+                id = "STRID_MM_AUG"
+                en = "August"
+                zh = "八月"
+                />
+
+        <lanstr
+                id = "STRID_MM_SEP"
+                en = "September"
+                zh = "九月"
+                />
+        <lanstr
+                id = "STRID_MM_OCT"
+                en = "October"
+                zh = "十月"
+                />
+        <lanstr
+                id = "STRID_MM_NOV"
+                en = "November"
+                zh = "十一月"
+                />
+
+        <lanstr
+                id = "STRID_MM_DEC"
+                en = "December"
+                zh = "十二月"
+                />
+
+        <strset
+                id = "STRSET_WEEK"
+                dddd = "STRID_WEEK_SUN;STRID_WEEK_MON;STRID_WEEK_TUE;STRID_WEEK_WED;STRID_WEEK_THUR;STRID_WEEK_FRI;STRID_WEEK_SAT;"/>
+
+        <strset
+                id = "STRSET_SHORT_MONTH"
+                M = "STRID_MM_JAN;STRID_MM_FEB;STRID_MM_MAR;STRID_MM_APR;STRID_MM_MAY;STRID_MM_JUN;STRID_MM_JUL;STRID_MM_AUG;STRID_MM_SEP;STRID_MM_OCT;STRID_MM_NOV;STRID_MM_DEC;"
+        />
+
+        <timefmt
+                id = "TIMEFMT_SHORT_DATETIME"
+                en = "[yyyy].<M>.[dd],week <dddd> [H]:[m]:[s]"
+                zh = "[yyyy].<M>.<dddd> [h]:[m]:[s]"
+                />
+</language>

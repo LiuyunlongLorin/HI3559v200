@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view
+    id="HDMI_PLAYBACK_PAGE"
+    isusecommonskin="yes">
+
+    <window
+        id="HDMI_PLAYBACK_PAGE"
+        top="0"
+        width="1920"
+        height="1080"
+        opacity="255"
+        winlevel="0"
+        transparent="yes"
+        normalskin="SKIN_COMMON_BG"
+        isrelease="yes"
+        onshow="PDT_HDMI_PLAYBACK_OnShow"
+        onhide="PDT_HDMI_PLAYBACK_OnHide"
+        ontimer="PDT_HDMI_PLAYBACK_OnTimer"
+        onkeydown="PDT_HDMI_PLAYBACK_OnKeyDown"
+        ongesturetap="PDT_HDMI_PLAYBACK_WinOnGestureTap"
+        ongesturefling="PDT_HDMI_PLAYBACK_WinOnGestureFling"
+        onevent="PDT_HDMI_PLAYBACK_OnEvent">
+
+        <button
+            id="HDMI_PLAYBACK_BACK"
+            top="16"
+            left="48"
+            width="96"
+            height="96"
+            isrelease="yes"
+            normalskin="SKIN_HDMI_PLAYBACK_BUTTON_BACK"
+            highlightskin="SKIN_HDMI_PLAYBACK_BUTTON_BACK_ACTIVE"
+            activeskin="SKIN_HDMI_PLAYBACK_BUTTON_BACK_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_HDMI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="HDMI_PLAYBACK_INFO"
+            top="16"
+            left="576"
+            width="768"
+            height="96"
+            isrelease="yes"
+            font="FONT72"
+            text="STRING_FILELIST_INFO"
+            alignment="hcenter|vcenter"
+            transparent="yes"
+            normalskin="SKIN_HDMI_PLAYBACK_BUTTON_SPEED"
+            highlightskin="SKIN_HDMI_PLAYBACK_BUTTON_SPEED"
+            activeskin="SKIN_HDMI_PLAYBACK_BUTTON_SPEED"/>
+
+        <button
+            id="HDMI_PLAYBACK_VOLUME"
+            top="16"
+            left="1360"
+            width="192"
+            height="96"
+            isrelease="yes"
+            font="FONT72"
+            text=""
+            normalskin="SKIN_PLAYBACK_BUTTON_SPEED"
+            highlightskin="SKIN_PLAYBACK_BUTTON_SPEED_ACTIVE"
+            activeskin="SKIN_PLAYBACK_BUTTON_SPEED_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_HDMI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="HDMI_PLAYBACK_SPEED"
+            top="16"
+            left="1568"
+            width="192"
+            height="96"
+            isrelease="yes"
+            font="FONT72"
+            text="STRING_PLAYBACK_SPEED"
+            alignment="hcenter|vcenter"
+            transparent="yes"
+            normalskin="SKIN_HDMI_PLAYBACK_BUTTON_SPEED"
+            highlightskin="SKIN_HDMI_PLAYBACK_BUTTON_SPEED_ACTIVE"
+            activeskin="SKIN_HDMI_PLAYBACK_BUTTON_SPEED_ACTIVE"
+            onkeydown="PDT_HDMI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="HDMI_PLAYBACK_DELETE"
+            top="16"
+            left="1776"
+            width="96"
+            height="96"
+            isrelease="yes"
+            normalskin="SKIN_HDMI_PLAYBACK_BUTTON_DELETE"
+            highlightskin="SKIN_HDMI_PLAYBACK_BUTTON_DELETE_ACTIVE"
+            activeskin="SKIN_HDMI_PLAYBACK_BUTTON_DELETE_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_HDMI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="HDMI_PLAYBACK_PREV"
+            top="968"
+            left="196"
+            width="96"
+            height="96"
+            isrelease="yes"
+            normalskin="SKIN_HDMI_PLAYBACK_PREV_NORMAL"
+            highlightskin="SKIN_HDMI_PLAYBACK_PREV_ACTIVE"
+            activeskin="SKIN_HDMI_PLAYBACK_PREV_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_HDMI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="HDMI_PLAYBACK_PLAY"
+            top="968"
+            left="912"
+            width="96"
+            height="96"
+            isrelease="yes"
+            normalskin="SKIN_HDMI_PLAYBACK_PLAY_NORMAL"
+            highlightskin="SKIN_HDMI_PLAYBACK_PLAY_ACTIVE"
+            activeskin="SKIN_HDMI_PLAYBACK_PLAY_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_HDMI_PLAYBACK_OnKeyDown"/>
+
+        <button
+            id="HDMI_PLAYBACK_NEXT"
+            top="968"
+            left="1628"
+            width="96"
+            height="96"
+            isrelease="yes"
+            normalskin="SKIN_HDMI_PLAYBACK_NEXT_NORMAL"
+            highlightskin="SKIN_HDMI_PLAYBACK_NEXT_ACTIVE"
+            activeskin="SKIN_HDMI_PLAYBACK_NEXT_ACTIVE"
+            alignment="hcenter|vcenter"
+            onkeydown="PDT_HDMI_PLAYBACK_OnKeyDown"/>
+    </window>
+</view>
