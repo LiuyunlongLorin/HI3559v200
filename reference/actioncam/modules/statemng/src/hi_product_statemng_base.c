@@ -426,7 +426,8 @@ HI_S32 PDT_STATEMNG_BaseStateEnter(HI_VOID *pvArg)
 
 /** exit Base state */
 HI_S32 PDT_STATEMNG_BaseStateExit(HI_VOID *pvArg)
-{
+{   
+    MLOGI("Lorin add -> Base State Exit\n");
     return HI_SUCCESS;
 }
 
@@ -451,6 +452,7 @@ HI_S32 PDT_STATEMNG_BaseStateMsgProc(HI_MESSAGE_S *pstMsg, HI_MW_PTR pvArg, HI_S
         /** switch workmode message process */
         case HI_EVENT_STATEMNG_SWITCH_WORKMODE:
         {
+            MLOGI("Lorin add -> switch workmode in base state\n");
             return PDT_STATEMNG_BaseStateSwitchWorkmodeMsgProc(pstMsg, pStateID);
         }
         /** sd mounted message process */

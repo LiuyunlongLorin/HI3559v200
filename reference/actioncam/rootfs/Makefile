@@ -238,7 +238,7 @@ appfs_prepare: appfs_clean
 	@sed -i 's/^software_version *=.*/software_version   = \"$(BUILD_SOFTVERSION)\"/' $(PARAM_FS_PATH)/config_product_devmng.ini
 	@sed -i 's/^model *=.*/model              = \"$(DEVICE_MODEL)\"/' $(PARAM_FS_PATH)/config_product_devmng.ini
 ifeq ($(CONFIG_MOTIONSENSOR),y)
-	@sed -i 's/^dis_type *=.*/dis_type   = \"DIS_MODE_GYRO\"/' $(PARAM_FS_PATH)/config_product_media_common.ini
+#	@sed -i 's/^dis_type *=.*/dis_type   = \"DIS_MODE_GYRO\"/' $(PARAM_FS_PATH)/config_product_media_common.ini
 endif
 	@cp $(PDT_OUT_MODULES_BIN)/ini2bin_pc $(PARAM_FS_PATH)
 	@cp $(PDT_OUT_MODULES_BIN)/ini2bin_board $(PARAM_FS_PATH)

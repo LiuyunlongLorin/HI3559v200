@@ -856,7 +856,7 @@ HI_S32 PDT_STATEMNG_RecStatesMsgProc(HI_MESSAGE_S *pstMsg, HI_VOID *pvArg, HI_ST
             }
             else if(pstMsg->what == HI_EVENT_STATEMNG_SWITCH_WORKMODE && pstMsg->arg2 != HI_PDT_WORKMODE_UPGRADE)
             {
-                MLOGD(YELLOW"upload msg to Base state\n"NONE);
+                MLOGI(YELLOW"Lorin add -> upload msg to Base state\n"NONE);//将消息上报到base状态处理
                 return HI_PROCESS_MSG_UNHANDLER;
             }
 

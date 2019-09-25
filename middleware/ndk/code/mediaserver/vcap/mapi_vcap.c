@@ -5001,10 +5001,12 @@ HI_S32 HI_MAPI_VCAP_SetChnDISAttr(HI_HANDLE VcapPipeHdl, HI_HANDLE PipeChnHdl,
     /* 6.enable and disable dis status */
     if (pstDisAttr->stDisAttr.bEnable == HI_TRUE) {
         /* Set dis attr and enable dis */
+         MAPI_ERR_TRACE(HI_MAPI_MOD_VCAP, "Loirn add -> open chn dis\n");
         s32Ret = MAPI_VCAP_EnableChnDIS(VcapPipeHdl, PipeChnHdl, pstDisAttr);
         CHECK_MAPI_VCAP_RET(s32Ret, "enable dis fail,VcapPipeHdl[%d],PipeChnHdl[%d]\n", VcapPipeHdl, PipeChnHdl);
     } else {
         /* Disable dis */
+         MAPI_ERR_TRACE(HI_MAPI_MOD_VCAP, "Loirn add -> close chn dis\n");
         s32Ret = MAPI_VCAP_DisableChnDIS(VcapPipeHdl, PipeChnHdl, pstDisAttr);
         CHECK_MAPI_VCAP_RET(s32Ret, "disable dis fail,VcapPipeHdl[%d],PipeChnHdl[%d]\n", VcapPipeHdl, PipeChnHdl);
     }

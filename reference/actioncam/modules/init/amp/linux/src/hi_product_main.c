@@ -219,7 +219,7 @@ static HI_VOID PDT_LoadMmcDriver(HI_VOID)
 /** load driver task */
 static HI_VOID* PDT_LoadDriver(void* pVoid)
 {
-    HI_S32 s32Ret = HI_SUCCESS;
+    //HI_S32 s32Ret = HI_SUCCESS;
     pthread_detach(pthread_self());
 
 #ifdef CFG_LCD_TOUCHPAD_ON  //Lroin modity

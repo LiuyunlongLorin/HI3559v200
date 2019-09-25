@@ -169,8 +169,6 @@ static UINT32 cmd_ssp_read(int argc, char* argv[])
     struct spi_ioc_transfer transfer[1];
     unsigned int spi_num=0, csn=0, dev_addr = 0, reg_addr = 0, cur_reg_addr;
     unsigned int num_reg = 1, dev_width = 1, reg_width = 1, data_width = 1;
-    buf[0] = 0x8f;
-    buf[1] = 0x00;
     if (argc < READ_MIN_CNT) {
         print_r_usage();
         retval = -1;
@@ -231,7 +229,9 @@ static UINT32 cmd_ssp_read(int argc, char* argv[])
                 break;
         }
     }
-
+   // buf[0] = 0x8f;
+    buf[0] = 0x80|reg_addr;
+    buf[1] = 0x00;
     dprintf("spi_num:%u, csn:%u\n"
             "dev_addr:0x%04x, reg_addr:0x%04x, num_reg:%d, "
             "dev_width:%d, reg_width:%d, data_width:%d\n",

@@ -68,9 +68,24 @@ HI_S32 MAPI_VCAP_SetMotionSensor(const HI_MAPI_MOTIONSENSOR_INFO_S *pstMotionAtt
 
     s32Ret = HI_MPI_MOTIONFUSION_SetAttr(GYRO_DEVICE, &pstMotionAttr->stMFusionAttr);
     CHECK_MAPI_VCAP_RET(s32Ret, "call HI_MPI_MOTIONFUSION_SetAttr fail.\n");
-
+    MAPI_ERR_TRACE(HI_MAPI_MOD_VCAP,"Lorin add Dis Ifo aRotationMatrix[0]=%d, aRotationMatrix[1]=%d, aRotationMatrix[2]=%d,aRotationMatrix[3]=%d, aRotationMatrix[4]=%d, aRotationMatrix[5]=%d, \
+                         aGyroDrift[0]=%d, aGyroDrift[1]=%d, aGyroDrift[2]=%d\n ",\
+                         pstMotionAttr->aRotationMatrix[0],
+                         pstMotionAttr->aRotationMatrix[1],
+                         pstMotionAttr->aRotationMatrix[2],
+                         pstMotionAttr->aRotationMatrix[3],
+                         pstMotionAttr->aRotationMatrix[4],
+                         pstMotionAttr->aRotationMatrix[5],
+                         pstMotionAttr->aGyroDrift[0],
+                         pstMotionAttr->aGyroDrift[1],
+                         pstMotionAttr->aGyroDrift[2]
+                        );
+    //设置6面标定
     s32Ret = HI_MPI_MOTIONFUSION_SetGyroSixSideCal(GYRO_DEVICE, bEnSixSideCal, pstMotionAttr->aRotationMatrix);
     CHECK_MAPI_VCAP_RET(s32Ret, "call HI_MPI_MOTIONFUSION_SetGyroSixSideCal fail.\n");
+    //标定GROY
+    s32Ret = HI_MPI_MOTIONFUSION_SetGyroDrift(GYRO_DEVICE, bEnSixSideCal, pstMotionAttr->aGyroDrift);
+    CHECK_MAPI_VCAP_RET(s32Ret, "call HI_MPI_MOTIONFUSION_SetGyroDrift fail.\n");
 
     /* todo: the offonline drift may be needed in the future version */
     if (!g_stGlobMotionAttr.bSetDrift) {
@@ -133,8 +148,8 @@ static HI_S32 MAPI_VCAP_InitMotionSensor(HI_MAPI_MOTIONSENSOR_INFO_S *pstMotionA
     stMotionSet.stMSensorAttr.u32TemperatureMask = pstMotionAttr->stMFusionAttr.u32TemperatureMask;
 
     // set gyro samplerate and full scale range
-    stMotionSet.stMSensorConfig.stGyroConfig.u64ODR = 1000 * GRADIENT;
-    stMotionSet.stMSensorConfig.stGyroConfig.u64FSR = pstMotionAttr->u32GyroFSR;
+    stMotionSet.stMSensorConfig.stGyroConfig.u64ODR = 1000 * GRADIENT;    //设置陀螺仪频率
+    stMotionSet.stMSensorConfig.stGyroConfig.u64FSR = pstMotionAttr->u32GyroFSR;  //设置陀螺仪的量程
 
     // set accel samplerate and full scale range
     stMotionSet.stMSensorConfig.stAccConfig.u64ODR = 1000 * GRADIENT;

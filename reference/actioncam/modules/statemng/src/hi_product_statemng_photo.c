@@ -718,7 +718,7 @@ HI_S32 PDT_STATEMNG_PhotoStatesEnter(HI_VOID *pvArg)
     PDT_STATEMNG_CHECK_NULL_PTR(pvArg,"pvArg");
 
     PDT_STATEMNG_STATE_ATTR_S *pstStateAttr = (PDT_STATEMNG_STATE_ATTR_S *)pvArg;
-    MLOGD(YELLOW"enter state(%s)\n"NONE, pstStateAttr->stState.name);
+    MLOGI(YELLOW"Lorin add -> enter state(%s)\n"NONE, pstStateAttr->stState.name);
 
     /** get enter workmode and check it */
     HI_PDT_WORKMODE_E enEnterWorkMode;
@@ -855,6 +855,7 @@ HI_S32 PDT_STATEMNG_PhotoStatesEnter(HI_VOID *pvArg)
 
     /** publish HI_EVENT_STATEMNG_SWITCH_WORKMODE event to EventHub */
     MUTEX_LOCK(g_stSTATEMNGContext.Mutex);
+    MLOGI("Lorin add -> Going to  Publish Switchmode Enent\n");
     s32Ret = PDT_STATEMNG_PublishEvent(HI_EVENT_STATEMNG_SWITCH_WORKMODE,
                 0, enEnterWorkMode, HI_TRUE, 0L, NULL, 0);
     if(HI_SUCCESS != s32Ret)

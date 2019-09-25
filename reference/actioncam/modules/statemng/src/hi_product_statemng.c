@@ -691,7 +691,7 @@ HI_S32 HI_PDT_STATEMNG_SendMessage(const HI_MESSAGE_S *pstMsg)
     }
 
     MLOGI(YELLOW"send msg(0x%08X)(from Terminal) succeed\n"NONE, pstMsg->what);
-    g_stSTATEMNGContext.bInProgress = HI_TRUE;
+    g_stSTATEMNGContext.bInProgress = HI_TRUE;//置为HI_TRUE 表示状态机开始处理消息了
     MUTEX_UNLOCK(g_stSTATEMNGContext.Mutex);
     return s32Ret;
 }

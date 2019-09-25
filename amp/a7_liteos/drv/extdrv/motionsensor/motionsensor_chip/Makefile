@@ -60,7 +60,15 @@ else
 endif
 endif
 
-
+ifeq ($(SENSOR_TYPE), LSM6dsm)
+    SRCS += ./SensorDev/LSM6dsm/lsm6dsm.c
+	SRCS += ./SensorDev/LSM6dsm/motionsensorgpio.c
+ifeq ($(MPP_BUILD),y)
+    INC += -I$(DRV_ROOT)/extdrv/$(HIARCH)/motionsensor/motionsensor_chip/SensorDev/LSM6dsm/
+else
+    INC += -I$(DRV_ROOT)/extdrv/motionsensor/motionsensor_chip/SensorDev/LSM6dsm/
+endif
+endif
 
 
 

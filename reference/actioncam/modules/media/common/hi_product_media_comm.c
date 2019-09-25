@@ -3868,9 +3868,9 @@ HI_S32 HI_PDT_MEDIA_SetDIS(HI_HANDLE VcapPipeHdl, HI_HANDLE VcapPipeChnHdl, HI_B
 
                 pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.bEnable = bEnable;
 
-                MLOGD(LIGHT_BLUE"pipe[%d] pipechn[%d] enable[%d]\n"NONE, VcapPipeHdl, VcapPipeChnHdl,
+                MLOGI(LIGHT_BLUE"pipe[%d] pipechn[%d] enable[%d]\n"NONE, VcapPipeHdl, VcapPipeChnHdl,
                     pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.bEnable);
-                MLOGD(LIGHT_BLUE"MotinLevel[%d] MotionType[%d]\n"NONE,
+                MLOGI(LIGHT_BLUE"MotinLevel[%d] MotionType[%d]\n"NONE,
                     pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.enMotionLevel,
                     pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.enMode);
 
@@ -3883,7 +3883,7 @@ HI_S32 HI_PDT_MEDIA_SetDIS(HI_HANDLE VcapPipeHdl, HI_HANDLE VcapPipeChnHdl, HI_B
                             s_stMEDIACtx.bCompress);
                         /** shutdown LDC before enable DIS */
 
-#ifdef CONFIG_MOTIONSENSOR
+#ifdef CONFIG_MOTIONSENSOR  //如果定义了陀螺仪则关闭畸变
                         if(bEnable && (0 == VcapPipeChnHdl) && pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stLDCAttr.bEnable)
                         {
                             MLOGD(LIGHT_BLUE"pipe[%d] pipechn[%d] enable[%d], shut down LDC\n"NONE, VcapPipeHdl, VcapPipeChnHdl,
@@ -3922,15 +3922,59 @@ HI_S32 HI_PDT_MEDIA_SetDIS(HI_HANDLE VcapPipeHdl, HI_HANDLE VcapPipeChnHdl, HI_B
                         pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.bEnable =
                             HI_TRUE;
                         HI_PERFORMANCE_TIME_STAMP;
+                        MLOGI("Lorin add  Dis Ifo stDisAttr-> bGdcBypass = %d, u32MovingSubjectLevel= %d, s32RollingShutterCoef= %d,\
+                        s32Timelag = %d, u32ViewAngle=%d, u32HorizontalLimit= %d, bStillCrop=%d, u32VerticalLimit= %d\n",\
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.bGdcBypass,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.u32MovingSubjectLevel,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.s32RollingShutterCoef,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.s32Timelag,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.u32ViewAngle,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.u32HorizontalLimit,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.bStillCrop,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDisAttr.u32VerticalLimit
+                        );
+
+                        MLOGI("Lorin add Dis Ifo stDISConfig-> enMode = %d, enMotionLevel=%d, enPdtType=%d, u32BufNum=%d, u32CropRatio =%d,\
+                        u32Framerate=%d, u32GyroOutputRange=%d, u32GyroDataBitWidth=%d, bCameraSteady=%d, bScale=%d\n",\
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.enMode,\
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.enMotionLevel,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.enPdtType,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.u32BufNum,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.u32CropRatio,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.u32FrameRate,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.u32GyroOutputRange,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.u32GyroDataBitWidth,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.bCameraSteady,
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stDISConfig.bScale
+                        );
+                      
+
+#if 0
+                         MLOGI("Lorin add Dis Ifo stDISConfig-> u32GyroFSR = %d, u32AccFSR=%d, aGyroDrift[0]=%d, aGyroDrift[1]=%d, aGyroDrift[2] =%d,\
+                         aRotationMatrix[0]=%d, aRotationMatrix[1]=%d, aRotationMatrix[2]=%d,aRotationMatrix[3]=%d, aRotationMatrix[4]=%d, aRotationMatrix[5]=%d\n",\
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.u32GyroFSR,\
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.u32AccFSR,\
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aGyroDrift[0],\
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aGyroDrift[1],\
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aGyroDrift[2],
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aRotationMatrix[0],
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aRotationMatrix[1],
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aRotationMatrix[2],
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aRotationMatrix[3],
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aRotationMatrix[4],
+                        pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr.stMotionSensorInfo.aRotationMatrix[5],\
+                        );
+#endif
                         s32Ret = HI_MAPI_VCAP_SetChnDISAttr(pstDevAttr->astVcapPipeAttr[j].VcapPipeHdl,
                             pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].PipeChnHdl,
-                            &pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr);
+                            &pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stDISAttr.stAttr); //真正的开启电子防抖
                         HI_PERFORMANCE_TIME_STAMP;
                         HI_APPCOMM_CHECK_RETURN(s32Ret, HI_FAILURE);
                     }
 
-                    if(!bEnable)
+                    if(!bEnable)  //关闭防抖
                     {
+                        MLOGI("Lorin add ->  DisEnable   Dis \n");
                         HI_MAPI_VCAP_DIS_ATTR_S stDisAttr;
                         HI_PERFORMANCE_TIME_STAMP;
                         s32Ret = HI_MAPI_VCAP_GetChnDISAttr(VcapPipeHdl, VcapPipeChnHdl, &stDisAttr);
@@ -3945,7 +3989,7 @@ HI_S32 HI_PDT_MEDIA_SetDIS(HI_HANDLE VcapPipeHdl, HI_HANDLE VcapPipeChnHdl, HI_B
                         HI_PERFORMANCE_TIME_STAMP;
                         HI_APPCOMM_CHECK_RETURN(s32Ret, HI_FAILURE);
 
-#ifdef CONFIG_MOTIONSENSOR
+#ifdef CONFIG_MOTIONSENSOR   //恢复原来的畸变状态
                         if(pstDevAttr->astVcapPipeAttr[j].astPipeChnAttr[k].stLDCAttr.bEnable)
                         {
                             MLOGD(LIGHT_BLUE"pipe[%d] pipechn[%d] enable[%d], turn on LDC\n"NONE, VcapPipeHdl, VcapPipeChnHdl,

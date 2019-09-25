@@ -1460,7 +1460,7 @@ HI_S32 PDT_NETCTRL_SetWorkmode(HI_S32 argc, const HI_CHAR* pargv[],
         pfnStringProc(pvData,(HI_CHAR *)"SvrFuncResult=\"%d\"\r\n",HISNET_SVR_ARGPARSER_ERROR);
         return HI_FAILURE;
     }
-
+    MLOGI("Lorin add Enter Set WorkMode Cgi\n");
     if (HI_SUCCESS == Hisnet_Server_ARG_OptIsSet((HI_CHAR *)"act", opts))
     {
         if (0 == strncmp(_act,"set",strlen("set")))
@@ -1566,7 +1566,7 @@ HI_S32 PDT_NETCTRL_GetWorkmode(HI_S32 argc, const HI_CHAR* pargv[], PfnCgiString
         pfnStringProc(pvData,(HI_CHAR *)"SvrFuncResult=\"%d\"\r\n",HISNET_SVR_ARGPARSER_ERROR);
         return HI_FAILURE;
     }
-
+    MLOGI("lorin add- > Enter get workmode\n");
     if (HI_SUCCESS == Hisnet_Server_ARG_OptIsSet((HI_CHAR *)"act", opts))
     {
         if (0 == strncmp(_act,"get",strlen("get")))
@@ -1585,7 +1585,6 @@ HI_S32 PDT_NETCTRL_GetWorkmode(HI_S32 argc, const HI_CHAR* pargv[], PfnCgiString
                 pfnStringProc(pvData,(HI_CHAR *)"SvrFuncResult=\"%d\"\r\n",HISNET_SVR_RTN_ERROR);
                 return HI_FAILURE;
             }
-
             pfnStringProc(pvData,(HI_CHAR *)"var workmode=\"%s\";\r\n", szWorkmode);
         }
         else

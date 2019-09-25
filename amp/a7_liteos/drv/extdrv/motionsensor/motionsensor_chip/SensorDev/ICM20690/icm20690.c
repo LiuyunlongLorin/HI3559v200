@@ -1308,7 +1308,7 @@ static HI_S32 ICM20690_SetParam(MSENSOR_PARAM_S* stMSensorParam)
         /*set GyroFSRConfig*/
 
         u32FSR = stMSensorParam->stMSensorConfig.stGyroConfig.u64FSR / GRADIENT;
-
+        print_info("gyro u32fsr = %d\n", u32FSR);
         switch (u32FSR)
         {
             case GYRO_FULL_SCALE_SET_2KDPS:

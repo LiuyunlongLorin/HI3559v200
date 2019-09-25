@@ -3187,7 +3187,7 @@ HI_S32 PDT_STATEMNG_SetDIS(HI_MESSAGE_S *pstMsg, HI_PDT_MEDIA_CFG_S *pstMediaCfg
 
                 VcapPipeChnHdl = pstVcapPipeAttr->astPipeChnAttr[k].PipeChnHdl;
 
-                MLOGD(YELLOW"astVcap(%d).astVcapPipe(%d).astPipeChn(%d).bSupportDIS(%d)\n"NONE,
+                MLOGI(YELLOW"astVcap(%d).astVcapPipe(%d).astPipeChn(%d).bSupportDIS(%d)\n"NONE,
                     i, j, k, stCapability.astVcapDev[i].astVcapPipe[j].astPipeChn[k].bSupportDIS);
                 if(stCapability.astVcapDev[i].astVcapPipe[j].astPipeChn[k].bSupportDIS)
                 {

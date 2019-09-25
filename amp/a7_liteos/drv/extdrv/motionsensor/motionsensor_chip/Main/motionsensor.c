@@ -223,10 +223,12 @@ static HI_SL MotionSensor_ioctl(HI_U32 u32cmd, HI_UL arg, void* private_data)
 
             if (stTrigerConfig.eTrigerMode == TRIGER_TIMER)
             {
+                print_info("lorin add -> eTrigerMode = TRIGER_TIMER\n");
                 HI_MotionSensor_TimerRun();
             }
             else if (stTrigerConfig.eTrigerMode == TRIGER_EXTERN_INTERRUPT)
             {
+                print_info("lorin add -> eTrigerMode = TRIGER_EXTERN_INTERRUPT\n");
                 HI_MotionSensor_INTERRUPTRun();
             }
             else
@@ -490,8 +492,10 @@ HI_VOID MotionSensorExit(HI_VOID)
     HI_CHIP_UnRegisterDataMngCallback();
 #endif
 
-    if (MotionSensorStatus)
-
+    if (MotionSensorStatus)
+
+
+
     {
         HI_MotionSensor_SensorDeInit(MotionSensorStatus);
     }
